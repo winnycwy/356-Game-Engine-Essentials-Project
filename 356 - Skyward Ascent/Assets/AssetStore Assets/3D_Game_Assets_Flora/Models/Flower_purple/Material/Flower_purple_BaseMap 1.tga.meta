@@ -146,6 +146,6 @@ AssetOrigin:
   productId: 318366
   packageName: 3D_Game_Assets_Flora
   packageVersion: 1.0.0
-  assetPath: Assets/3D_Game_Assets_Flora/Models/Flower_purple/Material/Flower_purple_BaseMap
+  assetPath: Assets/AssetStore Assets/3D_Game_Assets_Flora/Models/Flower_purple/Material/Flower_purple_BaseMap
     1.tga
   uploadId: 751987
