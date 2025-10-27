@@ -12989,6 +12989,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2260838521744650801, guid: 86dc54aceca812f4b9e7f7b0730cc6d2, type: 3}
   m_PrefabInstance: {fileID: 395887490}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &397605584
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4852658062243704293, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_Name
+      value: plant_mushlight
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -84.559326
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 20.175797
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 80.220726
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5193717311282411359, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
 --- !u!1001 &402851268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50322,6 +50379,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7335051610645913851, guid: 6ed4aebaeedce0a42bd253cc5ab192fb, type: 3}
   m_PrefabInstance: {fileID: 1485015379}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1487354346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1487354347}
+  m_Layer: 0
+  m_Name: Island 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1487354347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1487354346}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 245.26584, y: -87.98348, z: 117.59772}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!850595691 &1488111629
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -72717,3 +72805,5 @@ SceneRoots:
   - {fileID: 712083959}
   - {fileID: 416633463}
   - {fileID: 898766575}
+  - {fileID: 1487354347}
+  - {fileID: 397605584}
