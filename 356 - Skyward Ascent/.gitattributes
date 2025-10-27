@@ -13,3 +13,4 @@
 *.blend filter=lfs diff=lfs merge=lfs -text
 *.tif filter=lfs diff=lfs merge=lfs -text
 Assets/AssetStore[[:space:]]Assets/BOKI/LowPolyNature/Terrain/data/TerrainData_f3b311aa-fb5e-44f1-9205-35ded49ebf8e.asset.meta filter=lfs diff=lfs merge=lfs -text
+TerrainData_f3b311aa-fb5e-44f1-9205-35ded49ebf8e.asset filter=lfs diff=lfs merge=lfs -text
