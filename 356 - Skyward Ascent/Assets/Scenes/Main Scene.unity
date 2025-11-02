@@ -50230,6 +50230,14 @@ PrefabInstance:
       value: HeartBloomTree
       objectReference: {fileID: 0}
     - target: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.1963043
       objectReference: {fileID: 0}
