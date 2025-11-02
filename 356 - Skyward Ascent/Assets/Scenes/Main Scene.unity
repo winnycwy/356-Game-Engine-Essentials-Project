@@ -50306,10 +50306,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActivated: 0
-  dormantMaterial: {fileID: 0}
-  activatedMaterial: {fileID: 0}
-  treeGlowLight: {fileID: 0}
-  nextIslandSceneName: Island2
+  dormantMaterial: {fileID: 2100000, guid: b98e54aa0584e3346a9401d9bc46736b, type: 2}
+  activatedMaterial: {fileID: 2100000, guid: 12822eaa6a4a90843b76b35766d47224, type: 2}
+  treeGlowLight: {fileID: 166689194}
+  nextIslandSceneName: Island 2
   teleportPoint: {fileID: 0}
   teleportDelay: 2
   activationParticles: {fileID: 0}
@@ -76864,8 +76864,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 100116, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1915221608}
   m_SourcePrefab: {fileID: 100100000, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
+--- !u!1 &1915221607 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100116, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
+  m_PrefabInstance: {fileID: 1915221606}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1915221608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915221607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b6c97e57ca7c9468f935b78182ed19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heartbloomTree: {fileID: 1231693961}
+  sunPetalsCollected: 0
+  requiredSunPetals: 3
 --- !u!1001 &1923518291
 PrefabInstance:
   m_ObjectHideFlags: 0
