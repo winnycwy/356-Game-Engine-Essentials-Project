@@ -9,10 +9,12 @@ public class SunPetal : MonoBehaviour
 
     private Vector3 startPosition;
     private bool isCollected = false;
+    private FairyFloraController fairyController;
 
     void Start()
     {
         startPosition = transform.position;
+        fairyController = FindObjectOfType<FairyFloraController>();
     }
 
     void Update()
@@ -32,41 +34,30 @@ public class SunPetal : MonoBehaviour
     {
         if (isCollected) return;
 
-        // Check if player collected the petal
         if (other.CompareTag("Player"))
         {
-            CollectPetal(other.gameObject);
+            CollectPetal();
         }
     }
 
-    void CollectPetal(GameObject player)
+    void CollectPetal()
     {
         isCollected = true;
 
-        // Get the Fairy controller from the player
-        FairyFloraController fairy = player.GetComponent<FairyFloraController>();
-        if (fairy != null)
+        if (fairyController != null)
         {
-            fairy.CollectSunPetal();
+            fairyController.CollectSunPetal();
         }
 
-        // Play collection effects
         PlayCollectionEffects();
-
-        // Disable the petal
         GetComponent<Renderer>().enabled = false;
         GetComponent<Collider>().enabled = false;
 
-        // Destroy after effects finish
         Destroy(gameObject, 2f);
     }
 
     void PlayCollectionEffects()
     {
-        // Add particle effects, sounds, etc.
-        Debug.Log("Sun Petal collected!");
-
-        // Example: You could add a particle system that plays here
         ParticleSystem collectParticles = GetComponent<ParticleSystem>();
         if (collectParticles != null)
             collectParticles.Play();
