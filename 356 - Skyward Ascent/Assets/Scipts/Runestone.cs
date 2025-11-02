@@ -4,8 +4,8 @@ using System.Collections;
 public class Runestone : MonoBehaviour
 {
     [Header("Glow Settings")]
-    public Material normalMaterial;
-    public Material glowingMaterial;
+    public Material normalMaterial;       // Material 1 stays unchanged
+    public Material glowingMaterial;      // Material 2 will change to this
     public Light glowLight;
     public float glowIntensity = 2f;
     public float glowDuration = 1.5f;
@@ -16,26 +16,33 @@ public class Runestone : MonoBehaviour
     private bool isActivated = false;
     private Renderer stoneRenderer;
     private AudioSource audioSource;
+    private Material glowMaterialInstance; // Instance of glowing material
 
     void Start()
     {
         stoneRenderer = GetComponent<Renderer>();
         audioSource = GetComponent<AudioSource>();
 
-        // Set initial state
+        // Ensure materials are set correctly
         if (stoneRenderer != null && normalMaterial != null)
         {
-            stoneRenderer.material = normalMaterial;
+            Material[] mats = stoneRenderer.materials;
+            mats[0] = normalMaterial;  // keep material 1 as normal
+            stoneRenderer.materials = mats;
         }
 
-        // Setup glow light
         if (glowLight != null)
         {
             glowLight.intensity = 0f;
             glowLight.enabled = false;
         }
+
+        // Create instance of glowing material for material 2
+        if (glowingMaterial != null)
+            glowMaterialInstance = new Material(glowingMaterial);
     }
 
+    // Called externally (player presses E)
     public void ActivateRunestone()
     {
         if (!isActivated)
@@ -49,17 +56,11 @@ public class Runestone : MonoBehaviour
     {
         // Play activation sound
         if (audioSource != null && activationSound != null)
-        {
             audioSource.PlayOneShot(activationSound);
-        }
 
-        // Enable light
         if (glowLight != null)
-        {
             glowLight.enabled = true;
-        }
 
-        // Smooth glow transition
         float elapsedTime = 0f;
 
         while (elapsedTime < glowDuration)
@@ -67,16 +68,16 @@ public class Runestone : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float progress = elapsedTime / glowDuration;
 
-            // Fade in light
+            // Fade light
             if (glowLight != null)
-            {
                 glowLight.intensity = Mathf.Lerp(0f, glowIntensity, progress);
-            }
 
-            // Optional: Change material
-            if (stoneRenderer != null && glowingMaterial != null)
+            // Lerp only material 2
+            if (stoneRenderer != null && glowMaterialInstance != null)
             {
-                stoneRenderer.material.Lerp(normalMaterial, glowingMaterial, progress);
+                Material[] mats = stoneRenderer.materials;
+                mats[1].Lerp(normalMaterial, glowMaterialInstance, progress); // change only material 2
+                stoneRenderer.materials = mats;
             }
 
             yield return null;
@@ -84,21 +85,19 @@ public class Runestone : MonoBehaviour
 
         // Ensure final state
         if (glowLight != null)
-        {
             glowLight.intensity = glowIntensity;
-        }
 
-        if (stoneRenderer != null && glowingMaterial != null)
+        if (stoneRenderer != null && glowMaterialInstance != null)
         {
-            stoneRenderer.material = glowingMaterial;
+            Material[] mats = stoneRenderer.materials;
+            mats[1] = glowMaterialInstance; // final glowing material to material 2
+            stoneRenderer.materials = mats;
         }
 
-        // Notify runestone manager
+        // Notify manager
         RunestoneManager manager = FindObjectOfType<RunestoneManager>();
         if (manager != null)
-        {
             manager.OnRunestoneActivated(this);
-        }
     }
 
     public bool IsActivated()
