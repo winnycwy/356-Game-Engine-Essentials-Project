@@ -5,6 +5,13 @@ public class testPlayer : MonoBehaviour
     public float moveSpeed = 5f;
     public float rotateSpeed = 720f; // degrees per second
 
+    [Header("Runestone Interaction")]
+    public float interactRange = 3f;             // Distance to interact
+    public KeyCode interactKey = KeyCode.E;      // Key to activate runestone
+    public LayerMask runestoneLayer;             // Layer for runestones
+
+    private Runestone focusedRunestone;
+
     void Update()
     {
         // Get WASD input
@@ -25,5 +32,38 @@ public class testPlayer : MonoBehaviour
             // Move forward
             transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         }
+
+        CheckForRunestone();
+        HandleRunestoneInteraction();
+    }
+
+    private void CheckForRunestone()
+    {
+        focusedRunestone = null;
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, runestoneLayer);
+        foreach (Collider hit in hits)
+        {
+            Runestone rs = hit.GetComponent<Runestone>();
+            if (rs != null && !rs.IsActivated())
+            {
+                focusedRunestone = rs;
+                break; // Only focus first available
+            }
+        }
+    }
+
+    private void HandleRunestoneInteraction()
+    {
+        if (focusedRunestone != null && Input.GetKeyDown(interactKey))
+        {
+            focusedRunestone.ActivateRunestone();
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }
