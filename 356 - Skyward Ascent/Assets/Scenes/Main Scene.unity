@@ -31994,9 +31994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321f8c5fa302e2345b80f794f24c5621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 50
-  floatHeight: 0.5
-  floatSpeed: 2
 --- !u!1 &835576648
 GameObject:
   m_ObjectHideFlags: 0
@@ -50305,17 +50302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b72f3cd0089c04ea1356ac2d267e6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActivated: 0
-  dormantMaterial: {fileID: 2100000, guid: b98e54aa0584e3346a9401d9bc46736b, type: 2}
-  activatedMaterial: {fileID: 2100000, guid: 12822eaa6a4a90843b76b35766d47224, type: 2}
-  treeGlowLight: {fileID: 166689194}
-  nextIslandSceneName: Island 2
-  teleportPoint: {fileID: 0}
-  teleportDelay: 2
-  activationParticles: {fileID: 0}
-  teleportParticles: {fileID: 0}
-  activationSound: {fileID: 0}
-  teleportSound: {fileID: 0}
 --- !u!1001 &1235325750
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -76887,9 +76873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6c97e57ca7c9468f935b78182ed19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heartbloomTree: {fileID: 1231693961}
-  sunPetalsCollected: 0
-  requiredSunPetals: 3
 --- !u!1001 &1923518291
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85979,7 +85962,7 @@ Transform:
   m_GameObject: {fileID: 1404006537649641314}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.19999695, y: 0.44500732, z: -4}
+  m_LocalPosition: {x: 0.049998373, y: 0.4449997, z: -1.0000027}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -86614,8 +86597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 2
-  SprintSpeed: 5.335
+  MoveSpeed: 5
+  SprintSpeed: 10
   RotationSmoothTime: 0.12
   SpeedChangeRate: 10
   LandingAudioClip: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
@@ -86773,7 +86756,7 @@ Transform:
   m_GameObject: {fileID: 3554455284591092038}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.19999695, y: 0.44500732, z: -4}
+  m_LocalPosition: {x: 0.049998373, y: 0.4449997, z: -1.0000027}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88332,16 +88315,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7786111211491323700}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -114.1, y: 137.56348, z: -21.8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.5154242, z: -0, w: 0.85693526}
+  m_LocalPosition: {x: -325.07, y: 113.08, z: -45.32}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6009073813772403699}
   - {fileID: 1404006537649641319}
   - {fileID: 3554455284591091897}
   m_Father: {fileID: 1487354347}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 62.052, z: 0}
 --- !u!1 &7786111211491323700
 GameObject:
   m_ObjectHideFlags: 0
