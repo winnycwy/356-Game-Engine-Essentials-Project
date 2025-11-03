@@ -5905,8 +5905,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6965193482390740380, guid: a8a84fa4c8f502748b607c6df2ac57f3, type: 3}
+      propertyPath: Gravity
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965193482390740380, guid: a8a84fa4c8f502748b607c6df2ac57f3, type: 3}
       propertyPath: MoveSpeed
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965193482390740380, guid: a8a84fa4c8f502748b607c6df2ac57f3, type: 3}
+      propertyPath: JumpHeight
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6965193482390740380, guid: a8a84fa4c8f502748b607c6df2ac57f3, type: 3}
+      propertyPath: JumpTimeout
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6965193482390740380, guid: a8a84fa4c8f502748b607c6df2ac57f3, type: 3}
       propertyPath: SprintSpeed
