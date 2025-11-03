@@ -13458,6 +13458,7 @@ Transform:
   - {fileID: 1783497706}
   - {fileID: 486151719}
   - {fileID: 1382904622}
+  - {fileID: 610276918}
   m_Father: {fileID: 6758549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &351039112
@@ -23329,7 +23330,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 349366173}
     m_Modifications:
     - target: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
       propertyPath: m_LocalScale.x
@@ -23345,15 +23346,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 67
+      value: -33.21
       objectReference: {fileID: 0}
     - target: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 157.44333
+      value: 29.783325
       objectReference: {fileID: 0}
     - target: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -253.7
+      value: -48.55002
       objectReference: {fileID: 0}
     - target: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
       propertyPath: m_LocalRotation.w
@@ -23392,6 +23393,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
+--- !u!4 &610276918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2776300223543673294, guid: b540a01988cc0ba4baed8af8e2bbbf10, type: 3}
+  m_PrefabInstance: {fileID: 610276917}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &611562095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78464,7 +78470,10 @@ MonoBehaviour:
   fairyName: Flora
   approachDistance: 1.5
   dialogueLines:
-  - Hi! Can you help me to collect the key?
+  - 'Dear traveler! Please! Help me! I''ve been trapped in this cage for days and
+    its eating up my powers. I-im too weak right now and without my powers i cant
+    light the Heartbloom tree. Please find 3 Sun Petals scattered across this land
+    and bring them back to me. '
   walkSpeed: 1.5
   talkOptionButton: {fileID: 1285273759}
   interactionTimeout: 10
@@ -87974,4 +87983,3 @@ SceneRoots:
   - {fileID: 6758549}
   - {fileID: 633555768}
   - {fileID: 1501940671}
-  - {fileID: 610276917}
