@@ -49,7 +49,7 @@ public class RunestoneInteractor : MonoBehaviour
     }
 }
 */
-//DRAFT 2 - Add player animation
+/* DRAFT 2 - Add player animation
 using UnityEngine;
 
 public class RunestoneInteractor : MonoBehaviour
@@ -147,6 +147,111 @@ public class RunestoneInteractor : MonoBehaviour
     {
         // Show interaction range in editor
         Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
+    }
+}
+*/
+using UnityEngine;
+using System.Collections;
+
+public class RunestoneInteractor : MonoBehaviour
+{
+    [Header("Interaction Settings")]
+    public float interactRange = 3f;
+    public KeyCode interactKey = KeyCode.E;
+    public LayerMask runestoneLayer;
+
+    [Header("Animation Settings")]
+    public Animator playerAnimator;
+    public string interactAnimation = "Interact";
+    public float animationDelay = 0.5f;
+
+    private Runestone focusedRunestone = null;
+    private bool isInteracting = false;
+
+    void Start()
+    {
+        if (playerAnimator == null)
+            playerAnimator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        if (!isInteracting)
+        {
+            CheckForRunestone();
+            HandleRunestoneInteraction();
+            UpdateUI();
+        }
+    }
+
+    private void CheckForRunestone()
+    {
+        // Store the previous focused runestone
+        Runestone previousRunestone = focusedRunestone;
+        focusedRunestone = null;
+
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, runestoneLayer);
+
+        foreach (Collider hit in hits)
+        {
+            Runestone rs = hit.GetComponent<Runestone>();
+            if (rs != null && !rs.IsActivated())
+            {
+                focusedRunestone = rs;
+                break;
+            }
+        }
+
+        // If we had a runestone focused but now we don't, hide the UI
+        if (previousRunestone != null && focusedRunestone == null)
+        {
+            UIManager.Instance.HideInteractionPrompt();
+        }
+    }
+
+    private void UpdateUI()
+    {
+        if (focusedRunestone != null)
+        {
+            UIManager.Instance.ShowInteractionPrompt("E - Activate Runestone");
+        }
+        // Note: We don't hide UI here anymore - it's handled in CheckForRunestone
+    }
+
+    private void HandleRunestoneInteraction()
+    {
+        if (focusedRunestone != null && Input.GetKeyDown(interactKey))
+        {
+            StartCoroutine(InteractionSequence());
+        }
+    }
+
+    private System.Collections.IEnumerator InteractionSequence()
+    {
+        isInteracting = true;
+
+        // Hide UI immediately when interaction starts
+        UIManager.Instance.HideInteractionPrompt();
+
+        if (playerAnimator != null && !string.IsNullOrEmpty(interactAnimation))
+        {
+            playerAnimator.SetTrigger(interactAnimation);
+        }
+
+        yield return new WaitForSeconds(animationDelay);
+
+        if (focusedRunestone != null)
+        {
+            focusedRunestone.ActivateRunestone();
+        }
+
+        isInteracting = false;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = focusedRunestone != null ? Color.green : Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }
