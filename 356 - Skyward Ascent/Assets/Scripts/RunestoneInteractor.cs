@@ -49,6 +49,7 @@ public class RunestoneInteractor : MonoBehaviour
     }
 }
 */
+//DRAFT 2 - Add player animation
 using UnityEngine;
 
 public class RunestoneInteractor : MonoBehaviour
@@ -149,3 +150,4 @@ public class RunestoneInteractor : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }
+
