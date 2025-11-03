@@ -6,10 +6,10 @@ using System.Collections;
 public class FairyAI : MonoBehaviour
 {
     // State enumeration - MUST BE PUBLIC to be accessible by other scripts
-    public enum FairyState { Idle, StandUp, Approach, WaitForInteraction, Dialogue, WaitForPlayerExit, ReturnToMushroom }
+    public enum FairyState { Idle, StandUp, Approach, WaitForInteraction, Dialogue, WaitForPlayerExit, ReturnToStart }
 
     [Header("Component References")]
-    public Transform mushroomSitPoint;      // Reference to mushroom sitting position
+    public Transform fairyStartPoint;       // Reference to fairy's starting position
 
     [Header("Dialogue System")]
     public DialogueSystem dialogueSystem;   // Reference to UI dialogue system
@@ -31,7 +31,7 @@ public class FairyAI : MonoBehaviour
     public KeyCode cursorToggleKey = KeyCode.Tab; // Key to toggle cursor
 
     [Header("Cooldown Settings")]
-    public float returnCooldown = 3.0f;     // Cooldown after returning to mushroom
+    public float returnCooldown = 3.0f;     // Cooldown after returning to start position
 
     [Header("Debug Settings")]
     public bool showDebugInfo = true;       // Toggle debug messages and gizmos
@@ -50,7 +50,9 @@ public class FairyAI : MonoBehaviour
     // Approach state variables
     private Vector3 targetPosition;         // Store the target position once
     private bool hasSetDestination = false; // Track if destination was set
-    private bool isReturningToMushroom = false; // Track if we're returning to mushroom
+    private bool isReturningToStart = false; // Track if we're returning to start position
+    private Vector3 startPosition;          // Fairy's initial position
+    private Quaternion startRotation;       // Fairy's initial rotation
 
     public bool PlayerInTrigger
     {
@@ -119,8 +121,8 @@ public class FairyAI : MonoBehaviour
             case FairyState.WaitForPlayerExit:
                 UpdateWaitForPlayerExitState();
                 break;
-            case FairyState.ReturnToMushroom:
-                UpdateReturnToMushroomState();
+            case FairyState.ReturnToStart:
+                UpdateReturnToStartState();
                 break;
         }
 
@@ -191,13 +193,13 @@ public class FairyAI : MonoBehaviour
             debugInfo += " [SHOULD TRANSITION TO STAND UP]";
         }
 
-        if ((currentState == FairyState.Approach || currentState == FairyState.ReturnToMushroom) && agent != null)
+        if ((currentState == FairyState.Approach || currentState == FairyState.ReturnToStart) && agent != null)
         {
             debugInfo += $"\n- Destination: {agent.destination}";
             debugInfo += $"\n- Has Path: {agent.hasPath}";
             debugInfo += $"\n- Remaining Distance: {agent.remainingDistance:F2}";
             debugInfo += $"\n- Is Stopped: {agent.isStopped}";
-            debugInfo += $"\n- Is Returning: {isReturningToMushroom}";
+            debugInfo += $"\n- Is Returning: {isReturningToStart}";
         }
 
         Debug.Log(debugInfo);
@@ -298,19 +300,25 @@ public class FairyAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Initialize fairy to starting state on mushroom
+    /// Initialize fairy to starting state at her position
     /// </summary>
     private void InitializeFairy()
     {
-        // Set initial position and rotation on mushroom
-        if (mushroomSitPoint != null)
+        // Store initial position and rotation
+        startPosition = transform.position;
+        startRotation = transform.rotation;
+
+        // Use fairyStartPoint if assigned, otherwise use current position
+        if (fairyStartPoint != null)
         {
-            transform.position = mushroomSitPoint.position;
-            transform.rotation = mushroomSitPoint.rotation;
+            startPosition = fairyStartPoint.position;
+            startRotation = fairyStartPoint.rotation;
+            transform.position = startPosition;
+            transform.rotation = startRotation;
         }
 
         currentState = FairyState.Idle;
-        isReturningToMushroom = false;
+        isReturningToStart = false;
 
         // Configure NavMesh Agent for walking
         if (agent != null)
@@ -326,11 +334,12 @@ public class FairyAI : MonoBehaviour
         // Set initial animation state
         if (animator != null)
         {
-            animator.SetBool("IsSitting", true);
+            animator.SetBool("IsSitting", false); // Not sitting anymore
             animator.SetBool("IsWalking", false);
+            animator.SetBool("IsIdle", true); // New idle state
         }
 
-        Debug.Log("FairyAI: Initialized in Idle state on mushroom");
+        Debug.Log("FairyAI: Initialized in Idle state at position: " + startPosition);
     }
 
     /// <summary>
@@ -352,7 +361,7 @@ public class FairyAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Idle state - fairy sits on mushroom waiting for player
+    /// Idle state - fairy waits at her position for player
     /// </summary>
     private void UpdateIdleState()
     {
@@ -364,7 +373,7 @@ public class FairyAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Stand up state - play stand up animation
+    /// Stand up state - play stand up animation (optional, can be used for attention)
     /// </summary>
     private void UpdateStandUpState()
     {
@@ -380,17 +389,17 @@ public class FairyAI : MonoBehaviour
     /// </summary>
     private void UpdateApproachState()
     {
-        // If we're returning to mushroom, switch to that state
-        if (isReturningToMushroom)
+        // If we're returning to start, switch to that state
+        if (isReturningToStart)
         {
-            currentState = FairyState.ReturnToMushroom;
+            currentState = FairyState.ReturnToStart;
             return;
         }
 
         // Check if player is still valid
         if (!IsPlayerValid())
         {
-            ReturnToMushroom();
+            ReturnToStart();
             return;
         }
 
@@ -420,27 +429,26 @@ public class FairyAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Return to mushroom state - dedicated state for returning
+    /// Return to start state - dedicated state for returning to initial position
     /// </summary>
-    private void UpdateReturnToMushroomState()
+    private void UpdateReturnToStartState()
     {
-        // Set destination to mushroom if not already set
-        if (!hasSetDestination && mushroomSitPoint != null)
+        // Set destination to start position if not already set
+        if (!hasSetDestination)
         {
             if (agent != null && agent.isOnNavMesh)
             {
                 agent.isStopped = false;
-                agent.SetDestination(mushroomSitPoint.position);
+                agent.SetDestination(startPosition);
                 hasSetDestination = true;
-                Debug.Log($"FairyAI: Returning to mushroom at {mushroomSitPoint.position}");
+                Debug.Log($"FairyAI: Returning to start position at {startPosition}");
             }
         }
 
-        // Check if reached mushroom
-        if (mushroomSitPoint != null && agent != null &&
-            !agent.pathPending && agent.remainingDistance <= 0.2f)
+        // Check if reached start position
+        if (agent != null && !agent.pathPending && agent.remainingDistance <= 0.2f)
         {
-            CompleteReturnToMushroom();
+            CompleteReturnToStart();
             return;
         }
 
@@ -457,7 +465,7 @@ public class FairyAI : MonoBehaviour
         if (!IsPlayerValid() || !playerInTrigger)
         {
             Debug.Log("Fairy: Player left during wait for interaction");
-            ReturnToMushroom();
+            ReturnToStart();
             return;
         }
 
@@ -466,7 +474,7 @@ public class FairyAI : MonoBehaviour
         if (interactionTimer >= interactionTimeout)
         {
             Debug.Log("Fairy: Interaction timeout reached");
-            ReturnToMushroom();
+            ReturnToStart();
         }
     }
 
@@ -486,7 +494,7 @@ public class FairyAI : MonoBehaviour
         {
             if (dialogueSystem != null)
                 dialogueSystem.ForceEndDialogue();
-            ReturnToMushroom();
+            ReturnToStart();
             return;
         }
 
@@ -503,7 +511,7 @@ public class FairyAI : MonoBehaviour
     {
         if (!IsPlayerValid() || !playerInTrigger)
         {
-            ReturnToMushroom();
+            ReturnToStart();
         }
 
         if (IsPlayerValid())
@@ -522,6 +530,7 @@ public class FairyAI : MonoBehaviour
         {
             bool isWalking = agent.velocity.magnitude > 0.1f && !agent.isStopped;
             animator.SetBool("IsWalking", isWalking);
+            animator.SetBool("IsIdle", !isWalking);
         }
     }
 
@@ -580,15 +589,15 @@ public class FairyAI : MonoBehaviour
     {
         currentState = FairyState.StandUp;
         standUpTimer = 0f;
-        isReturningToMushroom = false;
+        isReturningToStart = false;
 
         if (animator != null)
         {
-            animator.SetBool("IsSitting", false);
-            animator.SetTrigger("StandUp");
+            animator.SetBool("IsIdle", false);
+            animator.SetTrigger("StandUp"); // Optional attention animation
         }
 
-        Debug.Log("Fairy: Standing up to approach player");
+        Debug.Log("Fairy: Noticing player and preparing to approach");
     }
 
     /// <summary>
@@ -599,7 +608,7 @@ public class FairyAI : MonoBehaviour
         currentState = FairyState.Approach;
         hasSetDestination = false;
         targetPosition = Vector3.zero;
-        isReturningToMushroom = false;
+        isReturningToStart = false;
 
         if (agent != null && IsPlayerValid())
         {
@@ -609,6 +618,7 @@ public class FairyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsWalking", true);
+            animator.SetBool("IsIdle", false);
         }
 
         Debug.Log("Fairy: Walking toward player");
@@ -623,7 +633,7 @@ public class FairyAI : MonoBehaviour
         interactionTimer = 0f;
         hasSetDestination = false;
         targetPosition = Vector3.zero;
-        isReturningToMushroom = false;
+        isReturningToStart = false;
 
         if (agent != null)
         {
@@ -634,6 +644,7 @@ public class FairyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
+            animator.SetBool("IsIdle", true);
         }
 
         if (IsPlayerValid())
@@ -656,17 +667,10 @@ public class FairyAI : MonoBehaviour
     }
 
     /// <summary>
-    /// Return fairy to mushroom
+    /// Return fairy to start position
     /// </summary>
-    public void ReturnToMushroom()
+    public void ReturnToStart()
     {
-        if (mushroomSitPoint == null)
-        {
-            Debug.LogWarning("Mushroom sit point not assigned");
-            currentState = FairyState.Idle;
-            return;
-        }
-
         // Start cooldown
         isInCooldown = true;
         cooldownTimer = returnCooldown;
@@ -682,8 +686,8 @@ public class FairyAI : MonoBehaviour
         Cursor.visible = false;
 
         // Set state and flags
-        currentState = FairyState.ReturnToMushroom;
-        isReturningToMushroom = true;
+        currentState = FairyState.ReturnToStart;
+        isReturningToStart = true;
         hasSetDestination = false;
         targetPosition = Vector3.zero;
 
@@ -703,15 +707,16 @@ public class FairyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsWalking", true);
+            animator.SetBool("IsIdle", false);
         }
 
-        Debug.Log($"Fairy: Returning to mushroom (Cooldown: {returnCooldown}s)");
+        Debug.Log($"Fairy: Returning to start position (Cooldown: {returnCooldown}s)");
     }
 
     /// <summary>
-    /// Complete the return to mushroom process
+    /// Complete the return to start process
     /// </summary>
-    private void CompleteReturnToMushroom()
+    private void CompleteReturnToStart()
     {
         // Stop the agent
         if (agent != null)
@@ -720,18 +725,15 @@ public class FairyAI : MonoBehaviour
             agent.ResetPath();
         }
 
-        // Set position and rotation to mushroom exactly
-        if (mushroomSitPoint != null)
-        {
-            transform.position = mushroomSitPoint.position;
-            transform.rotation = mushroomSitPoint.rotation;
-        }
+        // Set position and rotation to start exactly
+        transform.position = startPosition;
+        transform.rotation = startRotation;
 
-        // Sit down
+        // Return to idle
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
-            animator.SetBool("IsSitting", true);
+            animator.SetBool("IsIdle", true);
         }
 
         // Ensure player controls are restored
@@ -746,11 +748,11 @@ public class FairyAI : MonoBehaviour
 
         // Reset all state variables
         currentState = FairyState.Idle;
-        isReturningToMushroom = false;
+        isReturningToStart = false;
         hasSetDestination = false;
         targetPosition = Vector3.zero;
 
-        Debug.Log("Fairy: Successfully returned to mushroom and sitting down");
+        Debug.Log("Fairy: Successfully returned to start position");
     }
 
     /// <summary>
@@ -818,6 +820,7 @@ public class FairyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
+            animator.SetBool("IsIdle", true);
         }
 
         Debug.Log("Fairy: Conversation finished, waiting for player to leave");
@@ -858,7 +861,7 @@ public class FairyAI : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsWalking", false);
-            animator.SetBool("IsSitting", true);
+            animator.SetBool("IsIdle", true);
         }
 
         // Hide talk option button
@@ -873,12 +876,9 @@ public class FairyAI : MonoBehaviour
             playerController.EnableMovement();
         }
 
-        // Return to mushroom position if available
-        if (mushroomSitPoint != null)
-        {
-            transform.position = mushroomSitPoint.position;
-            transform.rotation = mushroomSitPoint.rotation;
-        }
+        // Return to start position
+        transform.position = startPosition;
+        transform.rotation = startRotation;
     }
 
     /// <summary>
@@ -959,14 +959,17 @@ public class FairyAI : MonoBehaviour
             Gizmos.DrawWireSphere(targetPosition, 0.3f);
         }
 
-        // Blue line to mushroom if returning
-        if (Application.isPlaying && mushroomSitPoint != null &&
-            currentState == FairyState.Approach && agent != null &&
-            agent.destination == mushroomSitPoint.position)
+        // Blue line to start position if returning
+        if (Application.isPlaying && currentState == FairyState.Approach && agent != null &&
+            agent.destination == startPosition)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawLine(transform.position, mushroomSitPoint.position);
+            Gizmos.DrawLine(transform.position, startPosition);
         }
+
+        // Draw start position marker
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(startPosition, Vector3.one * 0.5f);
 
         // Draw NavMesh agent path if available
         if (agent != null && agent.hasPath)
