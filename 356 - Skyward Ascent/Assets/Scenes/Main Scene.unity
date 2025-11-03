@@ -17478,6 +17478,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 338393c58383f344c88bd23dc615240f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 460092968}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 338393c58383f344c88bd23dc615240f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 919132149613939575}
   m_SourcePrefab: {fileID: 100100000, guid: 338393c58383f344c88bd23dc615240f, type: 3}
 --- !u!135 &460092968
 SphereCollider:
@@ -32261,6 +32264,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 338393c58383f344c88bd23dc615240f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 834882082}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 338393c58383f344c88bd23dc615240f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 834882086}
   m_SourcePrefab: {fileID: 100100000, guid: 338393c58383f344c88bd23dc615240f, type: 3}
 --- !u!4 &834882080 stripped
 Transform:
@@ -32305,6 +32311,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 321f8c5fa302e2345b80f794f24c5621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &834882086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834882081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fd1aca77d615f438a57c0f81bf2fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAnimator: {fileID: 0}
+  triggerName: PickUpFlower
 --- !u!1 &835576648
 GameObject:
   m_ObjectHideFlags: 0
@@ -44980,7 +45000,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085825461}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
@@ -87461,6 +87481,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 338393c58383f344c88bd23dc615240f, type: 3}
   m_PrefabInstance: {fileID: 460092965}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &919132149613939575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149613939572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fd1aca77d615f438a57c0f81bf2fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerAnimator: {fileID: 0}
+  triggerName: PickUpFlower
 --- !u!1001 &1132602731968503260
 PrefabInstance:
   m_ObjectHideFlags: 0
