@@ -88630,7 +88630,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d22e735f8797cc42a86a2f41525fc4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Health>k__BackingField: {fileID: 0}
+  <Health>k__BackingField: {fileID: 8090919453279865618}
   canvas: {fileID: 1634242501448923284}
   fillImage: {fileID: 1634242500095667811}
   hideEmpty: 0
@@ -89218,8 +89218,8 @@ GameObject:
   - component: {fileID: 3623739362534707035}
   - component: {fileID: 8090919453279865617}
   - component: {fileID: 1604701658}
-  - component: {fileID: 8090919453279865619}
   - component: {fileID: 8090919453279865618}
+  - component: {fileID: 8090919453279865619}
   m_Layer: 8
   m_Name: PlayerArmature
   m_TagString: Player
@@ -91273,12 +91273,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2614080309174642572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad295dee684f1c1419b9e4ab36941a32, type: 3}
+  m_Script: {fileID: 11500000, guid: 143bf4aa5ce536246b13c53201ba94b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: {fileID: 8090919453279865619}
-  damageAmount: 10
-  healAmount: 10
+  maxHealth: 100
+  initialRatio: 1
 --- !u!114 &8090919453279865619
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91288,11 +91287,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2614080309174642572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 143bf4aa5ce536246b13c53201ba94b8, type: 3}
+  m_Script: {fileID: 11500000, guid: ad295dee684f1c1419b9e4ab36941a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  initialRatio: 1
+  playerHealth: {fileID: 8090919453279865618}
+  damageAmount: 10
+  healAmount: 10
 --- !u!4 &8176565476863673425
 Transform:
   m_ObjectHideFlags: 0
