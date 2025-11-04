@@ -36851,7 +36851,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_UseGeometry: 0
-  m_DefaultArea: 0
+  m_DefaultArea: 3
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
@@ -47676,7 +47676,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press E ti talk
+  m_text: Press E to talk
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -48298,6 +48298,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wizard
       objectReference: {fileID: 0}
+    - target: {fileID: 7940719953895527930, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -48317,6 +48321,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7940719953895527930, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1289039503}
+    - targetCorrespondingSourceObject: {fileID: 7940719953895527930, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1289039504}
   m_SourcePrefab: {fileID: 100100000, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
 --- !u!1001 &1140254220
 PrefabInstance:
@@ -54456,10 +54463,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wizardLines:
-  - Ah, you are awake. Do you know this place?
-  - No... I see you do not. We are both lost, it seems.
-  - That key... it feels important.
-  - Do not fear the height, Key-Bearer. Focus on the path ahead.
+  - Greetings, traveler. I am Eldrin, keeper of ancient knowledge.
+  - The crystals you seek are hidden in the forbidden caverns.
+  - Be wary of the shadow creatures that dwell there.
+  dialogueSystem: {fileID: 0}
 --- !u!95 &1289039502
 Animator:
   serializedVersion: 7
@@ -54494,6 +54501,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5254cc34557da6d499ff7f67d3fc7f63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &1289039504
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289039497}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 3.89
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1290798351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56232,7 +56260,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_UseGeometry: 0
-  m_DefaultArea: 0
+  m_DefaultArea: 3
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
@@ -74213,7 +74241,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_UseGeometry: 0
-  m_DefaultArea: 0
+  m_DefaultArea: 3
   m_GenerateLinks: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1
@@ -79799,6 +79827,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100116, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1915221618}
+    - targetCorrespondingSourceObject: {fileID: 100116, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1915221621}
   m_SourcePrefab: {fileID: 100100000, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
 --- !u!1 &1915221607 stripped
 GameObject:
@@ -79825,7 +79856,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 1
+  m_WalkableMask: 8
   m_ObstacleAvoidanceType: 4
 --- !u!64 &1915221614
 MeshCollider:
@@ -79865,6 +79896,8 @@ MonoBehaviour:
   dialogueLines:
   - Blah blah blah
   - Blah blah blah but 2
+  specialDialogue:
+  - You found my flower fn
   dialogueSystem: {fileID: 243967439}
   interactPromptUI: {fileID: 1285273759}
 --- !u!135 &1915221618
@@ -79886,8 +79919,28 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 6.01
+  m_Radius: 4.77
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1915221621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915221607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a60da3bc4c0b56439f29402009741d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1604701651}
+  interactableCharacter: {fileID: 0}
+  agent: {fileID: 1915221611}
+  followDistance: 10
+  hoverHeight: 0.5
+  hoverAmplitude: 0.25
+  hoverFrequency: 1
+  stoppingDistance: 1.2
 --- !u!4 &1919382865 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8284745087435665187, guid: f6b2f7b582bfb3f48bb416ec09de2509, type: 3}

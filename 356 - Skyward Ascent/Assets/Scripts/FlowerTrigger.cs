@@ -157,5 +157,10 @@ public class FlowerTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         flower.SetActive(false);
+
+        // Find the Fairy NPC and enable her special dialogue
+        InteractableCharacter fairy = FindObjectOfType<InteractableCharacter>();
+        if (fairy != null)
+            fairy.EnableSpecialDialogue();
     }
 }
