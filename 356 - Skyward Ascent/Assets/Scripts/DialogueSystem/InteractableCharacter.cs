@@ -88,10 +88,10 @@ public class InteractableCharacter : MonoBehaviour
     [Header("References")]
     public DialogueSystem dialogueSystem;
     public GameObject interactPromptUI;
-    public GameObject vineCage; // The cage that will dissolve
+    public GameObject vineCage;
     public Runestone[] cageRunestones;
     public TeleportToIsland heartbloomPortal;
-    public DissolveTrigger cageDissolveTrigger; // Reference to dissolve script
+    public DissolveTrigger cageDissolveTrigger;
 
     [Header("Quest Settings")]
     public int requiredSunPetals = 3;
@@ -99,6 +99,9 @@ public class InteractableCharacter : MonoBehaviour
     private bool playerInRange = false;
     private int collectedSunPetals = 0;
     private DialogueState currentState = DialogueState.Trapped;
+
+    // Simple flag to track if we've started dialogue for current state
+    private bool hasStartedDialogueForCurrentState = false;
 
     private enum DialogueState
     {
@@ -117,7 +120,6 @@ public class InteractableCharacter : MonoBehaviour
         if (heartbloomPortal == null)
             heartbloomPortal = FindObjectOfType<TeleportToIsland>();
 
-        // Find dissolve trigger if not assigned
         if (cageDissolveTrigger == null && vineCage != null)
         {
             cageDissolveTrigger = vineCage.GetComponent<DissolveTrigger>();
@@ -160,8 +162,10 @@ public class InteractableCharacter : MonoBehaviour
     private void StartConversation()
     {
         if (dialogueSystem == null) return;
+        if (dialogueSystem.IsDialogueActive) return;
 
-        if (!dialogueSystem.IsDialogueActive)
+        // Only start dialogue if we haven't completed it for this state
+        if (!hasStartedDialogueForCurrentState)
         {
             switch (currentState)
             {
@@ -175,6 +179,8 @@ public class InteractableCharacter : MonoBehaviour
                     dialogueSystem.StartDialogue(finalDialogue, characterName, this);
                     break;
             }
+
+            hasStartedDialogueForCurrentState = true;
         }
     }
 
@@ -202,39 +208,36 @@ public class InteractableCharacter : MonoBehaviour
     private void FreeFairy()
     {
         currentState = DialogueState.Freed;
+        hasStartedDialogueForCurrentState = false; // Reset for new state
 
-        // Use dissolve animation instead of directly disabling
         if (cageDissolveTrigger != null)
         {
             cageDissolveTrigger.StartDissolve();
-            Debug.Log("Starting vine cage dissolve animation...");
         }
         else if (vineCage != null)
         {
-            // Fallback: direct disable if no dissolve trigger
             vineCage.SetActive(false);
-            Debug.LogWarning("No DissolveTrigger found - directly disabling cage");
         }
-
-        Debug.Log("Fairy has been freed! She can now ask for sun petals.");
     }
 
     public void CollectSunPetal()
     {
         collectedSunPetals++;
-        Debug.Log($"Sun Petal collected! {collectedSunPetals}/{requiredSunPetals}");
 
         if (collectedSunPetals >= requiredSunPetals)
         {
             currentState = DialogueState.QuestComplete;
-            Debug.Log("All Sun Petals collected! Fairy can now activate the portal.");
+            hasStartedDialogueForCurrentState = false; // Reset for new state
             ActivateHeartbloomPortal();
         }
     }
 
     public void OnDialogueComplete()
     {
-        if (currentState == DialogueState.QuestComplete && heartbloomPortal != null)
+        // Dialogue completed for current state - no need to reset flag
+        // because we want it to remember that this dialogue was completed
+
+        if (currentState == DialogueState.QuestComplete)
         {
             EnsurePortalActive();
         }
