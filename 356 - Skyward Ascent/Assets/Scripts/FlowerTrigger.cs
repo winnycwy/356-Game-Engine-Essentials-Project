@@ -78,6 +78,7 @@ public class FlowerTrigger : MonoBehaviour
     }
 }
 */
+/*DRAFT 2
 using UnityEngine;
 using StarterAssets;
 using System.Collections;
@@ -162,5 +163,103 @@ public class FlowerTrigger : MonoBehaviour
         InteractableCharacter fairy = FindObjectOfType<InteractableCharacter>();
         if (fairy != null)
             fairy.EnableSpecialDialogue();
+    }
+}
+*/
+using UnityEngine;
+using StarterAssets;
+using System.Collections;
+
+public class FlowerTrigger : MonoBehaviour
+{
+    public Animator playerAnimator;
+    public string triggerName = "PickUpFlower";
+
+    private bool playerInRange = false;
+    private StarterAssetsInputs playerInput;
+    private GameObject flower;
+
+    void Start()
+    {
+        flower = gameObject;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+
+            if (playerAnimator == null)
+            {
+                playerAnimator = other.GetComponentInChildren<Animator>();
+            }
+
+            if (playerInput == null)
+                playerInput = other.GetComponent<StarterAssetsInputs>();
+
+            if (playerInput != null)
+                playerInput.interact = false;
+
+            // Show sun petal collection prompt
+            UIManager.Instance.ShowInteractionPrompt("E - Collect Sun Petal");
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+
+            if (playerInput != null)
+                playerInput.interact = false;
+
+            // Hide the prompt when leaving sun petal
+            UIManager.Instance.HideInteractionPrompt();
+        }
+    }
+
+    void Update()
+    {
+        // Sun petals require E press to collect
+        if (playerInRange && playerInput != null && playerInput.interact)
+        {
+            CollectSunPetal();
+        }
+    }
+
+    private void CollectSunPetal()
+    {
+        // Hide UI when collecting sun petal
+        UIManager.Instance.HideInteractionPrompt();
+
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetTrigger(triggerName);
+            StartCoroutine(DisableFlowerAfterDelay(0.8f));
+        }
+        else
+        {
+            Debug.LogWarning("Animator not found on Player.");
+        }
+
+        playerInput.interact = false;
+    }
+
+    private IEnumerator DisableFlowerAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        // Notify the fairy about sun petal collection
+        InteractableCharacter fairy = FindObjectOfType<InteractableCharacter>();
+        if (fairy != null)
+        {
+            fairy.CollectSunPetal();
+        }
+
+        flower.SetActive(false);
+
+        Debug.Log("Sun Petal collected!");
     }
 }

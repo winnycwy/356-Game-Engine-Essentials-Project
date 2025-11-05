@@ -1,3 +1,4 @@
+/*DRAFT 1
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -70,5 +71,235 @@ public class InteractableCharacter : MonoBehaviour
     public void EnableSpecialDialogue()
     {
         hasSpecialDialogue = true;
+    }
+}
+*/
+using UnityEngine;
+using System.Collections;
+
+public class InteractableCharacter : MonoBehaviour
+{
+    [Header("Dialogue")]
+    public string characterName = "Flora";
+    [TextArea] public string[] initialDialogue;
+    [TextArea] public string[] freedDialogue;
+    [TextArea] public string[] finalDialogue;
+
+    [Header("References")]
+    public DialogueSystem dialogueSystem;
+    public GameObject interactPromptUI;
+    public GameObject vineCage; // The cage that will dissolve
+    public Runestone[] cageRunestones;
+    public TeleportToIsland heartbloomPortal;
+    public DissolveTrigger cageDissolveTrigger; // Reference to dissolve script
+
+    [Header("Quest Settings")]
+    public int requiredSunPetals = 3;
+
+    private bool playerInRange = false;
+    private int collectedSunPetals = 0;
+    private DialogueState currentState = DialogueState.Trapped;
+
+    private enum DialogueState
+    {
+        Trapped,
+        Freed,
+        QuestComplete
+    }
+
+    void Start()
+    {
+        if (interactPromptUI != null)
+            interactPromptUI.SetActive(false);
+
+        InitializeDefaultDialogues();
+
+        if (heartbloomPortal == null)
+            heartbloomPortal = FindObjectOfType<TeleportToIsland>();
+
+        // Find dissolve trigger if not assigned
+        if (cageDissolveTrigger == null && vineCage != null)
+        {
+            cageDissolveTrigger = vineCage.GetComponent<DissolveTrigger>();
+        }
+    }
+
+    void Update()
+    {
+        if (playerInRange && Input.GetKeyDown(KeyCode.E))
+        {
+            StartConversation();
+        }
+
+        CheckIfFairyFreed();
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = true;
+            if (interactPromptUI != null)
+                interactPromptUI.SetActive(true);
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInRange = false;
+            if (interactPromptUI != null)
+                interactPromptUI.SetActive(false);
+
+            if (dialogueSystem != null && dialogueSystem.IsDialogueActive)
+                dialogueSystem.ForceEndDialogue();
+        }
+    }
+
+    private void StartConversation()
+    {
+        if (dialogueSystem == null) return;
+
+        if (!dialogueSystem.IsDialogueActive)
+        {
+            switch (currentState)
+            {
+                case DialogueState.Trapped:
+                    dialogueSystem.StartDialogue(initialDialogue, characterName, this);
+                    break;
+                case DialogueState.Freed:
+                    dialogueSystem.StartDialogue(freedDialogue, characterName, this);
+                    break;
+                case DialogueState.QuestComplete:
+                    dialogueSystem.StartDialogue(finalDialogue, characterName, this);
+                    break;
+            }
+        }
+    }
+
+    private void CheckIfFairyFreed()
+    {
+        if (currentState == DialogueState.Trapped && cageRunestones.Length > 0)
+        {
+            bool allActivated = true;
+            foreach (Runestone runestone in cageRunestones)
+            {
+                if (runestone != null && !runestone.IsActivated())
+                {
+                    allActivated = false;
+                    break;
+                }
+            }
+
+            if (allActivated)
+            {
+                FreeFairy();
+            }
+        }
+    }
+
+    private void FreeFairy()
+    {
+        currentState = DialogueState.Freed;
+
+        // Use dissolve animation instead of directly disabling
+        if (cageDissolveTrigger != null)
+        {
+            cageDissolveTrigger.StartDissolve();
+            Debug.Log("Starting vine cage dissolve animation...");
+        }
+        else if (vineCage != null)
+        {
+            // Fallback: direct disable if no dissolve trigger
+            vineCage.SetActive(false);
+            Debug.LogWarning("No DissolveTrigger found - directly disabling cage");
+        }
+
+        Debug.Log("Fairy has been freed! She can now ask for sun petals.");
+    }
+
+    public void CollectSunPetal()
+    {
+        collectedSunPetals++;
+        Debug.Log($"Sun Petal collected! {collectedSunPetals}/{requiredSunPetals}");
+
+        if (collectedSunPetals >= requiredSunPetals)
+        {
+            currentState = DialogueState.QuestComplete;
+            Debug.Log("All Sun Petals collected! Fairy can now activate the portal.");
+            ActivateHeartbloomPortal();
+        }
+    }
+
+    public void OnDialogueComplete()
+    {
+        if (currentState == DialogueState.QuestComplete && heartbloomPortal != null)
+        {
+            EnsurePortalActive();
+        }
+    }
+
+    private void ActivateHeartbloomPortal()
+    {
+        if (heartbloomPortal != null)
+        {
+            Collider portalCollider = heartbloomPortal.GetComponent<Collider>();
+            if (portalCollider != null)
+            {
+                portalCollider.enabled = true;
+            }
+
+            Debug.Log("Heartbloom Portal is now active!");
+
+            // If your TeleportToIsland has an ActivatePortal method
+            TeleportToIsland portalScript = heartbloomPortal.GetComponent<TeleportToIsland>();
+            if (portalScript != null && portalScript.GetType().GetMethod("ActivatePortal") != null)
+            {
+                portalScript.Invoke("ActivatePortal", 0f);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Heartbloom portal reference not found!");
+        }
+    }
+
+    private void EnsurePortalActive()
+    {
+        ActivateHeartbloomPortal();
+    }
+
+    private void InitializeDefaultDialogues()
+    {
+        if (initialDialogue == null || initialDialogue.Length == 0)
+        {
+            initialDialogue = new string[]
+            {
+                "Flora: Dear traveler....Please... Help me! I've been trapped in this cage for days and its eating up my powers",
+                "Flora: I sense a great power within you...perhaps you can try activating the runestones that bounds this cage...."
+            };
+        }
+
+        if (freedDialogue == null || freedDialogue.Length == 0)
+        {
+            freedDialogue = new string[]
+            {
+                "Flora: Oh thank you dear traveler! Is there anything I could do for you?",
+                "You: I need to find a way to go up to the highest peak of this land",
+                "Flora: Oh! The Heartbloom tree portal will bring you to the next island up ahead. However....I'm afraid I'm too weak right now to help you activate it. If it is not too much trouble, could you help me collect 3 Sun Petals scattered around this island?",
+                "Flora: The first flower is at a place where everything began, the second requires an easy climb up some floating platforms and the 3rd is guarded by the giant BumbleGrump",
+                "You: Of course no problem!"
+            };
+        }
+
+        if (finalDialogue == null || finalDialogue.Length == 0)
+        {
+            finalDialogue = new string[]
+            {
+                "Flora: Thank you for collecting the Sun Petals! The Heartbloom portal is now active.",
+                "Flora: Come traveler, step into the portal when you're ready to journey to the next island."
+            };
+        }
     }
 }
