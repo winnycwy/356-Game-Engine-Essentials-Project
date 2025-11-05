@@ -78953,7 +78953,7 @@ MonoBehaviour:
   heartbloomPortal: {fileID: 1231693965}
   cageDissolveTrigger: {fileID: 1512724795}
   requiredSunPetals: 3
-  playerFaeLightAbility: {fileID: 0}
+  playerFaeLightAbility: {fileID: 8090919453279865620}
 --- !u!135 &1915221618
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -91256,15 +91256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbc109f64ed2354e9417f8bdb9752d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faeLightPrefab: {fileID: 2814360575799913022, guid: 9e3e2959775e6d8428b69ecbed45a347, type: 3}
+  faeLightPrefab: {fileID: 5862522662427955825, guid: 9e3e2959775e6d8428b69ecbed45a347, type: 3}
   lightSpawnPoint: {fileID: 770639975}
   activateKey: 113
-  holdDuration: 1.5
-  lightDuration: 10
-  followSpeed: 3
-  orbitDistance: 2
-  activationParticles: {fileID: 0}
-  activationSound: {fileID: 0}
+  maxLightDistance: 3
+  lightFollowSpeed: 2
+  faeLightUI: {fileID: 0}
 --- !u!4 &8176565476863673425
 Transform:
   m_ObjectHideFlags: 0
