@@ -27080,8 +27080,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 988070465}
   - {fileID: 243967438}
+  - {fileID: 988070465}
   - {fileID: 651323460}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -29600,6 +29600,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4984388844682635995, guid: 9da29ca228e10ec4d846a0a7f5f32e8e, type: 3}
   m_PrefabInstance: {fileID: 770301510}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &770639974
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 770639975}
+  m_Layer: 0
+  m_Name: FaeLightPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &770639975
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770639974}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.44137388, z: -0, w: 0.8973233}
+  m_LocalPosition: {x: 0.26714835, y: 1.4005889, z: 0.16993463}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7744566541992629760}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &775781708
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -78922,6 +78953,7 @@ MonoBehaviour:
   heartbloomPortal: {fileID: 1231693965}
   cageDissolveTrigger: {fileID: 1512724795}
   requiredSunPetals: 3
+  playerFaeLightAbility: {fileID: 0}
 --- !u!135 &1915221618
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -89137,6 +89169,7 @@ GameObject:
   - component: {fileID: 1604701658}
   - component: {fileID: 8090919453279865618}
   - component: {fileID: 8090919453279865619}
+  - component: {fileID: 8090919453279865620}
   m_Layer: 8
   m_Name: PlayerArmature
   m_TagString: Player
@@ -90973,6 +91006,7 @@ Transform:
   m_Children:
   - {fileID: 1206639450342882277}
   - {fileID: 191245393229931969}
+  - {fileID: 770639975}
   - {fileID: 1634242500428999697}
   m_Father: {fileID: 6233111010272643038}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -91210,6 +91244,27 @@ MonoBehaviour:
   playerHealth: {fileID: 8090919453279865618}
   damageAmount: 10
   healAmount: 10
+--- !u!114 &8090919453279865620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2614080309174642572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bbc109f64ed2354e9417f8bdb9752d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  faeLightPrefab: {fileID: 2814360575799913022, guid: 9e3e2959775e6d8428b69ecbed45a347, type: 3}
+  lightSpawnPoint: {fileID: 770639975}
+  activateKey: 113
+  holdDuration: 1.5
+  lightDuration: 10
+  followSpeed: 3
+  orbitDistance: 2
+  activationParticles: {fileID: 0}
+  activationSound: {fileID: 0}
 --- !u!4 &8176565476863673425
 Transform:
   m_ObjectHideFlags: 0
