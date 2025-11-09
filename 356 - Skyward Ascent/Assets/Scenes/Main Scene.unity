@@ -92232,7 +92232,7 @@ MonoBehaviour:
   faeLightPrefab: {fileID: 1092339647826344401, guid: 21a0a83b6a20a514ba15fe77eac8fd6b, type: 3}
   lightSpawnPoint: {fileID: 770639975}
   activateKey: 113
-  lightDistance: 2
+  lightDistance: 1
   lightHeight: 4
   lightAngle: 30
   floatHeight: 0.3
