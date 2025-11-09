@@ -122,7 +122,6 @@ public class DialogueSystem : MonoBehaviour
     [Header("UI References")]
     public GameObject dialoguePanel;
     public TextMeshProUGUI dialogueText;
-    public TextMeshProUGUI speakerName;
     public float textSpeed = 0.05f;
 
     private string[] currentLines;
@@ -172,8 +171,6 @@ public class DialogueSystem : MonoBehaviour
         if (dialoguePanel != null)
             dialoguePanel.SetActive(true);
 
-        if (speakerName != null)
-            speakerName.text = speaker;
 
         DisplayCurrentLine();
     }
