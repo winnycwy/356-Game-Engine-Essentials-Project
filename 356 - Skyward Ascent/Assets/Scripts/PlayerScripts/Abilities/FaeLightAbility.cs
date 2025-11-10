@@ -445,8 +445,7 @@ public class FaeLightAbility : MonoBehaviour
     }
 }
 */
-
-
+/*DRAFT 4 - Floating but light intensity remains the same
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -700,6 +699,262 @@ public class FaeLightAbility : MonoBehaviour
         if (keybindText != null)
             keybindText.color = active ? activeTextColor : defaultTextColor;
 
+        if (active && pressEffect != null)
+            pressEffect.color = new Color(1, 1, 0.5f, 0.5f);
+        else if (!active && pressEffect != null)
+            pressEffect.color = new Color(1, 1, 1, 0);
+    }
+
+    public bool IsLightActive()
+    {
+        return isLightActive && currentFaeLight != null;
+    }
+
+    public GameObject GetCurrentLight()
+    {
+        return currentFaeLight;
+    }
+}
+*/
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections;
+
+public class FaeLightAbility : MonoBehaviour
+{
+    [Header("Fae Light Settings")]
+    public GameObject faeLightPrefab;
+    public Transform lightSpawnPoint;
+    public KeyCode activateKey = KeyCode.Q;
+    public float lightDistance = 2f;
+    public float lightHeight = 1f;
+    public float lightAngle = 30f;
+
+    [Header("Floating Animation")]
+    public float floatHeight = 0.3f;
+    public float floatSpeed = 1.5f;
+    public float rotationSpeed = 20f;
+
+    [Header("Light Pulsing")]
+    public bool enableLightPulsing = true; // Option to disable pulsing
+    public float pulseIntensityMultiplier = 0.2f; // How much to pulse (0.2 = ±20%)
+
+    [Header("UI References")]
+    public GameObject faeLightUI;
+    public Image buttonBackground;
+    public Image buttonIcon;
+    public TextMeshProUGUI keybindText;
+    public Image pressEffect;
+
+    [Header("Button Visuals")]
+    public Sprite defaultBackground;
+    public Sprite pressedBackground;
+    public Color defaultIconColor = Color.white;
+    public Color activeIconColor = new Color(1f, 0.9f, 0.3f);
+    public Color defaultTextColor = Color.white;
+    public Color activeTextColor = new Color(1f, 0.9f, 0.3f);
+
+    [Header("Button Effects")]
+    public float pressScale = 0.85f;
+    public float pressDuration = 0.1f;
+
+    private GameObject currentFaeLight;
+    private Light faePointLight;
+    private bool isAbilityUnlocked = false;
+    private bool isLightActive = false;
+    private Vector3 originalButtonScale;
+    private Coroutine buttonEffectCoroutine;
+    private Vector3 lightBasePosition;
+    private float baseLightIntensity; // Store the prefab's original intensity
+
+    void Start()
+    {
+        if (faeLightUI != null)
+            faeLightUI.SetActive(false);
+
+        if (buttonBackground != null)
+            originalButtonScale = buttonBackground.transform.localScale;
+
+        if (pressEffect != null)
+            pressEffect.color = new Color(1, 1, 1, 0);
+    }
+
+    void Update()
+    {
+        if (!isAbilityUnlocked) return;
+
+        if (Input.GetKeyDown(activateKey))
+        {
+            StartButtonPressEffect();
+        }
+
+        if (Input.GetKeyUp(activateKey))
+        {
+            StartButtonReleaseEffect();
+            if (isLightActive)
+                DeactivateFaeLight();
+        }
+
+        if (Input.GetKey(activateKey) && !isLightActive)
+        {
+            ActivateFaeLight();
+        }
+
+        if (isLightActive && currentFaeLight != null)
+        {
+            UpdateLightPosition();
+            AnimateFaeLight();
+        }
+    }
+
+    public void UnlockFaeLight()
+    {
+        isAbilityUnlocked = true;
+
+        if (faeLightUI != null)
+            faeLightUI.SetActive(true);
+
+        Debug.Log("Fae Light ability unlocked! Hold Q to activate.");
+    }
+
+    private void ActivateFaeLight()
+    {
+        if (faeLightPrefab != null)
+        {
+            CalculateBasePosition();
+            currentFaeLight = Instantiate(faeLightPrefab, lightBasePosition, Quaternion.identity);
+
+            // Get the light component and store its original intensity
+            faePointLight = currentFaeLight.GetComponentInChildren<Light>();
+            if (faePointLight != null)
+            {
+                baseLightIntensity = faePointLight.intensity; // Store prefab intensity
+                Debug.Log($"Fae Light activated! Base intensity: {baseLightIntensity}");
+            }
+            else
+            {
+                Debug.LogWarning("No Light component found on Fae Light prefab!");
+            }
+
+            isLightActive = true;
+            SetButtonActiveState(true);
+        }
+    }
+
+    private void DeactivateFaeLight()
+    {
+        if (currentFaeLight != null)
+        {
+            Destroy(currentFaeLight);
+            currentFaeLight = null;
+            faePointLight = null;
+            isLightActive = false;
+            SetButtonActiveState(false);
+            Debug.Log("Fae Light deactivated!");
+        }
+    }
+
+    private void CalculateBasePosition()
+    {
+        Vector3 playerForward = transform.forward;
+        Quaternion rotation = Quaternion.Euler(0, lightAngle, 0);
+        Vector3 offset = rotation * playerForward * lightDistance;
+        offset.y = lightHeight;
+        lightBasePosition = transform.position + offset;
+    }
+
+    private void UpdateLightPosition()
+    {
+        if (currentFaeLight == null) return;
+
+        CalculateBasePosition();
+        float yOffset = Mathf.Sin(Time.time * floatSpeed) * floatHeight;
+        Vector3 animatedPosition = lightBasePosition + new Vector3(0, yOffset, 0);
+        currentFaeLight.transform.position = animatedPosition;
+        currentFaeLight.transform.rotation = Quaternion.LookRotation(transform.forward);
+    }
+
+    private void AnimateFaeLight()
+    {
+        if (currentFaeLight == null) return;
+
+        // Gentle rotation
+        currentFaeLight.transform.Rotate(0, rotationSpeed * Time.deltaTime, 0, Space.World);
+
+        // Light pulsing - respect the prefab's base intensity
+        if (faePointLight != null && enableLightPulsing)
+        {
+            float pulse = (Mathf.Sin(Time.time * floatSpeed * 2f) + 1f) * 0.5f;
+            float pulseAmount = Mathf.Lerp(1f - pulseIntensityMultiplier, 1f + pulseIntensityMultiplier, pulse);
+            faePointLight.intensity = baseLightIntensity * pulseAmount; // Use base intensity
+        }
+    }
+
+    // ... (rest of your button effect methods remain the same)
+    private void StartButtonPressEffect()
+    {
+        if (buttonEffectCoroutine != null)
+            StopCoroutine(buttonEffectCoroutine);
+        buttonEffectCoroutine = StartCoroutine(ButtonPressEffect());
+    }
+
+    private void StartButtonReleaseEffect()
+    {
+        if (buttonEffectCoroutine != null)
+            StopCoroutine(buttonEffectCoroutine);
+        buttonEffectCoroutine = StartCoroutine(ButtonReleaseEffect());
+    }
+
+    private IEnumerator ButtonPressEffect()
+    {
+        if (buttonBackground == null) yield break;
+        if (pressedBackground != null)
+            buttonBackground.sprite = pressedBackground;
+        if (pressEffect != null)
+            pressEffect.color = new Color(1, 1, 1, 0.3f);
+
+        float timer = 0f;
+        Vector3 startScale = buttonBackground.transform.localScale;
+        Vector3 targetScale = originalButtonScale * pressScale;
+
+        while (timer < pressDuration)
+        {
+            timer += Time.deltaTime;
+            buttonBackground.transform.localScale = Vector3.Lerp(startScale, targetScale, timer / pressDuration);
+            yield return null;
+        }
+        buttonBackground.transform.localScale = targetScale;
+    }
+
+    private IEnumerator ButtonReleaseEffect()
+    {
+        if (buttonBackground == null) yield break;
+
+        float timer = 0f;
+        Vector3 startScale = buttonBackground.transform.localScale;
+        Vector3 targetScale = originalButtonScale;
+
+        while (timer < pressDuration)
+        {
+            timer += Time.deltaTime;
+            buttonBackground.transform.localScale = Vector3.Lerp(startScale, targetScale, timer / pressDuration);
+            yield return null;
+        }
+        buttonBackground.transform.localScale = targetScale;
+
+        if (pressEffect != null)
+            pressEffect.color = new Color(1, 1, 1, 0);
+        if (!isLightActive && defaultBackground != null)
+            buttonBackground.sprite = defaultBackground;
+    }
+
+    private void SetButtonActiveState(bool active)
+    {
+        if (buttonIcon != null)
+            buttonIcon.color = active ? activeIconColor : defaultIconColor;
+        if (keybindText != null)
+            keybindText.color = active ? activeTextColor : defaultTextColor;
         if (active && pressEffect != null)
             pressEffect.color = new Color(1, 1, 0.5f, 0.5f);
         else if (!active && pressEffect != null)
