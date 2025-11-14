@@ -818,6 +818,7 @@ public class FaeLightAbility : MonoBehaviour
         Debug.Log("Fae Light ability unlocked! Hold Q to activate.");
     }
 
+    // Modify the ActivateFaeLight method:
     private void ActivateFaeLight()
     {
         if (faeLightPrefab != null)
@@ -825,23 +826,19 @@ public class FaeLightAbility : MonoBehaviour
             CalculateBasePosition();
             currentFaeLight = Instantiate(faeLightPrefab, lightBasePosition, Quaternion.identity);
 
-            // Get the light component and store its original intensity
             faePointLight = currentFaeLight.GetComponentInChildren<Light>();
             if (faePointLight != null)
             {
-                baseLightIntensity = faePointLight.intensity; // Store prefab intensity
-                Debug.Log($"Fae Light activated! Base intensity: {baseLightIntensity}");
-            }
-            else
-            {
-                Debug.LogWarning("No Light component found on Fae Light prefab!");
+                baseLightIntensity = faePointLight.intensity;
             }
 
             isLightActive = true;
             SetButtonActiveState(true);
+
         }
     }
 
+    // Modify the DeactivateFaeLight method:
     private void DeactivateFaeLight()
     {
         if (currentFaeLight != null)
@@ -851,10 +848,8 @@ public class FaeLightAbility : MonoBehaviour
             faePointLight = null;
             isLightActive = false;
             SetButtonActiveState(false);
-            Debug.Log("Fae Light deactivated!");
         }
     }
-
     private void CalculateBasePosition()
     {
         Vector3 playerForward = transform.forward;

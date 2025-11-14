@@ -530,9 +530,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1671908962}
-  - {fileID: 2075449766}
-  - {fileID: 602943328}
+  - {fileID: 721044352}
   - {fileID: 1086963600}
   - {fileID: 752477002}
   - {fileID: 897379965}
@@ -23234,140 +23232,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7335051610645913851, guid: 6ed4aebaeedce0a42bd253cc5ab192fb, type: 3}
   m_PrefabInstance: {fileID: 597787356}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &602943327
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 602943328}
-  - component: {fileID: 602943332}
-  - component: {fileID: 602943331}
-  - component: {fileID: 602943330}
-  - component: {fileID: 602943329}
-  m_Layer: 0
-  m_Name: WizardCutsceneTrigger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &602943328
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602943327}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.15803246, z: -0, w: 0.98743397}
-  m_LocalPosition: {x: 40.16, y: 81.73999, z: -274.8}
-  m_LocalScale: {x: 25, y: 4, z: 15}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6758549}
-  m_LocalEulerAnglesHint: {x: 0, y: 18.185, z: 0}
---- !u!114 &602943329
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602943327}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73bc887288b9ca34998857e7888e578f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lightingController: {fileID: 2075449767}
-  postProcessingDarkness: {fileID: 1671908963}
-  wizardSpirit: {fileID: 1644123374}
-  dialogueSystem: {fileID: 243967439}
-  wizardAnimator: {fileID: 1344798961}
-  wizardDialogue:
-  - Welcome to the Sylvan Canopy, Staff-Bearer.
-  - This forest holds ancient magic, but darkness has taken root here.
-  - The creatures that once brought light now hide in shadow...
-  - Your Fae Light will guide you, but you'll need more than light to restore balance.
-  - Seek the fiery spirit that roams these woods. Its passion may ignite a new power
-    within you.
-  - Remember... even in darkness, there is always a spark waiting to be found.
---- !u!65 &602943330
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602943327}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &602943331
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602943327}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 4ce058dd90c47d9429003bd00e9dfa2a, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &602943332
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 602943327}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &605473817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -27739,6 +27603,39 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4161836121165495856, guid: eac2191c20b7acb4f8c3ca88637b42f3, type: 3}
   m_PrefabInstance: {fileID: 720973561}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &721044351
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 721044352}
+  m_Layer: 0
+  m_Name: Island2Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &721044352
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 721044351}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2075449766}
+  - {fileID: 1572081452}
+  m_Father: {fileID: 6758549}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &721596541
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51821,7 +51718,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 0.33710992, g: 0.8795749, b: 0.9730926, a: 1}
+  m_Color: {r: 0.6177897, g: 0.39781827, b: 0.9022148, a: 1}
   m_Intensity: 10
   m_Range: 3
   m_SpotAngle: 30
@@ -54726,7 +54623,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 0.33710992, g: 0.8795749, b: 0.9730926, a: 1}
+  m_Color: {r: 0.6067776, g: 0.33725494, b: 0.972549, a: 1}
   m_Intensity: 10
   m_Range: 3
   m_SpotAngle: 30
@@ -66824,6 +66721,95 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8351520952416237348, guid: aa5b1e0baf55a1d499aba08c74bbdb95, type: 3}
   m_PrefabInstance: {fileID: 1570558666}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1572081451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1572081452}
+  - component: {fileID: 1572081454}
+  - component: {fileID: 1572081453}
+  - component: {fileID: 1572081455}
+  m_Layer: 0
+  m_Name: Island2DarknessVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1572081452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572081451}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.16253746, z: -0, w: 0.9867024}
+  m_LocalPosition: {x: 11.8, y: 125.399994, z: -371.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 721044352}
+  m_LocalEulerAnglesHint: {x: 0, y: 18.708, z: 0}
+--- !u!114 &1572081453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572081451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 581285fd3a1b0484a85071e48fd1630e, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 0
+  priority: 0
+--- !u!114 &1572081454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572081451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 0
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 13140cf362bdd7b49a36a831c20e9b7b, type: 2}
+--- !u!65 &1572081455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1572081451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 150, y: 300, z: 300}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1574775377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -70473,11 +70459,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 635d908eca50bf8438e8025c83e1f212, type: 3}
---- !u!1 &1644123374 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8722707484499129528, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
-  m_PrefabInstance: {fileID: 1664977759}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1644123375 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8234436724202565122, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
@@ -71621,6 +71602,11 @@ PrefabInstance:
       addedObject: {fileID: 1228328318}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+--- !u!95 &1664977760 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2640996444692788344, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+  m_PrefabInstance: {fileID: 1664977759}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1669940869
 GameObject:
   m_ObjectHideFlags: 0
@@ -71721,70 +71707,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4377183326721852052, guid: 117025cd122780a4ab2875cc1a385fcc, type: 3}
   m_PrefabInstance: {fileID: 1670045061}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1671908961
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1671908962}
-  - component: {fileID: 1671908964}
-  - component: {fileID: 1671908963}
-  m_Layer: 0
-  m_Name: Global Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1671908962
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671908961}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9.659561, y: 121.764694, z: -338.0803}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6758549}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1671908963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671908961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b38a72f9af6eb24894595ffac0b4c6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  darkVolume: {fileID: 0}
-  transitionDuration: 3
---- !u!114 &1671908964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671908961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 0}
 --- !u!1001 &1675982377
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87383,7 +87305,7 @@ GameObject:
   - component: {fileID: 2075449770}
   - component: {fileID: 2075449769}
   - component: {fileID: 2075449768}
-  - component: {fileID: 2075449767}
+  - component: {fileID: 2075449771}
   m_Layer: 0
   m_Name: Island2Trigger
   m_TagString: Untagged
@@ -87400,31 +87322,12 @@ Transform:
   m_GameObject: {fileID: 2075449765}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.105928235, z: -0, w: 0.9943738}
-  m_LocalPosition: {x: 38.2, y: 81.3, z: -287.6}
+  m_LocalPosition: {x: 38.200005, y: 81.3, z: -287.6}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6758549}
+  m_Father: {fileID: 721044352}
   m_LocalEulerAnglesHint: {x: 0, y: 12.161, z: 0}
---- !u!114 &2075449767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2075449765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edbd5a6daa6d5f6438d4a1d063fb038b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainDirectionalLight: {fileID: 1501940670}
-  island2Fog: {fileID: 0}
-  targetLightIntensity: 0
-  darkLightColor: {r: 0.1, g: 0.1, b: 0.3, a: 1}
-  darkFogColor: {r: 0, g: 0, b: 0, a: 1}
-  fogDensity: 10
-  transitionDuration: 2
 --- !u!65 &2075449768
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -87499,6 +87402,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075449765}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2075449771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075449765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c92ebde0f561bf48a424b8f702b0abe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  triggerCollider: {fileID: 2075449768}
+  mainDirectionalLight: {fileID: 1501940670}
+  darknessVolume: {fileID: 1572081453}
+  wizardSpirit: {fileID: 1086963599}
+  dialogueSystem: {fileID: 243967439}
+  wizardAnimator: {fileID: 1664977760}
+  pitchBlackLightIntensity: 10
+  heavyFogDensity: 0.15
+  transitionDuration: 3
+  activeVignetteIntensity: 0.1
+  inactiveVignetteIntensity: 0.6
+  activeExposure: 0
+  inactiveExposure: -2
+  activeFogDensity: 0.05
+  effectTransitionSpeed: 2
+  wizardDialogue:
+  - The Sylvan Canopy... even darker than I remembered.
+  - These woods hold secrets in their shadows, Staff-Bearer.
+  - I sense a familiar spark here - a flame that refused to be extinguished.
+  - Seek the guardian of these woods. Its fire may ignite a new power within your
+    staff.
+  - But be warned... some paths require both light and warmth to navigate safely.
+  - Trust in the flames you carry, both old and new.
 --- !u!1001 &2077814068
 PrefabInstance:
   m_ObjectHideFlags: 0
