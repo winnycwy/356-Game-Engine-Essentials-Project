@@ -20,6 +20,16 @@ public class AbilityUIManager : MonoBehaviour
     public Sprite faeLightSprite;
     public string faeLightName = "Fae Light";
 
+    [Header("Fire Ability UI References")]
+    public GameObject fireAbilitySlot;
+    public Image fireAbilityIcon;
+    public TextMeshProUGUI fireAbilityName;
+    public TextMeshProUGUI fireKeybindText;
+
+    [Header("Fire Ability Settings")]
+    public Sprite fireAbilitySprite;
+    public string fireAbilityNameText = "Fox's Flame";
+
     private static AbilityUIManager _instance;
     public static AbilityUIManager Instance { get { return _instance; } }
 
@@ -83,5 +93,25 @@ public class AbilityUIManager : MonoBehaviour
             // Optional: change color based on progress
             holdProgressFill.color = Color.Lerp(Color.yellow, Color.green, progress);
         }
+    }
+
+    // Add this method:
+    public void UnlockFireAbility()
+    {
+        // Setup fire ability slot
+        if (fireAbilityIcon != null && fireAbilitySprite != null)
+            fireAbilityIcon.sprite = fireAbilitySprite;
+
+        if (fireAbilityName != null)
+            fireAbilityName.text = fireAbilityNameText;
+
+        if (fireKeybindText != null)
+            fireKeybindText.text = "R";
+
+        // Show fire ability slot
+        if (fireAbilitySlot != null)
+            fireAbilitySlot.SetActive(true);
+
+        Debug.Log("Fire Ability UI unlocked!");
     }
 }

@@ -17,6 +17,10 @@ public class HiddenCrystal : MonoBehaviour
     public int crystalValue = 1;
     public float collectionDelay = 0.5f; // Delay before collection after appearing
 
+    [Header("Quest Integration")]
+    public FoxNPC foxQuest; // Drag your Fox NPC here in Inspector
+
+
     // Particle effects
     public ParticleSystem collectParticles;
     public GameObject crystalModel; // Reference to the visual part
@@ -320,26 +324,22 @@ public class HiddenCrystal : MonoBehaviour
 
         isCollected = true;
 
-        // Play collect sound
+        // Notify Fox quest system
+        if (foxQuest != null)
+        {
+            foxQuest.OnCrystalFound();
+        }
+
+        // Rest of your collection code...
         if (collectSound != null)
         {
             AudioSource.PlayClipAtPoint(collectSound, transform.position);
         }
 
-        // Add to crystal manager
-        if (CrystalManager.Instance != null)
-        {
-            CrystalManager.Instance.AddCrystal(crystalValue);
-        }
-        else
-        {
-            Debug.LogWarning("CrystalManager instance not found!");
-        }
-
         // Play collection effects
         StartCoroutine(PlayCollectionEffects());
 
-        Debug.Log("Crystal collected!");
+        Debug.Log("Crystal collected and Fox notified!");
     }
 
     private IEnumerator PlayCollectionEffects()
@@ -433,4 +433,6 @@ public class HiddenCrystal : MonoBehaviour
             CollectCrystal();
         }
     }
+
+
 }
