@@ -110,8 +110,13 @@ AnimatorStateMachine:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     m_State: {fileID: -641177933233279970}
     m_Position: {x: 450, y: 300, z: 0}
+=======
+    m_State: {fileID: -6642335716494791929}
+    m_Position: {x: 450, y: 320, z: 0}
+>>>>>>> Stashed changes
 =======
     m_State: {fileID: -6642335716494791929}
     m_Position: {x: 450, y: 320, z: 0}
@@ -485,8 +490,13 @@ AnimatorController:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - m_Name: Attack
     m_Type: 9
+=======
+  - m_Name: Die
+    m_Type: 4
+>>>>>>> Stashed changes
 =======
   - m_Name: Die
     m_Type: 4
@@ -759,7 +769,11 @@ AnimatorState:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: -3305138864848016433}
+=======
+  - {fileID: 2255414692939443437}
+>>>>>>> Stashed changes
 =======
   - {fileID: 2255414692939443437}
 >>>>>>> Stashed changes
