@@ -8,6 +8,9 @@ public class OpeningCutscene : MonoBehaviour
     public DialogueSystem dialogueSystem;  // Your existing dialogue system
     public Animator wizardAnimator;        // Wizard's animator component
 
+    [Header("Audio Settings")]
+    public AudioSource typingAudioSource;
+
     [Header("Wizard Dialogue")]
     [TextArea]
     public string[] wizardDialogue = {
@@ -40,11 +43,43 @@ public class OpeningCutscene : MonoBehaviour
         // Start dialogue using your existing system
         if (dialogueSystem != null)
         {
+            // Only subscribe to line events now
+            dialogueSystem.OnLineTypingStart += StartTypingSound;
+            dialogueSystem.OnLineTypingComplete += StopTypingSound;
+
             dialogueSystem.StartDialogue(wizardDialogue, "Aetherius");
 
             // Hide wizard when dialogue ends
             StartCoroutine(HideWizardAfterDialogue());
         }
+    }
+
+    private void StartTypingSound()
+    {
+        if (typingAudioSource != null && !typingAudioSource.isPlaying)
+        {
+            typingAudioSource.loop = true;
+            typingAudioSource.Play();
+        }
+    }
+
+    private void StopTypingSound()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (dialogueSystem != null)
+        {
+            dialogueSystem.OnLineTypingStart -= StartTypingSound;
+            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
+        }
+
+        StopTypingSound();
     }
 
     private IEnumerator HideWizardAfterDialogue()
