@@ -252,16 +252,16 @@ public class Island2DarknessTrigger : MonoBehaviour
 
     [Header("Darkness Settings")]
     public float pitchBlackLightIntensity = 0f;
-    public float heavyFogDensity = 0.15f;
+    public float heavyFogDensity = 0.4f;
     public float transitionDuration = 3f;
 
     [Header("Fae Light Vision Settings")]
-    public float activeVignetteIntensity = 0.1f;  // Very light vignette when Fae Light is on
-    public float inactiveVignetteIntensity = 0.6f; // Strong vignette when Fae Light is off
-    public float activeExposure = 0f;             // Normal exposure
-    public float inactiveExposure = -2f;          // Dark exposure
-    public float activeFogDensity = 0.05f;        // Reduced fog
-    public float effectTransitionSpeed = 2f;      // How fast effects transition
+    public float activeVignetteIntensity = 0.1f;
+    public float inactiveVignetteIntensity = 0.6f;
+    public float activeExposure = -1f;
+    public float inactiveExposure = -5f;
+    public float activeFogDensity = 0.05f;
+    public float effectTransitionSpeed = 2f;
 
     [Header("Wizard Dialogue")]
     [TextArea]
@@ -284,18 +284,43 @@ public class Island2DarknessTrigger : MonoBehaviour
     private FaeLightAbility playerFaeLight;
     private bool isInIsland2 = false;
 
-    // Target values for smooth transitions
     private float targetVignetteIntensity;
     private float targetExposure;
     private float targetFogDensity;
 
+    // For local volume control
+    private bool isVolumeEnabled = false;
+    private Collider volumeCollider;
+
     void Start()
     {
+        Debug.Log("Island2DarknessTrigger - Start called");
+
         // Get post-processing effects
         if (darknessVolume != null && darknessVolume.profile != null)
         {
-            darknessVolume.profile.TryGetSettings(out vignette);
-            darknessVolume.profile.TryGetSettings(out colorGrading);
+            bool hasVignette = darknessVolume.profile.TryGetSettings(out vignette);
+            bool hasColorGrading = darknessVolume.profile.TryGetSettings(out colorGrading);
+
+            Debug.Log($"Post-processing: Vignette={hasVignette}, ColorGrading={hasColorGrading}");
+
+            // Get the volume's collider for local volume
+            volumeCollider = darknessVolume.GetComponent<Collider>();
+            if (volumeCollider != null)
+            {
+                Debug.Log($"Volume collider found: {volumeCollider.GetType().Name}");
+            }
+
+            // Initially disable the local volume
+            darknessVolume.enabled = false;
+            if (volumeCollider != null)
+            {
+                volumeCollider.enabled = false;
+            }
+        }
+        else
+        {
+            Debug.LogError("Darkness Volume or Profile is missing!");
         }
 
         // Store original lighting
@@ -303,19 +328,14 @@ public class Island2DarknessTrigger : MonoBehaviour
         {
             originalLightIntensity = mainDirectionalLight.intensity;
             originalLightColor = mainDirectionalLight.color;
+            Debug.Log($"Original light intensity: {originalLightIntensity}");
         }
 
         originalFogColor = RenderSettings.fogColor;
         originalFogDensity = RenderSettings.fogDensity;
         RenderSettings.fog = true;
 
-        // Ensure darkness volume starts disabled
-        if (darknessVolume != null)
-        {
-            darknessVolume.weight = 0f;
-        }
-
-        // Setup trigger
+        // Setup trigger - make sure it's on a separate GameObject from Fae Light
         if (triggerCollider != null)
         {
             triggerCollider.isTrigger = true;
@@ -342,19 +362,28 @@ public class Island2DarknessTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log($"Trigger entered by: {other.name} (Tag: {other.tag})");
+
+        // ONLY trigger for the Player, ignore FaeLight projectiles and other objects
         if (!hasTriggered && other.CompareTag("Player"))
         {
             hasTriggered = true;
             isInIsland2 = true;
+            Debug.Log("Player entered Island 2 - Starting darkness sequence");
             StartCoroutine(Island2Sequence());
+        }
+        else if (other.name.Contains("FaeLight"))
+        {
+            Debug.Log("Ignoring FaeLight projectile - this is not the player");
         }
     }
 
     void OnTriggerExit(Collider other)
     {
+        // ONLY respond to Player exiting
         if (other.CompareTag("Player") && isInIsland2)
         {
-            // Player left Island 2 - restore everything
+            Debug.Log("Player left Island 2");
             isInIsland2 = false;
             RestoreIsland1Lighting();
         }
@@ -368,21 +397,26 @@ public class Island2DarknessTrigger : MonoBehaviour
             if (player != null)
             {
                 playerFaeLight = player.GetComponent<FaeLightAbility>();
-                if (playerFaeLight == null)
+                if (playerFaeLight != null)
                 {
-                    Debug.LogWarning("FaeLightAbility component not found on Player!");
+                    Debug.Log("FaeLightAbility found on player!");
                 }
-            }
-            else
-            {
-                Debug.LogWarning("Player GameObject with tag 'Player' not found!");
+                else
+                {
+                    Debug.LogError("FaeLightAbility component not found on Player! Checking children...");
+                    playerFaeLight = player.GetComponentInChildren<FaeLightAbility>();
+                    if (playerFaeLight != null)
+                    {
+                        Debug.Log("FaeLightAbility found in player children!");
+                    }
+                }
             }
         }
     }
 
     private IEnumerator Island2Sequence()
     {
-        Debug.Log("Player entered Island 2 - Starting darkness sequence");
+        Debug.Log("Starting Island 2 darkness sequence");
 
         // Phase 1: Transition to darkness
         yield return StartCoroutine(TransitionToDarkness());
@@ -395,6 +429,18 @@ public class Island2DarknessTrigger : MonoBehaviour
 
     private IEnumerator TransitionToDarkness()
     {
+        // Enable the local volume
+        if (darknessVolume != null)
+        {
+            darknessVolume.enabled = true;
+            if (volumeCollider != null)
+            {
+                volumeCollider.enabled = true;
+            }
+            isVolumeEnabled = true;
+            Debug.Log("Local Post-Processing Volume enabled");
+        }
+
         float timer = 0f;
 
         while (timer < transitionDuration)
@@ -413,12 +459,6 @@ public class Island2DarknessTrigger : MonoBehaviour
             RenderSettings.fogColor = Color.Lerp(originalFogColor, Color.black, progress);
             RenderSettings.fogDensity = Mathf.Lerp(originalFogDensity, heavyFogDensity, progress);
 
-            // Fade in post-processing
-            if (darknessVolume != null)
-            {
-                darknessVolume.weight = progress;
-            }
-
             yield return null;
         }
 
@@ -430,18 +470,28 @@ public class Island2DarknessTrigger : MonoBehaviour
         RenderSettings.fogColor = Color.black;
         RenderSettings.fogDensity = heavyFogDensity;
 
-        if (darknessVolume != null)
-        {
-            darknessVolume.weight = 1f;
-        }
-
         // Set initial darkness effects
-        if (vignette != null) vignette.intensity.value = inactiveVignetteIntensity;
-        if (colorGrading != null) colorGrading.postExposure.value = inactiveExposure;
+        if (vignette != null)
+        {
+            vignette.intensity.value = inactiveVignetteIntensity;
+            Debug.Log($"Set vignette to: {vignette.intensity.value}");
+        }
+        if (colorGrading != null)
+        {
+            colorGrading.postExposure.value = inactiveExposure;
+            Debug.Log($"Set exposure to: {colorGrading.postExposure.value}");
+        }
     }
 
     private IEnumerator PlayWizardCutscene()
     {
+        // Skip cutscene for testing - comment this out when you want the cutscene
+        if (wizardSpirit == null || dialogueSystem == null)
+        {
+            Debug.Log("Skipping cutscene - components not set up");
+            yield break;
+        }
+
         if (wizardSpirit != null)
             wizardSpirit.SetActive(true);
 
@@ -475,7 +525,11 @@ public class Island2DarknessTrigger : MonoBehaviour
         if (playerFaeLight == null)
         {
             FindPlayerFaeLight();
-            return;
+            if (playerFaeLight == null)
+            {
+                Debug.LogWarning("FaeLightAbility still not found!");
+                return;
+            }
         }
 
         bool isFaeLightActive = playerFaeLight.IsLightActive();
@@ -499,24 +553,43 @@ public class Island2DarknessTrigger : MonoBehaviour
 
     private void SmoothTransitionEffects()
     {
+        // Only apply effects if the volume is enabled and we're in Island 2
+        if (!isVolumeEnabled || !isInIsland2) return;
+
         // Smoothly transition vignette
         if (vignette != null)
         {
-            vignette.intensity.value = Mathf.Lerp(vignette.intensity.value, targetVignetteIntensity, Time.deltaTime * effectTransitionSpeed);
+            float currentVignette = vignette.intensity.value;
+            vignette.intensity.value = Mathf.Lerp(currentVignette, targetVignetteIntensity, Time.deltaTime * effectTransitionSpeed);
         }
 
         // Smoothly transition exposure
         if (colorGrading != null)
         {
-            colorGrading.postExposure.value = Mathf.Lerp(colorGrading.postExposure.value, targetExposure, Time.deltaTime * effectTransitionSpeed);
+            float currentExposure = colorGrading.postExposure.value;
+            colorGrading.postExposure.value = Mathf.Lerp(currentExposure, targetExposure, Time.deltaTime * effectTransitionSpeed);
         }
 
         // Smoothly transition fog density
-        RenderSettings.fogDensity = Mathf.Lerp(RenderSettings.fogDensity, targetFogDensity, Time.deltaTime * effectTransitionSpeed);
+        float currentFog = RenderSettings.fogDensity;
+        RenderSettings.fogDensity = Mathf.Lerp(currentFog, targetFogDensity, Time.deltaTime * effectTransitionSpeed);
     }
 
     private void RestoreIsland1Lighting()
     {
+        // Disable the local volume
+        if (darknessVolume != null)
+        {
+            darknessVolume.enabled = false;
+            if (volumeCollider != null)
+            {
+                volumeCollider.enabled = false;
+            }
+            isVolumeEnabled = false;
+            Debug.Log("Local Post-Processing Volume disabled");
+        }
+
+        // Restore lighting
         if (mainDirectionalLight != null)
         {
             mainDirectionalLight.intensity = originalLightIntensity;
@@ -526,46 +599,48 @@ public class Island2DarknessTrigger : MonoBehaviour
         RenderSettings.fogColor = originalFogColor;
         RenderSettings.fogDensity = originalFogDensity;
 
-        if (darknessVolume != null)
-        {
-            darknessVolume.weight = 0f;
-        }
-
-        // Reset post-processing effects to default
-        if (vignette != null)
-        {
-            vignette.intensity.value = 0f;
-        }
-        if (colorGrading != null)
-        {
-            colorGrading.postExposure.value = 0f;
-        }
-
         Debug.Log("Player left Island 2 - Lighting restored to normal");
     }
 
-    // For debugging in Inspector
-    [ContextMenu("Force Fae Light Vision")]
-    public void ForceFaeLightVision()
+    // Manual trigger for testing - call this from another script if needed
+    public void ForceEnterIsland2()
+    {
+        if (!hasTriggered)
+        {
+            hasTriggered = true;
+            isInIsland2 = true;
+            Debug.Log("Manually forcing Island 2 entry");
+            StartCoroutine(TransitionToDarkness());
+        }
+    }
+
+    [ContextMenu("Test Fae Light ON")]
+    public void TestFaeLightOn()
     {
         if (vignette != null && colorGrading != null)
         {
             vignette.intensity.value = activeVignetteIntensity;
             colorGrading.postExposure.value = activeExposure;
             RenderSettings.fogDensity = activeFogDensity;
-            Debug.Log("Forced Fae Light vision effects");
+            Debug.Log($"TEST: Vignette={vignette.intensity.value}, Exposure={colorGrading.postExposure.value}");
         }
     }
 
-    [ContextMenu("Force Dark Vision")]
-    public void ForceDarkVision()
+    [ContextMenu("Test Fae Light OFF")]
+    public void TestFaeLightOff()
     {
         if (vignette != null && colorGrading != null)
         {
             vignette.intensity.value = inactiveVignetteIntensity;
             colorGrading.postExposure.value = inactiveExposure;
             RenderSettings.fogDensity = heavyFogDensity;
-            Debug.Log("Forced dark vision effects");
+            Debug.Log($"TEST: Vignette={vignette.intensity.value}, Exposure={colorGrading.postExposure.value}");
         }
+    }
+
+    [ContextMenu("Force Island 2 Entry")]
+    public void DebugForceIsland2()
+    {
+        ForceEnterIsland2();
     }
 }
