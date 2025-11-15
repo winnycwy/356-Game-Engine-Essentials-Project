@@ -42,7 +42,6 @@ public class FoxNPC : MonoBehaviour
     private bool hasSpokenInitial = false;
     private bool playerHasCrystal = false;
     private bool hasUnlockedFireAbility = false;
-    private bool hasGivenKeyQuest = false;
 
     void Start()
     {
@@ -71,11 +70,6 @@ public class FoxNPC : MonoBehaviour
             {
                 // Player has crystal - trigger ability unlock dialogue
                 StartCrystalConversation();
-            }
-            else if (hasGivenKeyQuest)
-            {
-                // Optional: Add reminder dialogue if player returns
-                ShowReminderDialogue();
             }
             else
             {
@@ -108,10 +102,6 @@ public class FoxNPC : MonoBehaviour
             else if (playerHasCrystal && !hasUnlockedFireAbility)
             {
                 StartCrystalConversation();
-            }
-            else if (hasGivenKeyQuest)
-            {
-                ShowReminderDialogue();
             }
         }
     }
@@ -208,21 +198,6 @@ public class FoxNPC : MonoBehaviour
         // Show the sacred key at top of tree trunk
         if (sacredKey != null)
             sacredKey.SetActive(true);
-
-        hasGivenKeyQuest = true;
-    }
-
-    private void ShowReminderDialogue()
-    {
-        if (dialogueSystem == null || dialogueSystem.IsDialogueActive) return;
-
-        string[] reminderDialogue = {
-            "Remember, find the sacred key that the Spritelings stole.",
-            "You'll need it to unlock the wizard's lair up ahead.",
-            "Use your new fire ability to defeat the Spritelings!"
-        };
-
-        dialogueSystem.StartDialogue(reminderDialogue, "Ignis");
     }
 
     // Call this when player finds the fire crystal (using Fae Light)
@@ -250,11 +225,6 @@ public class FoxNPC : MonoBehaviour
     public bool HasUnlockedFireAbility()
     {
         return hasUnlockedFireAbility;
-    }
-
-    public bool HasGivenKeyQuest()
-    {
-        return hasGivenKeyQuest;
     }
 
     public bool PlayerHasCrystal()

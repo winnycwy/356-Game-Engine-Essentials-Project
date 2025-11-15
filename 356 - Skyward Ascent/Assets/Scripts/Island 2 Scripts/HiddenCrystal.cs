@@ -323,23 +323,20 @@ public class HiddenCrystal : MonoBehaviour
         if (isCollected) return;
 
         isCollected = true;
+        Debug.Log("Crystal collected - notifying Fox");
 
         // Notify Fox quest system
         if (foxQuest != null)
         {
             foxQuest.OnCrystalFound();
+            Debug.Log("Fox notified about crystal");
+        }
+        else
+        {
+            Debug.LogError("FoxQuest reference not set on crystal!");
         }
 
         // Rest of your collection code...
-        if (collectSound != null)
-        {
-            AudioSource.PlayClipAtPoint(collectSound, transform.position);
-        }
-
-        // Play collection effects
-        StartCoroutine(PlayCollectionEffects());
-
-        Debug.Log("Crystal collected and Fox notified!");
     }
 
     private IEnumerator PlayCollectionEffects()

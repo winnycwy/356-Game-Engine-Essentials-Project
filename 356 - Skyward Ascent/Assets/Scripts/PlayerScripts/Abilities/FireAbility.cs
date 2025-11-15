@@ -39,6 +39,11 @@ public class FireAbility : MonoBehaviour
     private Vector3 originalButtonScale;
     private Coroutine buttonEffectCoroutine;
 
+    [Header("Animation")]
+    public Animator playerAnimator;
+    public string shootAnimationTrigger = "Shoot";
+
+
     void Start()
     {
         if (fireAbilityUI != null)
@@ -98,6 +103,12 @@ public class FireAbility : MonoBehaviour
     {
         if (fireProjectilePrefab != null && fireSpawnPoint != null)
         {
+            // Trigger shoot animation
+            if (playerAnimator != null)
+            {
+                playerAnimator.SetTrigger(shootAnimationTrigger);
+            }
+
             GameObject fireball = Instantiate(fireProjectilePrefab, fireSpawnPoint.position, fireSpawnPoint.rotation);
 
             // Set up projectile component
@@ -217,4 +228,6 @@ public class FireAbility : MonoBehaviour
     {
         return isAbilityUnlocked;
     }
+
+
 }

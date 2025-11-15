@@ -3107,7 +3107,7 @@ MonoBehaviour:
   isCollectible: 1
   crystalValue: 1
   collectionDelay: 0.5
-  foxQuest: {fileID: 0}
+  foxQuest: {fileID: 897379970}
   collectParticles: {fileID: 0}
   crystalModel: {fileID: 66314412}
   appearSound: {fileID: 0}
@@ -63431,7 +63431,7 @@ GameObject:
   - component: {fileID: 1450862608}
   m_Layer: 0
   m_Name: FireSpawnPoint
-  m_TagString: Untagged
+  m_TagString: WandProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -94396,7 +94396,12 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'root'\n\tTransform 'root'\n\tTransform 'arm_stretch.l'\n\tTransform
+    'spine_02.x'\n\tTransform 'spine_01.x'\n\tTransform 'thigh_stretch.r'\n\tTransform
+    'shoulder.r'\n\tTransform 'foot.l'\n\tTransform 'hand.r'\n\tTransform 'arm_stretch.r'\n\tand
+    more ...\n\tFrom animation clip 'mixamo.com'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
@@ -95134,11 +95139,13 @@ MonoBehaviour:
   defaultBackground: {fileID: 21300000, guid: de51907277a2e0f4882f8b9adddeb7c7, type: 3}
   pressedBackground: {fileID: 21300000, guid: 9ce2f9f709463fa40a74047dd90fbdeb, type: 3}
   defaultIconColor: {r: 1, g: 1, b: 1, a: 1}
-  activeIconColor: {r: 1, g: 0.6, b: 0.3, a: 1}
+  activeIconColor: {r: 1, g: 1, b: 1, a: 1}
   defaultTextColor: {r: 1, g: 1, b: 1, a: 1}
-  activeTextColor: {r: 1, g: 0.6, b: 0.3, a: 1}
+  activeTextColor: {r: 1, g: 1, b: 1, a: 1}
   pressScale: 0.85
   pressDuration: 0.1
+  playerAnimator: {fileID: 6860789273886431452}
+  shootAnimationTrigger: Shoot
 --- !u!114 &8090919453279865624
 MonoBehaviour:
   m_ObjectHideFlags: 0
