@@ -3,50 +3,93 @@ using System.Collections;
 
 public class VisionBlock : MonoBehaviour
 {
-    [Header("Reference to global volume object that should turn ON when hit")]
-    public GameObject globalVolumeObject;
+    [Header("References")]
+    public GameObject globalVolumeObject;   // Vision blocking overlay
+    public BeeScript enemyScript;           // Enemy's BeeScript
 
-    [Header("Timing")]
-    public float blockDuration = 1.5f;
-    public float cooldown = 1.0f;
+    [Header("Settings")]
+    public float blockDuration = 1.5f;   // Optional auto-unblock
+    public float cooldown = 1f;          // Prevent repeated triggers
+    public float stunDuration = 3f;      // How long enemy stops attacking
 
     private bool onCooldown = false;
+    private bool playerInside = false;
+
+    private FaeLightAbility playerFaeLight;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !onCooldown)
-        {
-            StartCoroutine(BlockVision(other));
-        }
-    }
+        if (!other.CompareTag("Player") || onCooldown) return;
 
-    private IEnumerator BlockVision(Collider player)
-    {
-        onCooldown = true;
+        playerInside = true;
 
-        // Enable global volume
+        // Get reference to player's FaeLightAbility
+        playerFaeLight = other.GetComponent<FaeLightAbility>();
+
+        // Start vision block
         if (globalVolumeObject != null)
             globalVolumeObject.SetActive(true);
 
-        // Disable FaeLightAbility script on player
-        FaeLightAbility faelight = player.GetComponent<FaeLightAbility>();
-        if (faelight != null)
-            faelight.enabled = false;
+        StartCoroutine(BlockDuration());
+    }
 
-        // Wait for block duration
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInside = false;
+            playerFaeLight = null;
+        }
+    }
+
+    private void Update()
+    {
+        if (!playerInside || playerFaeLight == null) return;
+
+        // If player activates FaeLight
+        if (playerFaeLight.IsLightActive())
+        {
+            RemoveBlockAndStunEnemy();
+        }
+    }
+
+    private IEnumerator BlockDuration()
+    {
         yield return new WaitForSeconds(blockDuration);
 
-        // Disable global volume
+        if (globalVolumeObject != null)
+            globalVolumeObject.SetActive(false);
+    }
+
+    private void RemoveBlockAndStunEnemy()
+    {
+        // Remove vision block immediately
         if (globalVolumeObject != null)
             globalVolumeObject.SetActive(false);
 
-        // Re-enable FaeLightAbility
-        if (faelight != null)
-            faelight.enabled = true;
+        // Stop enemy from attacking temporarily
+        if (enemyScript != null)
+        {
+            enemyScript.enabled = false; // Disable entire script
+            StartCoroutine(RestoreEnemyAfterStun(enemyScript, stunDuration));
+        }
 
-        // Wait for cooldown before allowing another block
+        // Prevent multiple triggers while inside
+        playerInside = false;
+        onCooldown = true;
+        StartCoroutine(ResetCooldown());
+    }
+
+    private IEnumerator RestoreEnemyAfterStun(BeeScript script, float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        if (script != null)
+            script.enabled = true;
+    }
+
+    private IEnumerator ResetCooldown()
+    {
         yield return new WaitForSeconds(cooldown);
-
         onCooldown = false;
     }
 }

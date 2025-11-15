@@ -43344,15 +43344,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013189255144, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 136.36
+      value: -9.38
       objectReference: {fileID: 0}
     - target: {fileID: 4000013189255144, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 101.13
+      value: 35.64
       objectReference: {fileID: 0}
     - target: {fileID: 4000013189255144, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -105.58
+      value: 122.32
       objectReference: {fileID: 0}
     - target: {fileID: 4000013189255144, guid: d82532fc4fd80bf4097d29efd331a0ff, type: 3}
       propertyPath: m_LocalRotation.w
@@ -43519,8 +43519,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalVolumeObject: {fileID: 1737648746}
+  enemyScript: {fileID: 1019500752}
   blockDuration: 1.5
   cooldown: 1
+  stunDuration: 5
 --- !u!4 &1019508894 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400116, guid: cb2a63aa7e6bbda4b8127e31c18ef3e9, type: 3}
@@ -47046,8 +47048,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalVolumeObject: {fileID: 0}
+  enemyScript: {fileID: 0}
   blockDuration: 1.5
   cooldown: 1
+  stunDuration: 3
 --- !u!1001 &1086226707
 PrefabInstance:
   m_ObjectHideFlags: 0
