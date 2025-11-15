@@ -256,6 +256,10 @@ public class DialogueSystem : MonoBehaviour
     public GameObject continuePrompt; // Add this - drag a "Press E" UI element
     public float promptBlinkSpeed = 1f; // Blink speed for the prompt
 
+    [Header("Dialogue Events")]
+    public System.Action OnLineTypingStart; // When a line starts typing
+    public System.Action OnLineTypingComplete; // When a line finishes typing
+
     private string[] currentLines;
     private int currentLineIndex;
     private Coroutine typingCoroutine;
@@ -276,6 +280,7 @@ public class DialogueSystem : MonoBehaviour
     void Update()
     {
         if (!IsDialogueActive) return;
+        if (currentLines == null) return;
 
         if (Input.GetKeyDown(KeyCode.E))
         {
@@ -324,12 +329,17 @@ public class DialogueSystem : MonoBehaviour
 
     private void DisplayCurrentLine()
     {
+        if (currentLines == null || currentLineIndex >= currentLines.Length) return;
+
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 
         // Hide continue prompt while typing
         if (continuePrompt != null)
             continuePrompt.SetActive(false);
+
+        // Trigger line typing start event
+        OnLineTypingStart?.Invoke();
 
         typingCoroutine = StartCoroutine(TypeText(currentLines[currentLineIndex]));
     }
@@ -350,10 +360,15 @@ public class DialogueSystem : MonoBehaviour
         // Show continue prompt after typing completes
         if (continuePrompt != null)
             continuePrompt.SetActive(true);
+
+        // Trigger event when line finishes typing naturally
+        OnLineTypingComplete?.Invoke();
     }
 
     private void SkipTyping()
     {
+        if (currentLines == null || currentLineIndex >= currentLines.Length) return;
+
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 
@@ -363,6 +378,8 @@ public class DialogueSystem : MonoBehaviour
         // Show continue prompt immediately when skipping
         if (continuePrompt != null)
             continuePrompt.SetActive(true);
+
+        OnLineTypingComplete?.Invoke();
     }
 
     private void ShowNextLine()
@@ -376,11 +393,20 @@ public class DialogueSystem : MonoBehaviour
         // Simple blink effect
         if (continuePrompt != null)
         {
-            float alpha = Mathf.PingPong(Time.time * promptBlinkSpeed, 1f);
+            //float alpha = Mathf.PingPong(Time.time * promptBlinkSpeed, 1f);
+            //CanvasGroup canvasGroup = continuePrompt.GetComponent<CanvasGroup>();
+            //if (canvasGroup == null)
+            //    canvasGroup = continuePrompt.AddComponent<CanvasGroup>();
+
+            //canvasGroup.alpha = alpha;
             CanvasGroup canvasGroup = continuePrompt.GetComponent<CanvasGroup>();
             if (canvasGroup == null)
+            {
                 canvasGroup = continuePrompt.AddComponent<CanvasGroup>();
+            }
 
+            // Calculate blink alpha
+            float alpha = Mathf.PingPong(Time.time * promptBlinkSpeed, 1f);
             canvasGroup.alpha = alpha;
         }
     }
