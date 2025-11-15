@@ -535,7 +535,6 @@ Transform:
   - {fileID: 752477002}
   - {fileID: 897379965}
   - {fileID: 1411619738}
-  - {fileID: 66314413}
   - {fileID: 349366173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2994,8 +2993,12 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 6758549}
+    m_TransformParent: {fileID: 1411619738}
     m_Modifications:
+    - target: {fileID: 2967605495177263730, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
       propertyPath: m_LocalScale.x
       value: 3
@@ -3052,6 +3055,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: HiddenCrystal
       objectReference: {fileID: 0}
+    - target: {fileID: 5575030985936643637, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6223553936845113312, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ba9a735517041342a1740d6e22cec6e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3088,7 +3099,7 @@ MonoBehaviour:
   fadeInDuration: 1.5
   fadeOutDuration: 2
   glowIntensity: 2
-  detectionRange: 2
+  detectionRange: 10
   faeLightLayer:
     serializedVersion: 2
     m_Bits: 1
@@ -7703,7 +7714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344973818417766545, guid: caa540c78c29d8e4ab0fb7df1b8b2558, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -20064,7 +20075,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344973818417766545, guid: caa540c78c29d8e4ab0fb7df1b8b2558, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -28638,7 +28649,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2075449766}
-  - {fileID: 1572081452}
   m_Father: {fileID: 6758549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &721596541
@@ -61436,7 +61446,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 66314413}
   m_Father: {fileID: 6758549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1411619739
@@ -66547,7 +66558,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344973818417766545, guid: caa540c78c29d8e4ab0fb7df1b8b2558, type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -68193,95 +68204,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8351520952416237348, guid: aa5b1e0baf55a1d499aba08c74bbdb95, type: 3}
   m_PrefabInstance: {fileID: 1570558666}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1572081451
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1572081452}
-  - component: {fileID: 1572081454}
-  - component: {fileID: 1572081453}
-  - component: {fileID: 1572081455}
-  m_Layer: 3
-  m_Name: Island2DarknessVolume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1572081452
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572081451}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.16253746, z: -0, w: 0.9867024}
-  m_LocalPosition: {x: 11.8, y: 125.399994, z: -371.6}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 721044352}
-  m_LocalEulerAnglesHint: {x: 0, y: 18.708, z: 0}
---- !u!114 &1572081453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572081451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 581285fd3a1b0484a85071e48fd1630e, type: 2}
-  isGlobal: 0
-  blendDistance: 8
-  weight: 1
-  priority: 10
---- !u!114 &1572081454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572081451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 0
-  priority: 0
-  blendDistance: 8
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: bb110b18bcad0b941997ff22af4b3382, type: 2}
---- !u!65 &1572081455
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1572081451}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 150, y: 300, z: 300}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &1574075897
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -70043,11 +69965,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d74d77397d6a74a8b89c252aa28651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactRange: 3
+  interactRange: 5
   interactKey: 101
   runestoneLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   playerAnimator: {fileID: 6860789273886431452}
   interactAnimation: Interact
   animationDelay: 0.5
@@ -89273,7 +89195,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   triggerCollider: {fileID: 2075449768}
   mainDirectionalLight: {fileID: 1501940670}
-  darknessVolume: {fileID: 1572081453}
+  darknessVolume: {fileID: 0}
   wizardSpirit: {fileID: 1086963599}
   dialogueSystem: {fileID: 243967439}
   wizardAnimator: {fileID: 1664977760}
