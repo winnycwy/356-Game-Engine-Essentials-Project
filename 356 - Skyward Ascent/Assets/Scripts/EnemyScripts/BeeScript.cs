@@ -19,18 +19,30 @@ public class BeeScript : MonoBehaviour
     public float attackCooldown = 1f;
     private float lastAttackTime = 0f;
 
+    private BeeHealthController healthController;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
+        healthController = GetComponent<BeeHealthController>();
+
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        if (healthController != null)
+        {
+            healthController.OnBeeDeath += OnDeath;
+        }
 
         GoToNextWaypoint();
     }
 
     void Update()
     {
+        if (healthController != null && !healthController.IsAlive())
+            return;
+
         float distance = Vector3.Distance(transform.position, player.position);
 
         switch (currentState)
@@ -47,6 +59,27 @@ public class BeeScript : MonoBehaviour
                     ChangeState(State.Patrol);
                 break;
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log($"🐝 Bee taking {damage} damage!");
+
+        if (healthController != null && healthController.IsAlive())
+        {
+            healthController.TakeDamage(damage);
+        }
+        else
+        {
+            Debug.LogError("BeeHealthController not found or bee already dead!");
+        }
+    }
+
+    void OnDeath()
+    {
+        Debug.Log("Bee died!");
+        agent.isStopped = true;
+        // Don't destroy here - BeeHealthController handles destruction
     }
 
     void ChangeState(State newState)
