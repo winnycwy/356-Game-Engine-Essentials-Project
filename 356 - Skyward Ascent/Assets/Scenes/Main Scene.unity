@@ -12469,6 +12469,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &310666033
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12544,6 +12545,8 @@ Transform:
   m_PrefabInstance: {fileID: 310666033}
   m_PrefabAsset: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1 &312501607
@@ -12683,6 +12686,9 @@ CanvasRenderer:
   m_GameObject: {fileID: 312501607}
   m_CullTransparentMesh: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -39444,6 +39450,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &922194225 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 190082, guid: c35b4f7b6db0440a8b9972af1d27adea, type: 3}
@@ -39451,6 +39458,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &922194227
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1 &922233733
@@ -39494,6 +39503,9 @@ RectTransform:
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &922233735
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -39502,6 +39514,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
   m_GameObject: {fileID: 922194225}
@@ -39522,6 +39535,8 @@ MonoBehaviour:
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   m_GameObject: {fileID: 922233733}
@@ -39613,6 +39628,9 @@ CanvasRenderer:
   m_GameObject: {fileID: 922233733}
   m_CullTransparentMesh: 1
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -64589,6 +64607,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1 &1453448022 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 164718, guid: b83d1fb4a7e14defb6ab7dd86e0ff3af, type: 3}
@@ -64618,6 +64637,8 @@ MonoBehaviour:
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 --- !u!1001 &1455204012
@@ -64693,6 +64714,9 @@ PrefabInstance:
       addedObject: {fileID: 1300913860}
   m_SourcePrefab: {fileID: 100100000, guid: acc591f3f3af45842beb61b22a2ee1c0, type: 3}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -91860,6 +91884,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 --- !u!1001 &2103710776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -91924,6 +91949,8 @@ PrefabInstance:
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 --- !u!1 &2107706937
 GameObject:
   m_ObjectHideFlags: 0
@@ -91969,6 +91996,9 @@ Transform:
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -94480,6 +94510,10 @@ GameObject:
   - component: {fileID: 8090919453279865622}
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+  - component: {fileID: 8090919453279865623}
+>>>>>>> Stashed changes
 =======
   - component: {fileID: 8090919453279865623}
 >>>>>>> Stashed changes
@@ -96612,12 +96646,15 @@ MonoBehaviour:
   m_EditorHideFlags: 0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_Script: {fileID: 11500000, guid: 81591a328ee695f46ad7d6c02c69260d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 6860789273886431452}
   weapon: {fileID: 1974375837}
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   m_Script: {fileID: 11500000, guid: 4a3f71f559d9b2349a0d99f713fb8a71, type: 3}
@@ -96635,6 +96672,9 @@ MonoBehaviour:
   - {fileID: 90100889}
   currentRespawnPoint: 0
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
@@ -96649,6 +96689,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_Script: {fileID: 11500000, guid: af41441e0dc6fe541ba6d4801efc6c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -96656,6 +96697,8 @@ MonoBehaviour:
   crystalValue: 1
   collectSound: {fileID: 0}
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
   m_Script: {fileID: 11500000, guid: b3d407b92daea2248b9ffb9a638351aa, type: 3}
@@ -96760,6 +96803,9 @@ AudioSource:
     m_PostInfinity: 2
     m_RotationOrder: 4
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
