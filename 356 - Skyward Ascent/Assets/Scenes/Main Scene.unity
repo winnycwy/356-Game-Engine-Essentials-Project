@@ -3063,7 +3063,7 @@ PrefabInstance:
     - target: {fileID: 6223553936845113312, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 9ba9a735517041342a1740d6e22cec6e, type: 2}
+      objectReference: {fileID: 2100000, guid: 2e1382ce347cca34cbf75422025a772a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -69136,6 +69136,7 @@ MonoBehaviour:
   wizardSpirit: {fileID: 1335315641}
   dialogueSystem: {fileID: 1581438831}
   wizardAnimator: {fileID: 1344798961}
+  typingAudioSource: {fileID: 0}
   wizardDialogue:
   - '"Ah, you are awake. Do you know this place?"'
   - '"No... I see you do not. We are both lost, it seems."'
@@ -91899,7 +91900,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5058434331446290799}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.8050139, y: -0.100257084, z: -0.5834465, w: 0.03861624}
+  m_LocalRotation: {x: 0.80501395, y: -0.10025709, z: -0.58344656, w: 0.038616244}
   m_LocalPosition: {x: -0.092054926, y: -0.000000059604503, z: -0.00000065596265}
   m_LocalScale: {x: 1.0000002, y: 1.0000001, z: 0.9999999}
   m_ConstrainProportionsScale: 0
@@ -93640,7 +93641,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3087096106012975824}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1469567, y: -0.035848662, z: 0.006899207, w: 0.988469}
+  m_LocalRotation: {x: -0.1469567, y: -0.035848666, z: 0.006899207, w: 0.98846906}
   m_LocalPosition: {x: -1.9913979e-10, y: 0.0848736, z: -0.000000005587938}
   m_LocalScale: {x: 1.0000001, y: 1.0000004, z: 1}
   m_ConstrainProportionsScale: 0
