@@ -37,6 +37,8 @@ public class HiddenCrystal : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("HiddenCrystal Start() called");
+
         // Get components
         crystalRenderer = GetComponent<Renderer>();
         glowLight = GetComponentInChildren<Light>();
@@ -50,25 +52,35 @@ public class HiddenCrystal : MonoBehaviour
         }
 
         // If no specific crystal model reference, use this object's renderer
-        if (crystalModel == null && crystalRenderer != null)
+        if (crystalModel == null)
         {
-            crystalModel = crystalRenderer.gameObject;
+            crystalModel = gameObject;
         }
 
-        // Store original material properties
+        // Store original material properties - CRITICAL STEP
         if (crystalRenderer != null)
         {
             crystalMaterial = crystalRenderer.material;
             originalColor = crystalMaterial.color;
+            Debug.Log($"Original color stored: R={originalColor.r}, G={originalColor.g}, B={originalColor.b}, A={originalColor.a}");
 
-            // Start invisible
-            SetCrystalAlpha(0f);
+            // Set crystal to completely transparent at start
+            Color transparentColor = originalColor;
+            transparentColor.a = 0f; // Fully transparent
+            crystalMaterial.color = transparentColor;
+
+            Debug.Log($"Crystal set to transparent. Alpha: {crystalMaterial.color.a}");
+        }
+        else
+        {
+            Debug.LogError("No Renderer found on crystal!");
         }
 
         // Start with light off
         if (glowLight != null)
         {
             glowLight.intensity = 0f;
+            Debug.Log("Glow light intensity set to 0");
         }
 
         // Disable collider initially if collectible
@@ -78,8 +90,52 @@ public class HiddenCrystal : MonoBehaviour
             if (collider != null)
             {
                 collider.enabled = false;
+                Debug.Log("Collider disabled initially");
             }
         }
+
+        isVisible = false;
+        isFading = false;
+        isCollected = false;
+
+        Debug.Log("Crystal initialized - should be completely invisible now");
+    }
+
+    private void ForceHideImmediately()
+    {
+        // Hide renderer immediately
+        if (crystalRenderer != null)
+        {
+            crystalRenderer.enabled = false;
+        }
+
+        // Also set material alpha to 0
+        if (crystalMaterial != null)
+        {
+            Color hiddenColor = originalColor;
+            hiddenColor.a = 0f;
+            crystalMaterial.color = hiddenColor;
+        }
+
+        // Hide light
+        if (glowLight != null)
+        {
+            glowLight.intensity = 0f;
+        }
+
+        // Disable collider
+        if (isCollectible)
+        {
+            Collider collider = GetComponent<Collider>();
+            if (collider != null)
+            {
+                collider.enabled = false;
+            }
+        }
+
+        isVisible = false;
+        isFading = false;
+        Debug.Log("Crystal forcefully hidden immediately");
     }
 
     void Update()
@@ -148,6 +204,12 @@ public class HiddenCrystal : MonoBehaviour
     {
         isFading = true;
 
+        // FIRST: Enable the renderer at the start of fade in
+        if (crystalRenderer != null)
+        {
+            crystalRenderer.enabled = true;
+        }
+
         // Play appear sound
         if (appearSound != null)
         {
@@ -191,6 +253,7 @@ public class HiddenCrystal : MonoBehaviour
             if (collider != null)
             {
                 collider.enabled = true;
+                Debug.Log("Crystal collider enabled for collection");
             }
         }
 
