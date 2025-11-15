@@ -263,10 +263,10 @@ public class HiddenCrystal : MonoBehaviour
             AudioSource.PlayClipAtPoint(collectSound, transform.position);
         }
 
-        // Add to crystal manager - FIXED METHOD NAME
+        // Add to crystal manager
         if (CrystalManager.Instance != null)
         {
-            CrystalManager.Instance.AddCrystal(crystalValue); // Changed from AddCrystals to AddCrystal
+            CrystalManager.Instance.AddCrystal(crystalValue);
         }
         else
         {

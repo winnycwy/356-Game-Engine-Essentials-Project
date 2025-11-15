@@ -37,7 +37,7 @@ public class CrystalCollectible : MonoBehaviour
         CrystalManager playerCrystals = FindObjectOfType<CrystalManager>();
         if (playerCrystals != null)
         {
-            playerCrystals.AddCrystals(crystalValue);
+            playerCrystals.AddCrystal(crystalValue);
         }
 
         // Visual effects

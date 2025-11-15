@@ -534,6 +534,8 @@ Transform:
   - {fileID: 1086963600}
   - {fileID: 752477002}
   - {fileID: 897379965}
+  - {fileID: 1411619738}
+  - {fileID: 66314413}
   - {fileID: 349366173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2986,6 +2988,139 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -889180119648741084, guid: 7cddce2c536fac84793f17712b73e2aa, type: 3}
+--- !u!1001 &66314411
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6758549}
+    m_Modifications:
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 19.635162
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 138.46053
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -369.9122
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575030985936643637, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      propertyPath: m_Name
+      value: HiddenCrystal
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5575030985936643637, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 66314414}
+    - targetCorrespondingSourceObject: {fileID: 5575030985936643637, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 66314418}
+  m_SourcePrefab: {fileID: 100100000, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+--- !u!1 &66314412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5575030985936643637, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+  m_PrefabInstance: {fileID: 66314411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &66314413 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5050133357904329871, guid: a68d827fdb3048e46928bff7883c7c2c, type: 3}
+  m_PrefabInstance: {fileID: 66314411}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &66314414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66314412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 745b572948261e146a160c1ca25f7bc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadeInDuration: 1.5
+  fadeOutDuration: 2
+  glowIntensity: 2
+  detectionRange: 2
+  faeLightLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  isCollectible: 1
+  crystalValue: 1
+  collectionDelay: 0.5
+  collectParticles: {fileID: 0}
+  crystalModel: {fileID: 66314412}
+  appearSound: {fileID: 0}
+  disappearSound: {fileID: 0}
+  collectSound: {fileID: 0}
+--- !u!135 &66314418
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66314412}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.7
+  m_Center: {x: 0.014766261, y: 0.7, z: -0.02238974}
 --- !u!1001 &66826530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14065,7 +14200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 349366173}
   m_Layer: 0
-  m_Name: Puzzle 2
+  m_Name: Bat Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -61272,6 +61407,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7244735059107313878, guid: 0e183e0b8892f4746b5bca14f433fbdf, type: 3}
   m_PrefabInstance: {fileID: 1767428962}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1411619737
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1411619738}
+  - component: {fileID: 1411619739}
+  m_Layer: 0
+  m_Name: CystalManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1411619738
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411619737}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6758549}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1411619739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411619737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc42b4e5b1bf7ed42a84ec15edf84f34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crystalCountText: {fileID: 0}
+  crystalCollectedPopup: {fileID: 0}
+  collectSound: {fileID: 0}
 --- !u!1001 &1413976295
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -69865,7 +70047,7 @@ MonoBehaviour:
   interactKey: 101
   runestoneLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   playerAnimator: {fileID: 6860789273886431452}
   interactAnimation: Interact
   animationDelay: 0.5
@@ -92644,6 +92826,7 @@ GameObject:
   - component: {fileID: 8090919453279865619}
   - component: {fileID: 8090919453279865620}
   - component: {fileID: 8090919453279865621}
+  - component: {fileID: 8090919453279865622}
   m_Layer: 8
   m_Name: PlayerArmature
   m_TagString: Player
@@ -94773,6 +94956,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 6860789273886431452}
   weapon: {fileID: 1974375837}
+--- !u!114 &8090919453279865622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2614080309174642572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af41441e0dc6fe541ba6d4801efc6c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTag: Player
+  crystalValue: 1
+  collectSound: {fileID: 0}
 --- !u!4 &8176565476863673425
 Transform:
   m_ObjectHideFlags: 0
