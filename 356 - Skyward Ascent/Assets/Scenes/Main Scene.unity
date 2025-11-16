@@ -29189,6 +29189,14 @@ PrefabInstance:
       propertyPath: activeTextColor.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2839206129883934133, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: castEffect
+      value: 
+      objectReference: {fileID: 8176230078092200170, guid: 3355f6bfa6db8b24281b827de929694c, type: 3}
+    - target: {fileID: 3509008385078245598, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: interactRange
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3954384215200107648, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 214.01584
@@ -44952,7 +44960,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 143bf4aa5ce536246b13c53201ba94b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 50
   initialRatio: 1
 --- !u!4 &1019508894 stripped
 Transform:
