@@ -34413,6 +34413,7 @@ GameObject:
   - component: {fileID: 898328576160968675}
   - component: {fileID: 8176230078092200170}
   - component: {fileID: 8636462576248347671}
+  - component: {fileID: -3009687586067013411}
   m_Layer: 0
   m_Name: Meteors AOE
   m_TagString: Untagged
@@ -34429,7 +34430,7 @@ Transform:
   m_GameObject: {fileID: 7957833072274404953}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 91.6311, y: 147.5343, z: -212.19148}
+  m_LocalPosition: {x: 162.52272, y: 32.50065, z: 108.286606}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -34696,7 +34697,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.4
+      scalar: 0.5
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -38098,7 +38099,7 @@ ParticleSystem:
     m_Dampen:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.2
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -38151,7 +38152,7 @@ ParticleSystem:
     m_Bounce:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -38204,7 +38205,7 @@ ParticleSystem:
     m_EnergyLossOnCollision:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.8
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -38254,9 +38255,9 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    minKillSpeed: 0
+    minKillSpeed: 0.1
     maxKillSpeed: 10000
-    radiusScale: 0.0001
+    radiusScale: 0.5
     collidesWith:
       serializedVersion: 2
       m_Bits: 64
@@ -39321,3 +39322,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-3009687586067013411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7957833072274404953}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a42cef032e42446874bb080a23dfed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePerSecond: 40
+  damageInterval: 0.5
+  damageRadius: 4
+  hitEffect: {fileID: 0}
+  hitSound: {fileID: 0}
