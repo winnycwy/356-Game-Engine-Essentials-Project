@@ -1,16 +1,28 @@
 using UnityEngine;
+using Ilumisoft.HealthSystem;
 
 public class ShadowClone : MonoBehaviour
 {
     public float speed = 10f;
     public float lifeTime = 3f;
-    public float health = 1f;
+    public float contactDamage = 10f;   // how much damage clone deals to player
 
-    Transform player;
+    private Transform player;
+    private Health health;              // Ilumisoft health reference
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        health = GetComponent<Health>();
+        if (health == null)
+        {
+            Debug.LogError("ShadowClone requires a Health component!");
+        }
+
+        // If killed by weapon:
+        health.OnHealthEmpty += OnDeath;
+
         Destroy(gameObject, lifeTime);
     }
 
@@ -21,13 +33,27 @@ public class ShadowClone : MonoBehaviour
         transform.position = Vector3.MoveTowards(
             transform.position,
             player.position,
-            speed * Time.deltaTime);
+            speed * Time.deltaTime
+        );
     }
 
-    public void ApplyFireDamage()
+    private void OnTriggerEnter(Collider other)
     {
-        health -= 1f;
-        if (health <= 0)
+        // If it hits player, deal damage + die
+        if (other.CompareTag("Player"))
+        {
+            Health playerHealth = other.GetComponent<Health>();
+
+            if (playerHealth != null)
+                playerHealth.ApplyDamage(contactDamage);
+
             Destroy(gameObject);
+        }
+    }
+
+    private void OnDeath()
+    {
+        // Clone is killed by weapon or other damage
+        Destroy(gameObject);
     }
 }

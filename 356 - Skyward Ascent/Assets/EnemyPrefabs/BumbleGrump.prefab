@@ -566,7 +566,7 @@ GameObject:
   - component: {fileID: 5299213591499779901}
   m_Layer: 0
   m_Name: BumbleGrump
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -651,6 +651,19 @@ MonoBehaviour:
   - {fileID: 0}
   chaseRange: 6
   loseRange: 10
+  attackDamage: 10
+  attackCooldown: 1
+  attackRange: 2
+  animator: {fileID: 0}
+  animationTransitionTime: 0.1
+  hurtSound: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
+  hurtFlashDuration: 0.2
+  hurtColor: {r: 1, g: 1, b: 1, a: 1}
+  deathDestroyDelay: 2
 --- !u!1 &8334764448232161451
 GameObject:
   m_ObjectHideFlags: 0
