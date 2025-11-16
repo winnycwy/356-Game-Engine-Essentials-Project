@@ -12,6 +12,17 @@ public class BatScript : MonoBehaviour
     public Transform player;
     public Transform[] waypoints;
 
+    [Header("Flight Settings")]
+    public float flightHeight = 3f;
+    public float groundClearance = 0.5f;
+    public float obstacleClearance = 1f;
+    public float obstacleCheckDistance = 2f;
+
+    [Header("Movement Settings")]
+    public float patrolSpeed = 4f; // Increased from default
+    public float chaseSpeed = 6f;  // Increased from default
+    public float acceleration = 12f;
+
     [Header("Combat Settings")]
     public float chaseRange = 10f;
     public float loseRange = 15f;
@@ -47,7 +58,6 @@ public class BatScript : MonoBehaviour
     private Color originalColor;
     private bool isFlashing = false;
     private bool isDead = false;
-    private bool isAttacking = false;
 
     // Animation parameter names
     private string moveSpeedParam = "MoveSpeed";
@@ -63,15 +73,9 @@ public class BatScript : MonoBehaviour
         batRenderer = GetComponentInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
 
-        // Debug NavMeshAgent
-        if (agent != null)
-        {
-            Debug.Log($"🦇 NavMeshAgent: enabled={agent.enabled}, isOnNavMesh={agent.isOnNavMesh}");
-        }
-        else
-        {
-            Debug.LogError("🦇 NavMeshAgent component missing!");
-        }
+        // Configure NavMeshAgent with higher speeds
+        agent.speed = patrolSpeed;
+        agent.acceleration = acceleration;
 
         // Setup flapping audio source
         SetupFlappingSound();
@@ -99,29 +103,14 @@ public class BatScript : MonoBehaviour
             health.OnHealthEmpty += OnDeath;
         }
 
-        // Debug waypoints
-        if (waypoints != null && waypoints.Length > 0)
-        {
-            Debug.Log($"🦇 Waypoints assigned: {waypoints.Length}");
-            for (int i = 0; i < waypoints.Length; i++)
-            {
-                if (waypoints[i] != null)
-                    Debug.Log($"🦇 Waypoint {i}: {waypoints[i].name} at {waypoints[i].position}");
-                else
-                    Debug.LogError($"🦇 Waypoint {i} is null!");
-            }
-        }
-        else
-        {
-            Debug.LogError("🦇 No waypoints assigned!");
-        }
+        // Ensure the bat starts at a safe height
+        EnsureSafeHeight();
 
         GoToNextWaypoint();
     }
 
     private void SetupFlappingSound()
     {
-        // Create a separate AudioSource for flapping sound
         flappingAudioSource = gameObject.AddComponent<AudioSource>();
         flappingAudioSource.spatialBlend = 1f;
         flappingAudioSource.volume = flappingVolume;
@@ -130,67 +119,149 @@ public class BatScript : MonoBehaviour
         flappingAudioSource.loop = true;
         flappingAudioSource.rolloffMode = AudioRolloffMode.Linear;
 
-        // Assign and play flapping sound
         if (flappingSound != null)
         {
             flappingAudioSource.clip = flappingSound;
             flappingAudioSource.Play();
-            Debug.Log("🦇 Flapping sound started");
-        }
-        else
-        {
-            Debug.LogWarning("🦇 Flapping sound clip is not assigned!");
         }
     }
 
     void Update()
     {
-        if (isDead)
-        {
-            Debug.Log("🦇 Bat is dead, not updating");
-            return;
-        }
+        if (isDead) return;
 
+        UpdateMovementSpeed(); // Update speed based on state
         UpdateAnimations();
         UpdateFlappingSound();
+        MaintainFlightHeight();
 
-        if (player == null)
-        {
-            Debug.LogError("🦇 Player reference is null!");
-            return;
-        }
+        if (player == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
-
-        Debug.Log($"🦇 State: {currentState}, Distance to player: {distanceToPlayer}");
 
         switch (currentState)
         {
             case State.Patrol:
                 Patrol();
                 if (distanceToPlayer < chaseRange)
-                {
-                    Debug.Log($"🦇 Switching to Chase (distance {distanceToPlayer} < {chaseRange})");
                     ChangeState(State.Chase);
-                }
                 break;
 
             case State.Chase:
                 Chase();
 
-                // Check for attack range
                 if (distanceToPlayer <= attackRange && Time.time >= lastAttackTime + attackCooldown)
                 {
-                    Debug.Log($"🦇 Starting attack (distance {distanceToPlayer} <= {attackRange})");
                     StartAttack();
                 }
 
                 if (distanceToPlayer > loseRange)
-                {
-                    Debug.Log($"🦇 Switching to Patrol (distance {distanceToPlayer} > {loseRange})");
                     ChangeState(State.Patrol);
-                }
                 break;
+        }
+    }
+
+    private void UpdateMovementSpeed()
+    {
+        if (isDead) return;
+
+        // Change speed based on state
+        float targetSpeed = currentState == State.Chase ? chaseSpeed : patrolSpeed;
+
+        // Smoothly change speed
+        agent.speed = Mathf.Lerp(agent.speed, targetSpeed, Time.deltaTime * 2f);
+    }
+
+    private void MaintainFlightHeight()
+    {
+        if (isDead) return;
+
+        // Get current position
+        Vector3 currentPosition = transform.position;
+
+        // Calculate ground height
+        float groundHeight = GetGroundHeight(currentPosition);
+
+        // Calculate obstacle height (jumping stones, etc.)
+        float obstacleHeight = GetObstacleHeight(currentPosition);
+
+        // Calculate minimum safe height (highest of ground + clearance or obstacle + clearance)
+        float minSafeHeight = Mathf.Max(
+            groundHeight + groundClearance,
+            obstacleHeight + obstacleClearance
+        );
+
+        // Ensure we're flying at least at flightHeight OR above obstacles
+        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
+
+        // Smoothly adjust height if needed
+        if (Mathf.Abs(currentPosition.y - targetHeight) > 0.1f)
+        {
+            float newY = Mathf.Lerp(currentPosition.y, targetHeight, Time.deltaTime * 3f);
+            transform.position = new Vector3(currentPosition.x, newY, currentPosition.z);
+        }
+    }
+
+    private float GetGroundHeight(Vector3 position)
+    {
+        RaycastHit hit;
+        // Shoot a ray straight down to find the ground
+        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity))
+        {
+            return hit.point.y;
+        }
+
+        // If no ground detected, assume flat ground at y=0
+        return 0f;
+    }
+
+    private float GetObstacleHeight(Vector3 position)
+    {
+        float highestObstacle = 0f;
+
+        // Check for obstacles in multiple directions
+        Vector3[] checkDirections = {
+            Vector3.forward,
+            Vector3.back,
+            Vector3.left,
+            Vector3.right,
+            Vector3.forward + Vector3.right,
+            Vector3.forward + Vector3.left,
+            Vector3.back + Vector3.right,
+            Vector3.back + Vector3.left
+        };
+
+        foreach (Vector3 direction in checkDirections)
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(position, direction, out hit, obstacleCheckDistance))
+            {
+                // Only consider obstacles that are higher than current position
+                if (hit.collider.gameObject != gameObject && hit.point.y > highestObstacle)
+                {
+                    highestObstacle = hit.point.y;
+                }
+            }
+        }
+
+        return highestObstacle;
+    }
+
+    private void EnsureSafeHeight()
+    {
+        Vector3 currentPosition = transform.position;
+        float groundHeight = GetGroundHeight(currentPosition);
+        float obstacleHeight = GetObstacleHeight(currentPosition);
+        float minSafeHeight = Mathf.Max(
+            groundHeight + groundClearance,
+            obstacleHeight + obstacleClearance
+        );
+
+        // If current position is below safe height, move up
+        if (currentPosition.y < minSafeHeight)
+        {
+            float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
+            transform.position = new Vector3(currentPosition.x, targetHeight, currentPosition.z);
         }
     }
 
@@ -198,12 +269,10 @@ public class BatScript : MonoBehaviour
     {
         if (flappingAudioSource == null || isDead) return;
 
-        // Adjust flapping pitch based on movement speed
         float speed = agent.velocity.magnitude / agent.speed;
-        flappingAudioSource.pitch = Mathf.Lerp(0.7f, 1.3f, speed);
+        flappingAudioSource.pitch = Mathf.Lerp(0.7f, 1.5f, speed); // Increased pitch range for faster movement
 
-        // Adjust volume based on state (louder when chasing)
-        float targetVolume = currentState == State.Chase ? flappingVolume * 1.3f : flappingVolume;
+        float targetVolume = currentState == State.Chase ? flappingVolume * 1.5f : flappingVolume;
         flappingAudioSource.volume = Mathf.Lerp(flappingAudioSource.volume, targetVolume, Time.deltaTime * 2f);
     }
 
@@ -211,9 +280,7 @@ public class BatScript : MonoBehaviour
     {
         if (animator == null) return;
 
-        // Update movement speed
         float speed = agent.velocity.magnitude / agent.speed;
-        Debug.Log($"🦇 Movement speed: {speed}");
 
         if (HasParameter(animator, moveSpeedParam))
         {
@@ -235,9 +302,6 @@ public class BatScript : MonoBehaviour
     {
         if (isDead) return;
 
-        isAttacking = true;
-
-        // Trigger attack animation
         if (animator != null && HasParameter(animator, attackParam))
         {
             animator.SetTrigger(attackParam);
@@ -245,7 +309,6 @@ public class BatScript : MonoBehaviour
 
         lastAttackTime = Time.time;
         ApplyAttackDamage();
-        Debug.Log("🦇 Starting attack!");
     }
 
     private void ApplyAttackDamage()
@@ -254,46 +317,22 @@ public class BatScript : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        Debug.Log($"🦇 Attack check: distance={distanceToPlayer}, attackRange={attackRange}, inRange={distanceToPlayer <= attackRange}");
-
         if (distanceToPlayer <= attackRange)
         {
             Health playerHealth = player.GetComponent<Health>();
-            if (playerHealth != null)
+            if (playerHealth != null && playerHealth.IsAlive)
             {
-                Debug.Log($"🦇 Player health found: {playerHealth.CurrentHealth}");
-                if (playerHealth.IsAlive)
-                {
-                    playerHealth.ApplyDamage(attackDamage);
-                    Debug.Log($"🦇 Bat attacked player for {attackDamage} damage! Player health now: {playerHealth.CurrentHealth}");
-                }
-                else
-                {
-                    Debug.Log("🦇 Player is already dead");
-                }
+                playerHealth.ApplyDamage(attackDamage);
             }
-            else
-            {
-                Debug.LogError("🦇 Player Health component not found!");
-            }
-        }
-        else
-        {
-            Debug.Log($"🦇 Player out of attack range: {distanceToPlayer} > {attackRange}");
         }
     }
 
-    // Animation Event: Called at the end of attack animation
     public void OnAttackEnd()
     {
-        isAttacking = false;
-
         if (animator != null && HasParameter(animator, attackParam))
         {
             animator.ResetTrigger(attackParam);
         }
-
-        Debug.Log("🦇 Attack animation ended");
     }
 
     private void OnHealthChanged(float changeAmount)
@@ -346,28 +385,23 @@ public class BatScript : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        Debug.Log("🦇 Bat died!");
 
-        // Stop flapping sound
         if (flappingAudioSource != null)
         {
             flappingAudioSource.Stop();
         }
 
-        // Trigger death animation
         if (animator != null && HasParameter(animator, isDeadParam))
         {
             animator.SetBool(isDeadParam, true);
         }
 
-        // Stop AI
         if (agent != null)
         {
             agent.isStopped = true;
             agent.enabled = false;
         }
 
-        // Disable collider
         Collider collider = GetComponent<Collider>();
         if (collider != null)
             collider.enabled = false;
@@ -392,8 +426,6 @@ public class BatScript : MonoBehaviour
     {
         if (isDead) return;
 
-        Debug.Log($"🦇 Bat taking {damage} damage!");
-
         if (health != null && health.IsAlive)
         {
             health.ApplyDamage(damage);
@@ -411,56 +443,84 @@ public class BatScript : MonoBehaviour
 
     void Patrol()
     {
-        if (isDead || waypoints.Length == 0)
-        {
-            Debug.Log("🦇 No waypoints or dead");
-            return;
-        }
-
-        // Add debug logs to see what's happening
-        Debug.Log($"🦇 Patrol: pathPending={agent.pathPending}, remainingDistance={agent.remainingDistance}");
+        if (isDead || waypoints.Length == 0) return;
 
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
-        {
-            Debug.Log("🦇 Going to next waypoint");
             GoToNextWaypoint();
-        }
     }
 
     void GoToNextWaypoint()
     {
-        if (isDead || waypoints.Length == 0)
-        {
-            Debug.Log("🦇 Cannot go to waypoint - dead or no waypoints");
-            return;
-        }
+        if (isDead || waypoints.Length == 0) return;
 
-        Debug.Log($"🦇 Moving to waypoint {waypointIndex} at position {waypoints[waypointIndex].position}");
-        agent.destination = waypoints[waypointIndex].position;
+        Vector3 waypointPos = waypoints[waypointIndex].position;
+
+        // Ensure waypoint is at safe height
+        float groundHeight = GetGroundHeight(waypointPos);
+        float obstacleHeight = GetObstacleHeight(waypointPos);
+        float minSafeHeight = Mathf.Max(
+            groundHeight + groundClearance,
+            obstacleHeight + obstacleClearance
+        );
+        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
+
+        Vector3 adjustedWaypoint = new Vector3(waypointPos.x, targetHeight, waypointPos.z);
+
+        agent.destination = adjustedWaypoint;
         waypointIndex = (waypointIndex + 1) % waypoints.Length;
     }
 
     void Chase()
     {
         if (isDead || player == null) return;
-        agent.SetDestination(player.position);
+
+        Vector3 playerPosition = player.position;
+
+        // Ensure chase position is at safe height
+        float groundHeight = GetGroundHeight(playerPosition);
+        float obstacleHeight = GetObstacleHeight(playerPosition);
+        float minSafeHeight = Mathf.Max(
+            groundHeight + groundClearance,
+            obstacleHeight + obstacleClearance
+        );
+        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
+
+        Vector3 chasePosition = new Vector3(playerPosition.x, targetHeight, playerPosition.z);
+
+        agent.destination = chasePosition;
     }
 
     void OnDrawGizmosSelected()
     {
-        // Chase range
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, chaseRange);
 
-        // Lose range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, loseRange);
 
-        // Attack range
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // Flapping sound range
+        // Draw ground detection ray
+        Vector3 currentPos = transform.position;
+        float groundHeight = GetGroundHeight(currentPos);
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(currentPos, new Vector3(currentPos.x, groundHeight, currentPos.z));
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(new Vector3(currentPos.x, groundHeight, currentPos.z), 0.2f);
+
+        // Draw obstacle detection rays
+        Gizmos.color = Color.blue;
+        Vector3[] checkDirections = {
+            Vector3.forward, Vector3.back, Vector3.left, Vector3.right,
+            Vector3.forward + Vector3.right, Vector3.forward + Vector3.left,
+            Vector3.back + Vector3.right, Vector3.back + Vector3.left
+        };
+        foreach (Vector3 direction in checkDirections)
+        {
+            Gizmos.DrawRay(currentPos, direction * obstacleCheckDistance);
+        }
+
         if (flappingAudioSource != null)
         {
             Gizmos.color = Color.cyan;
