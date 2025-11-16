@@ -57,6 +57,11 @@ public class PlayerDeathHandler : MonoBehaviour
         if (deathScreen != null)
             deathScreen.SetActive(false);
 
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0); // Start invisible
+        }
+
         // Subscribe to health events - CORRECTED VERSION
         if (playerHealth != null)
         {
@@ -71,6 +76,8 @@ public class PlayerDeathHandler : MonoBehaviour
     private void HandleHealthChanged(float currentHealth)
     {
         Debug.Log($"Health changed: {currentHealth}");
+
+
 
         if (currentHealth < playerHealth.MaxHealth)
             TriggerHurtEffect();
@@ -95,7 +102,7 @@ public class PlayerDeathHandler : MonoBehaviour
 
     private void TriggerHurtEffect()
     {
-        if (screenHurtOverlay != null)
+        if (screenHurtOverlay != null && !isDead)
         {
             StartCoroutine(UIHurtFlash());
         }
@@ -139,6 +146,12 @@ public class PlayerDeathHandler : MonoBehaviour
 
         isDead = true;
         Debug.Log("Player Died!");
+
+        StopAllCoroutines();
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0); // Ensure no red overlay
+        }
 
         // 1️⃣ DISABLE PHYSICS FIRST - This is crucial!
         DisablePhysics();
@@ -310,7 +323,13 @@ public class PlayerDeathHandler : MonoBehaviour
     {
         if (!isDead) return;
 
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0);
+        }
+
         Debug.Log("=== STARTING RESPAWN PROCESS ===");
+
 
         // 1️⃣ Reset healing items FIRST
         if (HealingItemManager.Instance != null)
