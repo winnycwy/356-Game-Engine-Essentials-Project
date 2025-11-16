@@ -116,17 +116,13 @@ public class OpeningCutscene : MonoBehaviour
         {
 
             shockwaveEffect.SetActive(true);
-            Debug.Log("shockwave active");
 
-            // Optional: Get particle system and play it
+            // Get particle system and play it
             ParticleSystem particles = shockwaveEffect.GetComponent<ParticleSystem>();
             if (particles != null)
             {
                 particles.Play();
-                Debug.Log("shockwave played");
             }
-                
-
         }
     }
 

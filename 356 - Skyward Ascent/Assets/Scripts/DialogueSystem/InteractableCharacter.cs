@@ -1120,11 +1120,7 @@ public class InteractableCharacter : MonoBehaviour
 }
 */
 
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class InteractableCharacter : MonoBehaviour
@@ -1149,8 +1145,13 @@ public class InteractableCharacter : MonoBehaviour
     [Header("Dialogue Settings")]
     public bool startDialogueAutomatically = true; // Auto-start when player approaches
 
+    [Header("Fairy Power Restoration Effects")]
+    public AnimationClip fairyPowerUpAnimation;
+    public GameObject magicCircle;
+
     [Header("Audio Settings")]
     public AudioSource typingAudioSource;
+    public AudioClip powerRestorationSound;
 
     private bool playerInRange = false;
     private int collectedSunPetals = 0;
@@ -1348,7 +1349,50 @@ public class InteractableCharacter : MonoBehaviour
         playerFaeLightAbility.UnlockFaeLight();
         Debug.Log("Flora has granted you the Fae Light ability!");
 
+        // Trigger fairy power restoration effects
+        PlayFairyPowerRestoration();
+
         StartCoroutine(PlayAbilityGrantEffect());
+    }
+
+    private void PlayFairyPowerRestoration()
+    {
+        // Play fairy power-up animation clip
+        if (fairyPowerUpAnimation != null)
+        {
+            Animation anim = GetComponent<Animation>();
+            if (anim != null)
+            {
+                anim.Play(fairyPowerUpAnimation.name);
+            }
+            else
+            {
+                Animator animator = GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.Play(fairyPowerUpAnimation.name);
+                }
+            }
+        }
+
+        // Spawn magic circle object
+        if (magicCircle != null)
+        {
+            magicCircle.SetActive(true);
+
+            // Get particle system and play it
+            ParticleSystem particles = magicCircle.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+            }
+        }
+
+        // Play sound
+        if (powerRestorationSound != null)
+        {
+            AudioSource.PlayClipAtPoint(powerRestorationSound, transform.position);
+        }
     }
 
     private IEnumerator PlayAbilityGrantEffect()
