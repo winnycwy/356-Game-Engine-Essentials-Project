@@ -1,5 +1,7 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class DissolveTrigger : MonoBehaviour
 {
@@ -9,6 +11,11 @@ public class DissolveTrigger : MonoBehaviour
     public string dissolveProperty = "dissolve";
     public float dissolveDuration = 2f;
     public bool destroyAfterDissolve = false;
+
+    [Header("Audio Settings")]
+    public AudioClip cageDissolveSound;
+    [Range(0f, 1f)]
+    public float dissolveVolume = 1f;
 
     private bool isDissolving = false;
 
@@ -24,6 +31,9 @@ public class DissolveTrigger : MonoBehaviour
     private IEnumerator DissolveRoutine()
     {
         isDissolving = true;
+
+        // Play dissolve sound
+        PlayDissolveSound();
 
         // Create material instances for all renderers
         Material[] materials = new Material[targetRenderers.Length];
@@ -62,5 +72,31 @@ public class DissolveTrigger : MonoBehaviour
         }
 
         isDissolving = false;
+    }
+
+    private void PlayDissolveSound()
+    {
+        if (cageDissolveSound != null)
+        {
+            // Play at camera position to ensure it's heard
+            Vector3 playPosition = Camera.main.transform.position;
+            AudioSource.PlayClipAtPoint(cageDissolveSound, playPosition, dissolveVolume);
+            Debug.Log("cage dissolve sound played at position: " + transform.position);
+        }
+        else
+        {
+            Debug.LogWarning("Dissolve sound or AudioSource not set up properly!", this);
+        }
+
+        // Check camera position
+        //if (Camera.main != null)
+        //{
+        //    Vector3 cameraPos = Camera.main.transform.position;
+        //    float distance = Vector3.Distance(transform.position, cameraPos);
+        //    Debug.Log($"Camera at: {cameraPos}, Distance to sound: {distance}");
+        //}
+
+        //AudioSource.PlayClipAtPoint(cageDissolveSound, transform.position, 1f);
+        //Debug.Log("cage dissolve sound played at position: " + transform.position);
     }
 }

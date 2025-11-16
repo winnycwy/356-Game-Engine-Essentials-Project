@@ -20604,7 +20604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6000537148288252459, guid: caa540c78c29d8e4ab0fb7df1b8b2558, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.45
       objectReference: {fileID: 0}
     - target: {fileID: 6000537148288252459, guid: caa540c78c29d8e4ab0fb7df1b8b2558, type: 3}
       propertyPath: m_LocalPosition.z
@@ -26657,7 +26657,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 6546360ceb26ee64692cec784663e744, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -67867,6 +67867,8 @@ MonoBehaviour:
   dissolveProperty: _dissolve
   dissolveDuration: 2
   destroyAfterDissolve: 1
+  cageDissolveSound: {fileID: 8300000, guid: 0fb7d3e0817ba5a41a2806faef67b5e9, type: 3}
+  dissolveVolume: 1
 --- !u!1001 &1513187372
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -77746,7 +77748,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 11ed3550a81a73d459e1db81e121094e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
