@@ -10,6 +10,11 @@ public class OpeningCutscene : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioSource typingAudioSource;
+    public AudioSource wizardTeleportAudioSource;
+    public AudioClip wizardTeleportSound;
+
+    [Header("Disappear Effect")]
+    public GameObject shockwaveEffect;
 
     [Header("Wizard Dialogue")]
     [TextArea]
@@ -32,6 +37,8 @@ public class OpeningCutscene : MonoBehaviour
 
     void StartCutscene()
     {
+        PlayWizardTeleportSound();
+
         // Show wizard
         if (wizardSpirit != null)
             wizardSpirit.SetActive(true);
@@ -94,10 +101,38 @@ public class OpeningCutscene : MonoBehaviour
         if (wizardAnimator != null)
             wizardAnimator.SetTrigger("Disappear");
 
-        // Wait for animation then hide
+        // Wait for animation then hide and play disappear sound
         yield return new WaitForSeconds(1f);
+        SpawnDisappearEffect();
+        PlayWizardTeleportSound();
 
         if (wizardSpirit != null)
             wizardSpirit.SetActive(false);
+    }
+
+    private void SpawnDisappearEffect()
+    {
+        if (shockwaveEffect != null)
+        {
+
+            shockwaveEffect.SetActive(true);
+            Debug.Log("shockwave active");
+
+            // Optional: Get particle system and play it
+            ParticleSystem particles = shockwaveEffect.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+                Debug.Log("shockwave played");
+            }
+                
+
+        }
+    }
+
+    private void PlayWizardTeleportSound()
+    {
+        if (wizardTeleportAudioSource != null && wizardTeleportSound != null)
+            wizardTeleportAudioSource.PlayOneShot(wizardTeleportSound);
     }
 }
