@@ -86921,12 +86921,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< HEAD
-    - target: {fileID: 2838069486888028093, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: maxHealth
-      value: 100
-      objectReference: {fileID: 0}
-=======
+
+
 >>>>>>> 669d97fc3cd65e28a2d70553a208d804a738aa6f
     - target: {fileID: 3237909084013840098, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: m_Name
@@ -86937,44 +86933,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1403810920}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-<<<<<<< HEAD
-      propertyPath: hurtSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: deathSound
-      value: 
-      objectReference: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: hurtColor.a
-      value: 0.5882353
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: hurtColor.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: hurtColor.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: hurtColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: hurtParticles
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: deathParticles
-      value: 
-      objectReference: {fileID: 4836705781935009075, guid: f3b96935a3b89b249b5ade8a41a9e29e, type: 3}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-      propertyPath: deathDestroyDelay
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-=======
+
 >>>>>>> 669d97fc3cd65e28a2d70553a208d804a738aa6f
       propertyPath: 'waypoints.Array.data[0]'
       value: 
