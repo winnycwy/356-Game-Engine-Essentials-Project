@@ -86922,8 +86922,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
 
-
->>>>>>> 669d97fc3cd65e28a2d70553a208d804a738aa6f
     - target: {fileID: 3237909084013840098, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: m_Name
       value: BumbleGrump
@@ -86934,7 +86932,6 @@ PrefabInstance:
       objectReference: {fileID: 1403810920}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
 
->>>>>>> 669d97fc3cd65e28a2d70553a208d804a738aa6f
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1089250778}
