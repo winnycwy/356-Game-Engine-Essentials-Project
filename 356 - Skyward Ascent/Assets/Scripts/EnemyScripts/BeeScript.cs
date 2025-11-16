@@ -3,16 +3,14 @@ using UnityEngine.AI;
 using Ilumisoft.HealthSystem;
 using System.Collections;
 
-
 public class BeeScript : MonoBehaviour
 {
     public enum State { Patrol, Chase }
     public State currentState = State.Patrol;
 
+    [Header("AI Settings")]
     public Transform player;
     public Transform[] waypoints;
-    private int waypointIndex = 0;
-    private NavMeshAgent agent;
 
     [Header("Combat Settings")]
     public float chaseRange = 8f;
@@ -26,12 +24,14 @@ public class BeeScript : MonoBehaviour
     public float hurtFlashDuration = 0.2f;
     public Color hurtColor = Color.white;
 
-    [Header("Death Effects")] 
+    [Header("Death Effects")]
     public AudioClip deathSound;
     public ParticleSystem deathParticles;
     public GameObject deathEffectPrefab;
     public float deathDestroyDelay = 2f;
 
+    private NavMeshAgent agent;
+    private int waypointIndex = 0;
     private float lastAttackTime = 0f;
     private Health health;
     private AudioSource audioSource;
@@ -51,7 +51,7 @@ public class BeeScript : MonoBehaviour
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.spatialBlend = 1f; // 3D sound
+            audioSource.spatialBlend = 1f;
             audioSource.volume = 0.5f;
         }
 
@@ -75,8 +75,7 @@ public class BeeScript : MonoBehaviour
 
     void Update()
     {
-        if (isDead || health != null && !health.IsAlive)
-            return;
+        if (isDead) return; // Only check isDead, not health.IsAlive
 
         float distance = Vector3.Distance(transform.position, player.position);
 
@@ -99,7 +98,7 @@ public class BeeScript : MonoBehaviour
     private void OnHealthChanged(float changeAmount)
     {
         // Trigger hurt effects when taking damage
-        if (changeAmount < 0) // Negative change = damage taken
+        if (changeAmount < 0 && !isDead)
         {
             TriggerHurtEffects();
         }
@@ -130,16 +129,13 @@ public class BeeScript : MonoBehaviour
     {
         isFlashing = true;
 
-        // Flash to hurt color
         if (beeRenderer != null)
         {
             beeRenderer.material.color = hurtColor;
         }
 
-        // Wait for flash duration
         yield return new WaitForSeconds(hurtFlashDuration);
 
-        // Return to original color
         if (beeRenderer != null)
         {
             beeRenderer.material.color = originalColor;
@@ -153,92 +149,101 @@ public class BeeScript : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        Debug.Log("🐝 Bee died! Playing death effects...");
+        Debug.Log("🐝 Bee died! Starting death sequence...");
 
-        // Stop movement immediately
+        // ✅ IMMEDIATELY: Stop AI and disable components
         if (agent != null)
         {
             agent.isStopped = true;
             agent.enabled = false;
         }
 
-        // Disable collider to prevent further interactions
+        // Disable collider
         Collider collider = GetComponent<Collider>();
         if (collider != null)
             collider.enabled = false;
 
-        // Disable renderer to make bee invisible
-        if (beeRenderer != null)
-            beeRenderer.enabled = false;
+        // ✅ DON'T disable renderer yet - let particles play on visible bee
+        // beeRenderer.enabled = false;
 
-        // ✅ PLAY DEATH EFFECTS
+        // ✅ PLAY DEATH EFFECTS FIRST
         TriggerDeathEffects();
 
-        // Destroy after delay (let effects play out)
-        Destroy(gameObject, deathDestroyDelay);
+        // ✅ THEN start destruction sequence
+        StartCoroutine(DeathSequence());
     }
 
-    // ✅ ADD THIS: Death effects method
     private void TriggerDeathEffects()
     {
+        Debug.Log("🐝 Playing death effects");
+
         // Play death sound
         if (deathSound != null)
         {
             AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            Debug.Log("🐝 Death sound played");
         }
 
         // Play death particles
         if (deathParticles != null)
         {
             deathParticles.Play();
+            Debug.Log("🐝 Death particles played");
+
+            // Optional: Make particles independent so they continue after bee is destroyed
+            deathParticles.transform.SetParent(null); // Detach from bee
+        }
+        else
+        {
+            Debug.LogWarning("🐝 No death particles assigned!");
         }
 
-        // Spawn death effect prefab (explosion, etc.)
+        // Spawn death effect prefab
         if (deathEffectPrefab != null)
         {
             Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+            Debug.Log("🐝 Death effect prefab instantiated");
         }
-
-        // Optional: Shake or fall animation
-        StartCoroutine(DeathAnimation());
     }
 
-    // ✅ ADD THIS: Death animation coroutine
-    private IEnumerator DeathAnimation()
+    // ✅ NEW: Separate death sequence coroutine
+    private IEnumerator DeathSequence()
     {
-        // Make bee fall down or shake
-        float elapsed = 0f;
-        Vector3 startPosition = transform.position;
+        Debug.Log("🐝 Death sequence started");
 
-        while (elapsed < deathDestroyDelay)
+        // Wait a moment for effects to be visible
+        yield return new WaitForSeconds(0.5f);
+
+        // Now hide the bee but keep effects playing
+        if (beeRenderer != null)
         {
-            // Sink into ground
-            transform.position = startPosition - Vector3.up * (elapsed / deathDestroyDelay);
-
-            // Optional: Add slight shake
-            transform.position += Random.insideUnitSphere * 0.1f;
-
-            elapsed += Time.deltaTime;
-            yield return null;
+            beeRenderer.enabled = false;
+            Debug.Log("🐝 Bee renderer disabled");
         }
+
+        // Wait for remaining effects
+        yield return new WaitForSeconds(deathDestroyDelay - 0.5f);
+
+        // Finally destroy the bee
+        Debug.Log("🐝 Destroying bee GameObject");
+        Destroy(gameObject);
     }
 
     public void TakeDamage(float damage)
     {
-        Debug.Log($"Bee taking {damage} damage!");
+        if (isDead) return;
+
+        Debug.Log($"🐝 Bee taking {damage} damage!");
 
         if (health != null && health.IsAlive)
         {
             health.ApplyDamage(damage);
         }
-        else
-        {
-            Debug.LogError("BeeHealthController not found or bee already dead!");
-        }
     }
 
     void ChangeState(State newState)
     {
+        if (isDead) return;
         currentState = newState;
 
         if (newState == State.Patrol)
@@ -247,7 +252,7 @@ public class BeeScript : MonoBehaviour
 
     void Patrol()
     {
-        if (waypoints.Length == 0) return;
+        if (isDead || waypoints.Length == 0) return;
 
         if (!agent.pathPending && agent.remainingDistance < 0.5f)
             GoToNextWaypoint();
@@ -255,44 +260,44 @@ public class BeeScript : MonoBehaviour
 
     void GoToNextWaypoint()
     {
-        if (waypoints.Length == 0) return;
+        if (isDead || waypoints.Length == 0) return;
         agent.destination = waypoints[waypointIndex].position;
         waypointIndex = (waypointIndex + 1) % waypoints.Length;
     }
 
     void Chase()
     {
-        if (player != null)
-            agent.SetDestination(player.position);
+        if (isDead || player == null) return;
+        agent.SetDestination(player.position);
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if (isDead) return;
         TryDamagePlayer(other);
     }
 
     void OnTriggerStay(Collider other)
     {
+        if (isDead) return;
         TryDamagePlayer(other);
     }
 
     void TryDamagePlayer(Collider other)
     {
-        // Check if it's the player and we can attack again
+        if (isDead) return;
+
         if (other.CompareTag("Player") && Time.time >= lastAttackTime + attackCooldown)
         {
-            // Try getting the health component on the player
             Health playerHealth = other.GetComponent<Health>();
             if (playerHealth != null)
             {
                 playerHealth.ApplyDamage(attackDamage);
-                lastAttackTime = Time.time; // Reset attack timer
-                                            // Debug.Log("Bee attacked player for " + attackDamage);
+                lastAttackTime = Time.time;
             }
         }
     }
 
-    // Optional debug gizmos
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
