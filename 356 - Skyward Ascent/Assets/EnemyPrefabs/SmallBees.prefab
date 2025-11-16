@@ -256,12 +256,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 1, g: 0, b: 0, a: 0.5882353}
-  deathSound: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 0
 --- !u!114 &890850679255570627
 MonoBehaviour:
@@ -1351,12 +1351,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 1, g: 0, b: 0, a: 0.5882353}
-  deathSound: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 0
 --- !u!114 &1954775777814100027
 MonoBehaviour:
@@ -1689,7 +1689,7 @@ GameObject:
   - component: {fileID: 3300277549792346898}
   m_Layer: 0
   m_Name: SmallBees
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2084,12 +2084,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 0.96981126, g: 0, b: 0, a: 0.5882353}
-  deathSound: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 0
 --- !u!114 &3450041041627564382
 MonoBehaviour:
@@ -3373,12 +3373,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 1, g: 0, b: 0, a: 0.5882353}
-  deathSound: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 0
 --- !u!114 &3796991720298614273
 MonoBehaviour:
@@ -6509,12 +6509,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 1, g: 0, b: 0, a: 0.5882353}
-  deathSound: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 0
 --- !u!114 &8670017449875859499
 MonoBehaviour:
@@ -6787,12 +6787,12 @@ MonoBehaviour:
   animator: {fileID: 0}
   animationTransitionTime: 0.1
   hurtSound: {fileID: 0}
-  hurtParticles: {fileID: 0}
+  buzzingSound: {fileID: 0}
+  buzzingVolume: 0.3
+  buzzingMaxDistance: 15
+  buzzingMinDistance: 3
   hurtFlashDuration: 0.2
   hurtColor: {r: 1, g: 1, b: 1, a: 1}
-  deathSound: {fileID: 0}
-  deathParticles: {fileID: 0}
-  deathEffectPrefab: {fileID: 0}
   deathDestroyDelay: 2
 --- !u!114 &9162703591126220310
 MonoBehaviour:

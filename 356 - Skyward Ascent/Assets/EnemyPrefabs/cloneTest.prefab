@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1008509592120679159}
   - component: {fileID: 2158339214865082540}
   - component: {fileID: 7260276136526440992}
+  - component: {fileID: 7623153447217017252}
   - component: {fileID: 407758965783023961}
   m_Layer: 0
   m_Name: cloneTest
@@ -104,12 +105,26 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1, z: 1.48}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7623153447217017252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799557302213251384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 143bf4aa5ce536246b13c53201ba94b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1
+  initialRatio: 1
 --- !u!114 &407758965783023961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -124,7 +139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 10
   lifeTime: 3
-  health: 1
+  contactDamage: 10
 --- !u!1001 &6348229421359335107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -177,6 +192,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fox
       objectReference: {fileID: 0}
+    - target: {fileID: 7596732024113559598, guid: 91e4778cdfb185d4d9bfe81556dc4333, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: ccbc5a158c114a140ba244f6113b2fbc, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
