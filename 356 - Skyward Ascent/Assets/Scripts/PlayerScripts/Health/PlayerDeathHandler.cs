@@ -7,6 +7,12 @@ using UnityEngine.UI;
 
 public class PlayerDeathHandler : MonoBehaviour
 {
+    [Header("Player Hurt Effects")]
+    public AudioClip playerHurtSound; 
+    public Image screenHurtOverlay;
+    public float hurtFlashDuration = 0.3f;
+    public float hurtMaxAlpha = 0.4f;
+
     [Header("Death Settings")]
     public GameObject deathScreen;
     public float deathScreenDelay = 2f;
@@ -52,6 +58,11 @@ public class PlayerDeathHandler : MonoBehaviour
         if (deathScreen != null)
             deathScreen.SetActive(false);
 
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0); // Start invisible
+        }
+
         // Subscribe to health events - CORRECTED VERSION
         if (playerHealth != null)
         {
@@ -67,6 +78,18 @@ public class PlayerDeathHandler : MonoBehaviour
     {
         Debug.Log($"Health changed: {currentHealth}");
 
+
+
+        if (currentHealth < playerHealth.MaxHealth)
+            TriggerHurtEffect();
+        {
+            PlayerHurtEffect hurtEffect = GetComponent<PlayerHurtEffect>();
+            if (hurtEffect != null)
+            {
+                hurtEffect.TriggerHurtEffect();
+            }
+        }
+
         // Trigger hurt animation if health decreased and not dead
         if (animator != null && playerHealth != null && currentHealth < playerHealth.MaxHealth && !isDead)
         {
@@ -76,6 +99,54 @@ public class PlayerDeathHandler : MonoBehaviour
             // Optional: Add a cooldown so you don't spam hurt animation
             StartCoroutine(HurtAnimationCooldown());
         }
+    }
+
+    private void TriggerHurtEffect()
+    {
+        // Play hurt sound
+        if (playerHurtSound != null && audioSource != null && !isDead)
+        {
+            audioSource.PlayOneShot(playerHurtSound);
+        }
+
+        // Trigger UI hurt effect
+        if (screenHurtOverlay != null && !isDead)
+        {
+            StartCoroutine(UIHurtFlash());
+        }
+
+        // Trigger material flash if you have it
+        PlayerHurtEffect hurtEffect = GetComponent<PlayerHurtEffect>();
+        if (hurtEffect != null && !isDead)
+        {
+            hurtEffect.TriggerHurtEffect();
+        }
+    }
+
+    private IEnumerator UIHurtFlash()
+    {
+        // Fade in quickly
+        float elapsed = 0f;
+        while (elapsed < hurtFlashDuration / 2)
+        {
+            float alpha = Mathf.Lerp(0, hurtMaxAlpha, elapsed / (hurtFlashDuration / 2));
+            screenHurtOverlay.color = new Color(1, 0, 0, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Fade out slowly
+        elapsed = 0f;
+        while (elapsed < hurtFlashDuration / 2)
+        {
+            float alpha = Mathf.Lerp(hurtMaxAlpha, 0, elapsed / (hurtFlashDuration / 2));
+            screenHurtOverlay.color = new Color(1, 0, 0, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure completely invisible
+        screenHurtOverlay.color = new Color(1, 0, 0, 0);
     }
 
     private IEnumerator HurtAnimationCooldown()
@@ -90,6 +161,12 @@ public class PlayerDeathHandler : MonoBehaviour
 
         isDead = true;
         Debug.Log("Player Died!");
+
+        StopAllCoroutines();
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0); // Ensure no red overlay
+        }
 
         // 1️⃣ DISABLE PHYSICS FIRST - This is crucial!
         DisablePhysics();
@@ -261,7 +338,13 @@ public class PlayerDeathHandler : MonoBehaviour
     {
         if (!isDead) return;
 
+        if (screenHurtOverlay != null)
+        {
+            screenHurtOverlay.color = new Color(1, 0, 0, 0);
+        }
+
         Debug.Log("=== STARTING RESPAWN PROCESS ===");
+
 
         // 1️⃣ Reset healing items FIRST
         if (HealingItemManager.Instance != null)
