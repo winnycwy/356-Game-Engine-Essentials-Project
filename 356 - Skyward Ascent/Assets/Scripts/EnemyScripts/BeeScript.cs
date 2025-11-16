@@ -23,16 +23,18 @@ public class BeeScript : MonoBehaviour
     public Animator animator;
     public float animationTransitionTime = 0.1f;
 
-    [Header("Hurt Effects")]
+    [Header("Sound Effects")]
     public AudioClip hurtSound;
-    public ParticleSystem hurtParticles;
+    public AudioClip buzzingSound; // New buzzing sound
+    public float buzzingVolume = 0.3f;
+    public float buzzingMaxDistance = 15f;
+    public float buzzingMinDistance = 3f;
+
+    [Header("Hurt Effects")]
     public float hurtFlashDuration = 0.2f;
     public Color hurtColor = Color.white;
 
     [Header("Death Effects")]
-    public AudioClip deathSound;
-    public ParticleSystem deathParticles;
-    public GameObject deathEffectPrefab;
     public float deathDestroyDelay = 2f;
 
     private NavMeshAgent agent;
@@ -40,6 +42,7 @@ public class BeeScript : MonoBehaviour
     private float lastAttackTime = 0f;
     private Health health;
     private AudioSource audioSource;
+    private AudioSource buzzingAudioSource; // Separate audio source for buzzing
     private Renderer beeRenderer;
     private Color originalColor;
     private bool isFlashing = false;
@@ -60,7 +63,10 @@ public class BeeScript : MonoBehaviour
         beeRenderer = GetComponentInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
 
-        // Get or add AudioSource if missing
+        // Setup buzzing audio source
+        SetupBuzzingSound();
+
+        // Get or add main AudioSource if missing
         if (audioSource == null)
         {
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -86,11 +92,36 @@ public class BeeScript : MonoBehaviour
         GoToNextWaypoint();
     }
 
+    private void SetupBuzzingSound()
+    {
+        // Create a separate AudioSource for buzzing sound
+        buzzingAudioSource = gameObject.AddComponent<AudioSource>();
+        buzzingAudioSource.spatialBlend = 1f; // 3D sound
+        buzzingAudioSource.volume = buzzingVolume;
+        buzzingAudioSource.maxDistance = buzzingMaxDistance;
+        buzzingAudioSource.minDistance = buzzingMinDistance;
+        buzzingAudioSource.loop = true; // Loop the buzzing sound
+        buzzingAudioSource.rolloffMode = AudioRolloffMode.Linear;
+
+        // Assign and play buzzing sound
+        if (buzzingSound != null)
+        {
+            buzzingAudioSource.clip = buzzingSound;
+            buzzingAudioSource.Play();
+            Debug.Log("🐝 Buzzing sound started");
+        }
+        else
+        {
+            Debug.LogWarning("🐝 Buzzing sound clip is not assigned!");
+        }
+    }
+
     void Update()
     {
         if (isDead) return;
 
         UpdateAnimations();
+        UpdateBuzzingSound(); // Update buzzing sound based on movement
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -115,6 +146,19 @@ public class BeeScript : MonoBehaviour
                     ChangeState(State.Patrol);
                 break;
         }
+    }
+
+    private void UpdateBuzzingSound()
+    {
+        if (buzzingAudioSource == null || isDead) return;
+
+        // Adjust buzzing pitch based on movement speed for more dynamic sound
+        float speed = agent.velocity.magnitude / agent.speed;
+        buzzingAudioSource.pitch = Mathf.Lerp(0.8f, 1.2f, speed);
+
+        // Adjust volume based on state (louder when chasing)
+        float targetVolume = currentState == State.Chase ? buzzingVolume * 1.2f : buzzingVolume;
+        buzzingAudioSource.volume = Mathf.Lerp(buzzingAudioSource.volume, targetVolume, Time.deltaTime * 2f);
     }
 
     private void UpdateAnimations()
@@ -146,9 +190,6 @@ public class BeeScript : MonoBehaviour
         if (isDead) return;
 
         isAttacking = true;
-
-        // DON'T stop movement during attack - bee keeps moving
-        // agent.isStopped = true;
 
         // Trigger attack animation
         if (animator != null && HasParameter(animator, attackParam))
@@ -218,12 +259,6 @@ public class BeeScript : MonoBehaviour
             audioSource.PlayOneShot(hurtSound);
         }
 
-        // Play hurt particles
-        if (hurtParticles != null)
-        {
-            hurtParticles.Play();
-        }
-
         // Visual hurt flash
         if (beeRenderer != null && !isFlashing)
         {
@@ -257,6 +292,13 @@ public class BeeScript : MonoBehaviour
         isDead = true;
         Debug.Log("🐝 Bee died! Starting death sequence...");
 
+        // Stop buzzing sound when bee dies
+        if (buzzingAudioSource != null)
+        {
+            buzzingAudioSource.Stop();
+            Debug.Log("🐝 Buzzing sound stopped");
+        }
+
         // Trigger death animation
         if (animator != null && HasParameter(animator, isDeadParam))
         {
@@ -275,35 +317,8 @@ public class BeeScript : MonoBehaviour
         if (collider != null)
             collider.enabled = false;
 
-        // Play death effects
-        TriggerDeathEffects();
-
         // Start destruction sequence
         StartCoroutine(DeathSequence());
-    }
-
-    private void TriggerDeathEffects()
-    {
-        Debug.Log("🐝 Playing death effects");
-
-        // Play death sound
-        if (deathSound != null)
-        {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
-        }
-
-        // Play death particles (DON'T change parent - fixes prefab error)
-        if (deathParticles != null)
-        {
-            deathParticles.Play();
-            // Removed: deathParticles.transform.SetParent(null);
-        }
-
-        // Spawn death effect prefab
-        if (deathEffectPrefab != null)
-        {
-            Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
-        }
     }
 
     private IEnumerator DeathSequence()
@@ -313,7 +328,7 @@ public class BeeScript : MonoBehaviour
         // Wait for death animation to play
         yield return new WaitForSeconds(1.5f);
 
-        // Now hide the bee but keep effects playing
+        // Now hide the bee
         if (beeRenderer != null)
         {
             beeRenderer.enabled = false;
@@ -381,5 +396,12 @@ public class BeeScript : MonoBehaviour
         // Attack range
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+
+        // Buzzing sound range
+        if (buzzingAudioSource != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, buzzingMaxDistance);
+        }
     }
 }
