@@ -86921,7 +86921,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-
     - target: {fileID: 3237909084013840098, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: m_Name
       value: BumbleGrump
@@ -86931,7 +86930,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1403810920}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
-
       propertyPath: 'waypoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1089250778}
