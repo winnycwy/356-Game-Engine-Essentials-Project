@@ -3111,7 +3111,7 @@ MonoBehaviour:
   foxQuest: {fileID: 897379970}
   collectParticles: {fileID: 0}
   crystalModel: {fileID: 66314412}
-  appearSound: {fileID: 0}
+  appearSound: {fileID: 8300000, guid: e83d6c2e49e0eca49845ff6af1e4db8c, type: 3}
   disappearSound: {fileID: 0}
   collectSound: {fileID: 0}
 --- !u!135 &66314418
@@ -92702,7 +92702,7 @@ MonoBehaviour:
   castAnimationTrigger: CastFireSpell
   audioSource: {fileID: 716466759}
   castSound: {fileID: 0}
-  fireRainSound: {fileID: 8300000, guid: 6892530d1af583d4a9f515aa1ac4d6a3, type: 3}
+  fireRainSound: {fileID: 8300000, guid: 8683e9118a8511441aa062d73d7929eb, type: 3}
   fireAbilityUI: {fileID: 610122570}
   buttonBackground: {fileID: 610122572}
   buttonIcon: {fileID: 610122572}
