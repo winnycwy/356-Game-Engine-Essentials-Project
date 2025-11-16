@@ -50,7 +50,7 @@ public class OpeningCutscene : MonoBehaviour
         // Start dialogue using your existing system
         if (dialogueSystem != null)
         {
-            // Only subscribe to line events now
+            // Subscribe to line events now
             dialogueSystem.OnLineTypingStart += StartTypingSound;
             dialogueSystem.OnLineTypingComplete += StopTypingSound;
 
@@ -59,6 +59,17 @@ public class OpeningCutscene : MonoBehaviour
             // Hide wizard when dialogue ends
             StartCoroutine(HideWizardAfterDialogue());
         }
+    }
+
+    void OnDestroy()
+    {
+        if (dialogueSystem != null)
+        {
+            dialogueSystem.OnLineTypingStart -= StartTypingSound;
+            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
+        }
+
+        StopTypingSound();
     }
 
     private void StartTypingSound()
@@ -76,17 +87,6 @@ public class OpeningCutscene : MonoBehaviour
         {
             typingAudioSource.Stop();
         }
-    }
-
-    void OnDestroy()
-    {
-        if (dialogueSystem != null)
-        {
-            dialogueSystem.OnLineTypingStart -= StartTypingSound;
-            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
-        }
-
-        StopTypingSound();
     }
 
     private IEnumerator HideWizardAfterDialogue()
