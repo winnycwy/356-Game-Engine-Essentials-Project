@@ -1,83 +1,126 @@
 using UnityEngine;
 using Ilumisoft.HealthSystem;
 using UnityEngine.UI;
+using System.Collections;
 
 public class BeeHealthController : MonoBehaviour
 {
-    [Header("Health References")]
-    public Health health;
+    [Header("Health Bar")]
+    public GameObject healthBarPrefab;
 
-    [Header("Health Bar UI")]
-    public Slider healthBarSlider;
-    public GameObject healthBarCanvas;
-
-    [Header("Death Effects")]
-    public ParticleSystem deathParticles;
-    public AudioClip deathSound;
+    private Health health;
+    private Image healthBarFill;
+    private GameObject healthBarCanvas;
+    private RectTransform fillTransform;
+    private float originalFillWidth;
 
     // Events for other scripts to listen to
     public System.Action OnBeeDeath;
-    public System.Action<float> OnBeeHealthChanged;
 
     void Start()
     {
-        // Get Health component if not assigned
-        if (health == null)
-            health = GetComponent<Health>();
+        health = GetComponent<Health>();
+        CreateHealthBar();
 
-        // Setup health system
         if (health != null)
         {
             health.OnHealthChanged += OnHealthChanged;
             health.OnHealthEmpty += OnDeath;
         }
+    }
 
-        // Setup health bar
-        if (healthBarSlider == null && healthBarCanvas != null)
-            healthBarSlider = healthBarCanvas.GetComponentInChildren<Slider>();
+    private void CreateHealthBar()
+    {
+        // Auto-create health bar above the bee
+        healthBarCanvas = new GameObject("HealthBarCanvas");
+        healthBarCanvas.transform.SetParent(transform);
+        healthBarCanvas.transform.localPosition = new Vector3(0, 1.5f, 0);
 
-        UpdateHealthBar();
+        Canvas canvas = healthBarCanvas.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+
+        // Create background
+        GameObject background = new GameObject("Background");
+        background.transform.SetParent(healthBarCanvas.transform);
+        background.transform.localPosition = Vector3.zero;
+        background.transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);
+
+        Image bgImage = background.AddComponent<Image>();
+        bgImage.color = Color.red;
+
+        // Set background size
+        RectTransform bgRect = background.GetComponent<RectTransform>();
+        bgRect.sizeDelta = new Vector2(100, 10); // Width: 100, Height: 10
+
+        // Create fill
+        GameObject fill = new GameObject("Fill");
+        fill.transform.SetParent(background.transform); // Make fill a child of background
+        fill.transform.localPosition = Vector3.zero;
+
+        healthBarFill = fill.AddComponent<Image>();
+        healthBarFill.color = Color.green;
+
+        // Set fill size and store original width
+        fillTransform = fill.GetComponent<RectTransform>();
+        fillTransform.sizeDelta = new Vector2(100, 10); // Start full width
+        fillTransform.anchorMin = new Vector2(0, 0); // Anchor to left
+        fillTransform.anchorMax = new Vector2(0, 1); // Anchor to left
+        fillTransform.pivot = new Vector2(0, 0.5f); // Pivot on left center
+
+        originalFillWidth = 100f; // Store the full width
+
+        // Hide initially (only show when damaged)
+        healthBarCanvas.SetActive(false);
     }
 
     private void OnHealthChanged(float changeAmount)
     {
         UpdateHealthBar();
-        OnBeeHealthChanged?.Invoke(changeAmount);
+
+        if (changeAmount < 0 && healthBarCanvas != null)
+        {
+            healthBarCanvas.SetActive(true);
+        }
     }
 
     private void UpdateHealthBar()
     {
-        if (healthBarSlider != null && health != null)
+        if (healthBarFill != null && fillTransform != null && health != null)
         {
-            healthBarSlider.value = health.CurrentHealth / health.MaxHealth;
+            float healthPercent = health.CurrentHealth / health.MaxHealth;
 
-            // Hide health bar when full health
-            if (healthBarCanvas != null)
-            {
-                healthBarCanvas.SetActive(health.CurrentHealth < health.MaxHealth);
-            }
+            // Update fill width based on health percentage
+            float newWidth = originalFillWidth * healthPercent;
+            fillTransform.sizeDelta = new Vector2(newWidth, fillTransform.sizeDelta.y);
+
+            Debug.Log($"🐝 Health: {health.CurrentHealth}/{health.MaxHealth} ({healthPercent * 100}%) - Fill width: {newWidth}");
         }
     }
 
     private void OnDeath()
     {
-        Debug.Log("Bee died!");
+        Debug.Log("🐝 Bee died! Starting death sequence...");
 
-        // Play death effects
-        if (deathParticles != null)
-            Instantiate(deathParticles, transform.position, Quaternion.identity);
+        // Start coroutine for death effects
+        StartCoroutine(DeathSequence());
+    }
 
-        if (deathSound != null)
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+    private IEnumerator DeathSequence()
+    {
+        // Optional: Play death animation or effects here
+        Debug.Log("🐝 Playing death effects...");
+
+        // Wait a frame to ensure everything is processed
+        yield return null;
 
         // Notify other scripts that bee died
         OnBeeDeath?.Invoke();
 
-        // Destroy the bee
-        Destroy(gameObject, 0.1f);
+        // ✅ Destroy the entire bee GameObject
+        Debug.Log("🐝 Destroying bee...");
+        Destroy(gameObject);
     }
 
-    // Public method for other scripts to damage the bee
     public void TakeDamage(float damage)
     {
         if (health != null && health.IsAlive)
@@ -93,7 +136,6 @@ public class BeeHealthController : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Unsubscribe from events
         if (health != null)
         {
             health.OnHealthChanged -= OnHealthChanged;
