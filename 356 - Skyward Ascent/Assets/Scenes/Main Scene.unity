@@ -86617,6 +86617,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2838069486888028093, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
+      propertyPath: maxHealth
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 3237909084013840098, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: m_Name
       value: BumbleGrump
@@ -86629,6 +86633,10 @@ PrefabInstance:
       propertyPath: hurtSound
       value: 
       objectReference: {fileID: 8300000, guid: 585a08f8773a1da4bb6b7a78cae9ed7e, type: 3}
+    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
+      propertyPath: deathSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ee594c584776af840a98a2c593eea528, type: 3}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: hurtColor.a
       value: 0.5882353
@@ -86643,6 +86651,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
       propertyPath: hurtColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
+      propertyPath: hurtParticles
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
+      propertyPath: deathParticles
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
+      propertyPath: deathDestroyDelay
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4981187642004124638, guid: e3b5d441a18824f4981136c1eb649a90, type: 3}
