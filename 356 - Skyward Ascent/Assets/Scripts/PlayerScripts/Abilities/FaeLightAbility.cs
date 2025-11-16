@@ -759,6 +759,9 @@ public class FaeLightAbility : MonoBehaviour
     public float pressScale = 0.85f;
     public float pressDuration = 0.1f;
 
+    public float orbDamageRadius = 2f;
+    public float orbDamagePerSecond = 1f;
+
     private GameObject currentFaeLight;
     private Light faePointLight;
     private bool isAbilityUnlocked = false;
@@ -805,6 +808,17 @@ public class FaeLightAbility : MonoBehaviour
         {
             UpdateLightPosition();
             AnimateFaeLight();
+
+            // DAMAGE ORBS IN RANGE
+            Collider[] hits = Physics.OverlapSphere(currentFaeLight.transform.position, orbDamageRadius);
+            foreach (Collider hit in hits)
+            {
+                DarkFaeOrb orb = hit.GetComponent<DarkFaeOrb>();
+                if (orb != null)
+                {
+                    orb.TakeFaeLightDamage(orbDamagePerSecond * Time.deltaTime);
+                }
+            }
         }
     }
 

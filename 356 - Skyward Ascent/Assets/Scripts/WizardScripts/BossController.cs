@@ -3,17 +3,29 @@ using Ilumisoft.HealthSystem;
 
 public class BossController : MonoBehaviour
 {
+    [Header("Health")]
     public Health bossHealth;
 
     [Header("Phase Controllers")]
     public BossPhase1_Attacks phase1Controller;
     public BossPhase2_Attacks phase2Controller;
 
-    [Header("Trigger Settings")]
-    public Collider activationTrigger; // Assign a trigger collider in the scene
-    private bool bossActivated = false;
+    [Header("Activation")]
+    public bool startActivated = false; // optional, auto-start
 
+    [Header("Phase 3 Dialogue")]
+    public DialogueSystem dialogueSystem;
+    public string[] phase3Lines = new string[]
+    {
+        "I see now... I was not escaping the past... I was escaping myself.",
+        "This tower... these memories... they were never my prison. I was.",
+        "Thank you... for helping me remember what I truly am."
+    };
+    public string phase3Speaker = "Boss";
+
+    private bool bossActivated = false;
     private bool phase2Started = false;
+    private bool phase3Started = false;
 
     void Start()
     {
@@ -22,13 +34,18 @@ public class BossController : MonoBehaviour
 
         bossHealth.OnHealthChanged += OnBossHealthChanged;
 
-        
+        // Disable attacks until activation
         if (phase1Controller != null)
-            phase1Controller.enabled = false;
+            phase1Controller.enabled = startActivated;
+
+        if (startActivated)
+            bossActivated = true;
     }
 
     private void OnBossHealthChanged(float difference)
     {
+        if (!bossActivated) return; // Only track health changes after activation
+
         float current = bossHealth.CurrentHealth;
         float max = bossHealth.MaxHealth;
 
@@ -38,38 +55,46 @@ public class BossController : MonoBehaviour
             StartPhase2();
         }
 
-        
-        if (current <= 0)
+        // PHASE 3 TRIGGER
+        if (!phase3Started && current <= 0)
         {
-            Debug.Log("BOSS: DEAD — Start Phase 3 later.");
+            StartPhase3();
         }
     }
 
-    void StartPhase2()
+    public void ActivateBoss()
+    {
+        if (bossActivated) return;
+
+        bossActivated = true;
+        Debug.Log("Boss activated!");
+
+        if (phase1Controller != null)
+            phase1Controller.enabled = true;
+    }
+
+    private void StartPhase2()
     {
         phase2Started = true;
-
         Debug.Log("BOSS: Switching to PHASE 2");
 
-        
         if (phase2Controller != null)
             phase2Controller.StartPhase2();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void StartPhase3()
     {
-        if (bossActivated) return;
+        phase3Started = true;
+        Debug.Log("BOSS: Switching to PHASE 3 (Dialogue)");
 
-        if (other.CompareTag("Player"))
+        // Disable any remaining attacks
+        if (phase1Controller != null) phase1Controller.enabled = false;
+        if (phase2Controller != null) phase2Controller.enabled = false;
+
+        // Start dialogue
+        if (dialogueSystem != null)
         {
-            bossActivated = true;
-            Debug.Log("Boss activated!");
-
-            
-            if (phase1Controller != null)
-                phase1Controller.enabled = true;
-
-            
+            dialogueSystem.StartDialogue(phase3Lines, phase3Speaker);
         }
     }
 }
