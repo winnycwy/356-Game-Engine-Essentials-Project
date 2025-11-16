@@ -222,6 +222,7 @@ public class FireAbility : MonoBehaviour
 
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 }*/
 using UnityEngine;
 using UnityEngine.UI;
@@ -479,6 +480,9 @@ public class FireAbility : MonoBehaviour
         return isAbilityUnlocked;
     }
 }
+=======
+}
+>>>>>>> Stashed changes
 =======
 }
 >>>>>>> Stashed changes
