@@ -29024,6 +29024,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1689356114}
     - target: {fileID: 4791839343609390124, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: playerHurtSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e167a635c61d415409a3850eeff02dc5, type: 3}
+    - target: {fileID: 4791839343609390124, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: screenHurtOverlay
       value: 
       objectReference: {fileID: 409119410}

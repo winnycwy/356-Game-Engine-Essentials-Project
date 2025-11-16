@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 public class PlayerDeathHandler : MonoBehaviour
 {
-    [Header("UI Hurt Effect")]
+    [Header("Player Hurt Effects")]
+    public AudioClip playerHurtSound; 
     public Image screenHurtOverlay;
     public float hurtFlashDuration = 0.3f;
     public float hurtMaxAlpha = 0.4f;
@@ -102,9 +103,23 @@ public class PlayerDeathHandler : MonoBehaviour
 
     private void TriggerHurtEffect()
     {
+        // Play hurt sound
+        if (playerHurtSound != null && audioSource != null && !isDead)
+        {
+            audioSource.PlayOneShot(playerHurtSound);
+        }
+
+        // Trigger UI hurt effect
         if (screenHurtOverlay != null && !isDead)
         {
             StartCoroutine(UIHurtFlash());
+        }
+
+        // Trigger material flash if you have it
+        PlayerHurtEffect hurtEffect = GetComponent<PlayerHurtEffect>();
+        if (hurtEffect != null && !isDead)
+        {
+            hurtEffect.TriggerHurtEffect();
         }
     }
 
