@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 using Ilumisoft.HealthSystem; // Add this using directive
 
@@ -122,4 +122,27 @@ public class FireRainDamage : MonoBehaviour
         // Clean up
         lastHitTime.Clear();
     }
+
+    public class ParticleCollisionDebugger : MonoBehaviour
+    {
+        void OnParticleCollision(GameObject other)
+        {
+            Debug.Log($"🔥 Particle collided with: {other.name} (Tag: {other.tag})");
+
+            // Visual feedback - change color temporarily
+            Renderer renderer = other.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                Color originalColor = renderer.material.color;
+                renderer.material.color = Color.red;
+                Invoke(nameof(ResetColor), 0.5f);
+            }
+        }
+
+        void ResetColor()
+        {
+            // This would need to store original colors in a real implementation
+        }
+    }
+
 }

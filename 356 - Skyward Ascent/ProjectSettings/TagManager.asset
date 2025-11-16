@@ -8,6 +8,7 @@ TagManager:
   - enemy
   - FaeLight
   - WandProjectile
+  - Fae Light
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - Runestone
   - Water
   - UI
-  - 
+  - Enemy
   - 
   - 
   - 
