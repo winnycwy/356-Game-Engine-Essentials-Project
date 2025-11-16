@@ -7,10 +7,10 @@ using System.Collections;
 public class FireAbility : MonoBehaviour
 {
     [Header("Fire Ability Settings")]
-    public GameObject fireProjectilePrefab;
+    public ParticleSystem fireRainParticle; // Drag your particle system here
+    public float particleDuration = 3f;
     public Transform fireSpawnPoint;
     public KeyCode activateKey = KeyCode.Mouse1; // Right mouse button
-    public float fireSpeed = 15f;
     public float fireCooldown = 0.5f;
     public int damage = 20;
 
@@ -102,33 +102,23 @@ public class FireAbility : MonoBehaviour
 
     private void ShootFireProjectile()
     {
-        if (fireProjectilePrefab != null && fireSpawnPoint != null)
+        if (fireRainParticle != null)
         {
-            // Trigger shoot animation
-            if (playerAnimator != null)
-            {
-                playerAnimator.SetTrigger(shootAnimationTrigger);
-            }
+            // Play the particle system
+            fireRainParticle.Play();
 
-            GameObject fireball = Instantiate(fireProjectilePrefab, fireSpawnPoint.position, fireSpawnPoint.rotation);
+            // Optional: Stop after duration if it doesn't auto-stop
+            Invoke("StopFireRain", particleDuration);
 
-            // Set up projectile component
-            FireProjectile projectile = fireball.GetComponent<FireProjectile>();
-            if (projectile != null)
-            {
-                projectile.damage = damage;
-            }
+            Debug.Log("Fire rain activated!");
+        }
+    }
 
-            // Add velocity
-            Rigidbody rb = fireball.GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.linearVelocity = fireSpawnPoint.forward * fireSpeed;
-            }
-
-            // Start cooldown
-            StartCooldown();
-            SetButtonActiveState(true);
+    private void StopFireRain()
+    {
+        if (fireRainParticle != null)
+        {
+            fireRainParticle.Stop();
         }
     }
 
@@ -231,6 +221,7 @@ public class FireAbility : MonoBehaviour
     }
 
 
+<<<<<<< Updated upstream
 }*/
 using UnityEngine;
 using UnityEngine.UI;
@@ -488,3 +479,6 @@ public class FireAbility : MonoBehaviour
         return isAbilityUnlocked;
     }
 }
+=======
+}
+>>>>>>> Stashed changes
