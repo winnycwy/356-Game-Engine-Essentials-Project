@@ -1120,11 +1120,7 @@ public class InteractableCharacter : MonoBehaviour
 }
 */
 
-using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 public class InteractableCharacter : MonoBehaviour
@@ -1147,7 +1143,15 @@ public class InteractableCharacter : MonoBehaviour
     public int requiredSunPetals = 3;
 
     [Header("Dialogue Settings")]
-    public bool startDialogueAutomatically = true; // NEW: Auto-start when player approaches
+    public bool startDialogueAutomatically = true; // Auto-start when player approaches
+
+    [Header("Fairy Power Restoration Effects")]
+    public AnimationClip fairyPowerUpAnimation;
+    public GameObject magicCircle;
+
+    [Header("Audio Settings")]
+    public AudioSource typingAudioSource;
+    public AudioClip powerRestorationSound;
 
     private bool playerInRange = false;
     private int collectedSunPetals = 0;
@@ -1240,6 +1244,9 @@ public class InteractableCharacter : MonoBehaviour
         if (dialogueSystem == null) return;
         if (dialogueSystem.IsDialogueActive) return;
 
+        dialogueSystem.OnLineTypingStart += StartTypingSound;
+        dialogueSystem.OnLineTypingComplete += StopTypingSound;
+
         if (!hasStartedDialogueForCurrentState)
         {
             switch (currentState)
@@ -1263,7 +1270,6 @@ public class InteractableCharacter : MonoBehaviour
         }
     }
 
-    // ... REST OF YOUR EXISTING METHODS REMAIN THE SAME ...
     private void CheckIfFairyFreed()
     {
         if (currentState == DialogueState.Trapped && cageRunestones.Length > 0)
@@ -1331,6 +1337,9 @@ public class InteractableCharacter : MonoBehaviour
                 ActivateHeartbloomPortal();
                 hasActivatedPortal = true;
             }
+
+            dialogueSystem.OnLineTypingStart -= StartTypingSound;
+            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
         }
     }
 
@@ -1340,7 +1349,50 @@ public class InteractableCharacter : MonoBehaviour
         playerFaeLightAbility.UnlockFaeLight();
         Debug.Log("Flora has granted you the Fae Light ability!");
 
+        // Trigger fairy power restoration effects
+        PlayFairyPowerRestoration();
+
         StartCoroutine(PlayAbilityGrantEffect());
+    }
+
+    private void PlayFairyPowerRestoration()
+    {
+        // Play fairy power-up animation clip
+        if (fairyPowerUpAnimation != null)
+        {
+            Animation anim = GetComponent<Animation>();
+            if (anim != null)
+            {
+                anim.Play(fairyPowerUpAnimation.name);
+            }
+            else
+            {
+                Animator animator = GetComponent<Animator>();
+                if (animator != null)
+                {
+                    animator.Play(fairyPowerUpAnimation.name);
+                }
+            }
+        }
+
+        // Spawn magic circle object
+        if (magicCircle != null)
+        {
+            magicCircle.SetActive(true);
+
+            // Get particle system and play it
+            ParticleSystem particles = magicCircle.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+            }
+        }
+
+        // Play sound
+        if (powerRestorationSound != null)
+        {
+            AudioSource.PlayClipAtPoint(powerRestorationSound, transform.position);
+        }
     }
 
     private IEnumerator PlayAbilityGrantEffect()
@@ -1409,6 +1461,23 @@ public class InteractableCharacter : MonoBehaviour
                 "Thank you for collecting the Sun Petals! The Heartbloom portal is now active.",
                 "Come traveler, step into the portal when you're ready to journey to the next island."
             };
+        }
+    }
+
+    private void StartTypingSound()
+    {
+        if (typingAudioSource != null && !typingAudioSource.isPlaying)
+        {
+            typingAudioSource.loop = true;
+            typingAudioSource.Play();
+        }
+    }
+
+    private void StopTypingSound()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
         }
     }
 }

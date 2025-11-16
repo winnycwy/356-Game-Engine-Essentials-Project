@@ -10,6 +10,11 @@ public class OpeningCutscene : MonoBehaviour
 
     [Header("Audio Settings")]
     public AudioSource typingAudioSource;
+    public AudioSource wizardTeleportAudioSource;
+    public AudioClip wizardTeleportSound;
+
+    [Header("Disappear Effect")]
+    public GameObject shockwaveEffect;
 
     [Header("Wizard Dialogue")]
     [TextArea]
@@ -32,6 +37,8 @@ public class OpeningCutscene : MonoBehaviour
 
     void StartCutscene()
     {
+        PlayWizardTeleportSound();
+
         // Show wizard
         if (wizardSpirit != null)
             wizardSpirit.SetActive(true);
@@ -43,7 +50,7 @@ public class OpeningCutscene : MonoBehaviour
         // Start dialogue using your existing system
         if (dialogueSystem != null)
         {
-            // Only subscribe to line events now
+            // Subscribe to line events now
             dialogueSystem.OnLineTypingStart += StartTypingSound;
             dialogueSystem.OnLineTypingComplete += StopTypingSound;
 
@@ -52,6 +59,17 @@ public class OpeningCutscene : MonoBehaviour
             // Hide wizard when dialogue ends
             StartCoroutine(HideWizardAfterDialogue());
         }
+    }
+
+    void OnDestroy()
+    {
+        if (dialogueSystem != null)
+        {
+            dialogueSystem.OnLineTypingStart -= StartTypingSound;
+            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
+        }
+
+        StopTypingSound();
     }
 
     private void StartTypingSound()
@@ -71,17 +89,6 @@ public class OpeningCutscene : MonoBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        if (dialogueSystem != null)
-        {
-            dialogueSystem.OnLineTypingStart -= StartTypingSound;
-            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
-        }
-
-        StopTypingSound();
-    }
-
     private IEnumerator HideWizardAfterDialogue()
     {
         // Wait for dialogue to complete
@@ -94,10 +101,34 @@ public class OpeningCutscene : MonoBehaviour
         if (wizardAnimator != null)
             wizardAnimator.SetTrigger("Disappear");
 
-        // Wait for animation then hide
+        // Wait for animation then hide and play disappear sound
         yield return new WaitForSeconds(1f);
+        SpawnDisappearEffect();
+        PlayWizardTeleportSound();
 
         if (wizardSpirit != null)
             wizardSpirit.SetActive(false);
+    }
+
+    private void SpawnDisappearEffect()
+    {
+        if (shockwaveEffect != null)
+        {
+
+            shockwaveEffect.SetActive(true);
+
+            // Get particle system and play it
+            ParticleSystem particles = shockwaveEffect.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+            }
+        }
+    }
+
+    private void PlayWizardTeleportSound()
+    {
+        if (wizardTeleportAudioSource != null && wizardTeleportSound != null)
+            wizardTeleportAudioSource.PlayOneShot(wizardTeleportSound);
     }
 }
