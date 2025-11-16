@@ -3113,7 +3113,7 @@ MonoBehaviour:
   foxQuest: {fileID: 897379970}
   collectParticles: {fileID: 0}
   crystalModel: {fileID: 66314412}
-  appearSound: {fileID: 0}
+  appearSound: {fileID: 8300000, guid: e83d6c2e49e0eca49845ff6af1e4db8c, type: 3}
   disappearSound: {fileID: 0}
   collectSound: {fileID: 0}
 --- !u!135 &66314418
@@ -30213,6 +30213,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2117074232}
   m_SourcePrefab: {fileID: 100100000, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+--- !u!82 &716466759 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2175569763387010937, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+  m_PrefabInstance: {fileID: 716466758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &718740616 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 441334459993000016, guid: 5af94e9c41aa63c47af02bdc40a1fbb3, type: 3}
@@ -50978,6 +50983,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02d57bc0d36bd0a488b3e6d97f66fd16, type: 3}
+--- !u!4 &1105696936 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+  m_PrefabInstance: {fileID: 1386450568}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1105696938 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8724466350249207100, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+  m_PrefabInstance: {fileID: 1386450568}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1107160453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56467,10 +56482,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 166689192}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3682593085651455145, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1231693961}
+      addedObject: {fileID: 1105696936}
+    m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3682593085651455145, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1231693966}
@@ -56488,18 +56503,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4057992075610740243, guid: 2a002c714f14b934faa10b3db24dce55, type: 3}
   m_PrefabInstance: {fileID: 1231693954}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1231693961
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1231693955}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97b72f3cd0089c04ea1356ac2d267e6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1231693965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56517,8 +56520,11 @@ MonoBehaviour:
   startDisabled: 1
   fadeCanvasGroup: {fileID: 0}
   fadeDuration: 1
-  activationParticles: {fileID: 0}
+  activationParticles: {fileID: 1105696938}
   portalLight: {fileID: 0}
+  treeActivationParticles: {fileID: 1105696938}
+  treeActivationSound: {fileID: 0}
+  portalHumSound: {fileID: 8300000, guid: e83d6c2e49e0eca49845ff6af1e4db8c, type: 3}
 --- !u!65 &1231693966
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -63833,6 +63839,75 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7335051610645913851, guid: 6ed4aebaeedce0a42bd253cc5ab192fb, type: 3}
   m_PrefabInstance: {fileID: 1385426609}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1386450568
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1231693960}
+    m_Modifications:
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.3335152
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.3333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.9995903
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.31273475
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.7200038
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.557082
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99994886
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.010121688
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -25.654
+      objectReference: {fileID: 0}
+    - target: {fileID: 4659087304275547816, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4752457369876416285, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
+      propertyPath: m_Name
+      value: Portal yellow
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5ad33d58a66ab154a89c9e88255601e5, type: 3}
 --- !u!1001 &1392592646
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -94939,9 +95014,9 @@ MonoBehaviour:
   castLight: {fileID: 0}
   playerAnimator: {fileID: 2117074215}
   castAnimationTrigger: CastFireSpell
-  audioSource: {fileID: 0}
+  audioSource: {fileID: 716466759}
   castSound: {fileID: 0}
-  fireRainSound: {fileID: 0}
+  fireRainSound: {fileID: 8300000, guid: 8683e9118a8511441aa062d73d7929eb, type: 3}
   fireAbilityUI: {fileID: 610122570}
   buttonBackground: {fileID: 610122572}
   buttonIcon: {fileID: 610122572}
