@@ -19,20 +19,20 @@ public class BeeScript : MonoBehaviour
     public float attackCooldown = 1f;
     private float lastAttackTime = 0f;
 
-    private BeeHealthController healthController;
+    private Health health;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
 
-        healthController = GetComponent<BeeHealthController>();
+        health = GetComponent<Health>();
 
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        if (healthController != null)
+        if (health != null)
         {
-            healthController.OnBeeDeath += OnDeath;
+            health.OnHealthEmpty += OnDeath;
         }
 
         GoToNextWaypoint();
@@ -40,7 +40,7 @@ public class BeeScript : MonoBehaviour
 
     void Update()
     {
-        if (healthController != null && !healthController.IsAlive())
+        if (health != null && !health.IsAlive)
             return;
 
         float distance = Vector3.Distance(transform.position, player.position);
@@ -63,11 +63,11 @@ public class BeeScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        Debug.Log($"🐝 Bee taking {damage} damage!");
+        Debug.Log($"Bee taking {damage} damage!");
 
-        if (healthController != null && healthController.IsAlive())
+        if (health != null && health.IsAlive)
         {
-            healthController.TakeDamage(damage);
+            health.ApplyDamage(damage);
         }
         else
         {
@@ -78,8 +78,13 @@ public class BeeScript : MonoBehaviour
     void OnDeath()
     {
         Debug.Log("Bee died!");
-        agent.isStopped = true;
-        // Don't destroy here - BeeHealthController handles destruction
+;
+        if (agent != null)
+        {
+            agent.isStopped = true;
+        }
+
+        Destroy(gameObject, 0.1f);
     }
 
     void ChangeState(State newState)

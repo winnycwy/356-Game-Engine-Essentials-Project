@@ -5,16 +5,17 @@ using System.Collections;
 
 public class BeeHealthController : MonoBehaviour
 {
-    [Header("Health Bar")]
-    public GameObject healthBarPrefab;
+    [Header("Health Bar Settings")]
+    public float healthBarWidth = 1f;
+    public float healthBarHeight = 0.1f;
+    public float healthBarOffsetY = 0.3f;
 
     private Health health;
     private Image healthBarFill;
     private GameObject healthBarCanvas;
     private RectTransform fillTransform;
-    private float originalFillWidth;
+    private Image healthBarBackground;
 
-    // Events for other scripts to listen to
     public System.Action OnBeeDeath;
 
     void Start()
@@ -31,45 +32,46 @@ public class BeeHealthController : MonoBehaviour
 
     private void CreateHealthBar()
     {
-        // Auto-create health bar above the bee
+        // Create health bar canvas
         healthBarCanvas = new GameObject("HealthBarCanvas");
         healthBarCanvas.transform.SetParent(transform);
-        healthBarCanvas.transform.localPosition = new Vector3(0, 1.5f, 0);
+        healthBarCanvas.transform.localPosition = new Vector3(0, healthBarOffsetY, 0);
+        healthBarCanvas.transform.localRotation = Quaternion.identity;
 
         Canvas canvas = healthBarCanvas.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
 
-        // Create background
+        RectTransform canvasRect = healthBarCanvas.GetComponent<RectTransform>();
+        canvasRect.sizeDelta = new Vector2(healthBarWidth * 100, healthBarHeight * 100);
+
+        // Create background (DARK color - this shows when health decreases)
         GameObject background = new GameObject("Background");
         background.transform.SetParent(healthBarCanvas.transform);
         background.transform.localPosition = Vector3.zero;
-        background.transform.localScale = new Vector3(0.002f, 0.002f, 0.002f);
+        background.transform.localScale = Vector3.one;
 
-        Image bgImage = background.AddComponent<Image>();
-        bgImage.color = Color.red;
+        healthBarBackground = background.AddComponent<Image>();
+        healthBarBackground.color = new Color(0.3f, 0, 0, 0.8f); // DARK red background
 
-        // Set background size
         RectTransform bgRect = background.GetComponent<RectTransform>();
-        bgRect.sizeDelta = new Vector2(100, 10); // Width: 100, Height: 10
+        bgRect.sizeDelta = new Vector2(healthBarWidth * 100, healthBarHeight * 100);
 
-        // Create fill
+        // Create fill (RED color - this shrinks as health decreases)
         GameObject fill = new GameObject("Fill");
-        fill.transform.SetParent(background.transform); // Make fill a child of background
+        fill.transform.SetParent(background.transform);
         fill.transform.localPosition = Vector3.zero;
+        fill.transform.localScale = Vector3.one; // Start full
 
         healthBarFill = fill.AddComponent<Image>();
-        healthBarFill.color = Color.green;
+        healthBarFill.color = new Color(1, 0, 0, 0.8f); // BRIGHT red fill
 
-        // Set fill size and store original width
         fillTransform = fill.GetComponent<RectTransform>();
-        fillTransform.sizeDelta = new Vector2(100, 10); // Start full width
-        fillTransform.anchorMin = new Vector2(0, 0); // Anchor to left
-        fillTransform.anchorMax = new Vector2(0, 1); // Anchor to left
-        fillTransform.pivot = new Vector2(0, 0.5f); // Pivot on left center
+        fillTransform.anchorMin = new Vector2(0, 0);
+        fillTransform.anchorMax = new Vector2(1, 1);
+        fillTransform.offsetMin = Vector2.zero;
+        fillTransform.offsetMax = Vector2.zero;
 
-        originalFillWidth = 100f; // Store the full width
-
-        // Hide initially (only show when damaged)
+        // Hide initially
         healthBarCanvas.SetActive(false);
     }
 
@@ -77,6 +79,7 @@ public class BeeHealthController : MonoBehaviour
     {
         UpdateHealthBar();
 
+        // Show health bar when taking damage
         if (changeAmount < 0 && healthBarCanvas != null)
         {
             healthBarCanvas.SetActive(true);
@@ -85,39 +88,29 @@ public class BeeHealthController : MonoBehaviour
 
     private void UpdateHealthBar()
     {
-        if (healthBarFill != null && fillTransform != null && health != null)
+        if (healthBarFill != null && health != null)
         {
             float healthPercent = health.CurrentHealth / health.MaxHealth;
 
-            // Update fill width based on health percentage
-            float newWidth = originalFillWidth * healthPercent;
-            fillTransform.sizeDelta = new Vector2(newWidth, fillTransform.sizeDelta.y);
+            // ✅ FIX: Scale the RED fill based on health
+            // When health is full: scale = 1 (full red bar)
+            // When health is low: scale approaches 0 (less red, more dark background shows)
+            healthBarFill.transform.localScale = new Vector3(healthPercent, 1, 1);
 
-            Debug.Log($"🐝 Health: {health.CurrentHealth}/{health.MaxHealth} ({healthPercent * 100}%) - Fill width: {newWidth}");
+            Debug.Log($"🐝 Health: {health.CurrentHealth}/{health.MaxHealth} ({healthPercent * 100}%) - Fill scale: {healthPercent}");
         }
     }
 
     private void OnDeath()
     {
-        Debug.Log("🐝 Bee died! Starting death sequence...");
-
-        // Start coroutine for death effects
+        Debug.Log("🐝 Bee died!");
         StartCoroutine(DeathSequence());
     }
 
     private IEnumerator DeathSequence()
     {
-        // Optional: Play death animation or effects here
-        Debug.Log("🐝 Playing death effects...");
-
-        // Wait a frame to ensure everything is processed
         yield return null;
-
-        // Notify other scripts that bee died
         OnBeeDeath?.Invoke();
-
-        // ✅ Destroy the entire bee GameObject
-        Debug.Log("🐝 Destroying bee...");
         Destroy(gameObject);
     }
 

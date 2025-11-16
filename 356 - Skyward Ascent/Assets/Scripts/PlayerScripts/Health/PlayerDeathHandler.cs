@@ -67,6 +67,15 @@ public class PlayerDeathHandler : MonoBehaviour
     {
         Debug.Log($"Health changed: {currentHealth}");
 
+        if (currentHealth < playerHealth.MaxHealth)
+        {
+            PlayerHurtEffect hurtEffect = GetComponent<PlayerHurtEffect>();
+            if (hurtEffect != null)
+            {
+                hurtEffect.TriggerHurtEffect();
+            }
+        }
+
         // Trigger hurt animation if health decreased and not dead
         if (animator != null && playerHealth != null && currentHealth < playerHealth.MaxHealth && !isDead)
         {
