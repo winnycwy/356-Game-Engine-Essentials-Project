@@ -9,7 +9,6 @@ public class PlayerHurtEffect : MonoBehaviour
 
     private Material[] originalMaterials;
     private Renderer playerRenderer;
-    private Color originalColor;
     private bool isFlashing = false;
 
     void Start()
@@ -18,8 +17,12 @@ public class PlayerHurtEffect : MonoBehaviour
 
         if (playerRenderer != null)
         {
-            // Store original materials
-            originalMaterials = playerRenderer.materials;
+            // ✅ FIX: Create copies of materials to avoid shared material issues
+            originalMaterials = new Material[playerRenderer.materials.Length];
+            for (int i = 0; i < playerRenderer.materials.Length; i++)
+            {
+                originalMaterials[i] = new Material(playerRenderer.materials[i]);
+            }
         }
         else
         {
@@ -55,6 +58,7 @@ public class PlayerHurtEffect : MonoBehaviour
     {
         if (playerRenderer != null)
         {
+            // ✅ FIX: Change color on all materials
             foreach (Material mat in playerRenderer.materials)
             {
                 mat.color = color;
@@ -66,9 +70,26 @@ public class PlayerHurtEffect : MonoBehaviour
     {
         if (playerRenderer != null && originalMaterials != null)
         {
+            // ✅ FIX: Restore original materials completely
             for (int i = 0; i < playerRenderer.materials.Length; i++)
             {
-                playerRenderer.materials[i].color = originalMaterials[i].color;
+                if (i < originalMaterials.Length)
+                {
+                    playerRenderer.materials[i].color = originalMaterials[i].color;
+                }
+            }
+        }
+    }
+
+    // ✅ ADD THIS: Clean up when destroyed
+    private void OnDestroy()
+    {
+        if (originalMaterials != null)
+        {
+            foreach (Material mat in originalMaterials)
+            {
+                if (mat != null)
+                    DestroyImmediate(mat);
             }
         }
     }
