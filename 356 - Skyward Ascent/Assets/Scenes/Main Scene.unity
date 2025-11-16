@@ -82919,6 +82919,7 @@ MonoBehaviour:
   cageDissolveTrigger: {fileID: 1512724795}
   requiredSunPetals: 3
   startDialogueAutomatically: 1
+  typingAudioSource: {fileID: 649849574}
   playerFaeLightAbility: {fileID: 8090919453279865620}
 --- !u!135 &1915221618
 SphereCollider:

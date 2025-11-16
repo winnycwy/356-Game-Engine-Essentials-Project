@@ -1147,7 +1147,10 @@ public class InteractableCharacter : MonoBehaviour
     public int requiredSunPetals = 3;
 
     [Header("Dialogue Settings")]
-    public bool startDialogueAutomatically = true; // NEW: Auto-start when player approaches
+    public bool startDialogueAutomatically = true; // Auto-start when player approaches
+
+    [Header("Audio Settings")]
+    public AudioSource typingAudioSource;
 
     private bool playerInRange = false;
     private int collectedSunPetals = 0;
@@ -1240,6 +1243,9 @@ public class InteractableCharacter : MonoBehaviour
         if (dialogueSystem == null) return;
         if (dialogueSystem.IsDialogueActive) return;
 
+        dialogueSystem.OnLineTypingStart += StartTypingSound;
+        dialogueSystem.OnLineTypingComplete += StopTypingSound;
+
         if (!hasStartedDialogueForCurrentState)
         {
             switch (currentState)
@@ -1263,7 +1269,6 @@ public class InteractableCharacter : MonoBehaviour
         }
     }
 
-    // ... REST OF YOUR EXISTING METHODS REMAIN THE SAME ...
     private void CheckIfFairyFreed()
     {
         if (currentState == DialogueState.Trapped && cageRunestones.Length > 0)
@@ -1331,6 +1336,9 @@ public class InteractableCharacter : MonoBehaviour
                 ActivateHeartbloomPortal();
                 hasActivatedPortal = true;
             }
+
+            dialogueSystem.OnLineTypingStart -= StartTypingSound;
+            dialogueSystem.OnLineTypingComplete -= StopTypingSound;
         }
     }
 
@@ -1409,6 +1417,23 @@ public class InteractableCharacter : MonoBehaviour
                 "Thank you for collecting the Sun Petals! The Heartbloom portal is now active.",
                 "Come traveler, step into the portal when you're ready to journey to the next island."
             };
+        }
+    }
+
+    private void StartTypingSound()
+    {
+        if (typingAudioSource != null && !typingAudioSource.isPlaying)
+        {
+            typingAudioSource.loop = true;
+            typingAudioSource.Play();
+        }
+    }
+
+    private void StopTypingSound()
+    {
+        if (typingAudioSource != null && typingAudioSource.isPlaying)
+        {
+            typingAudioSource.Stop();
         }
     }
 }
