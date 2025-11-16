@@ -7,6 +7,11 @@ using UnityEngine.UI;
 
 public class PlayerDeathHandler : MonoBehaviour
 {
+    [Header("UI Hurt Effect")]
+    public Image screenHurtOverlay;
+    public float hurtFlashDuration = 0.3f;
+    public float hurtMaxAlpha = 0.4f;
+
     [Header("Death Settings")]
     public GameObject deathScreen;
     public float deathScreenDelay = 2f;
@@ -68,6 +73,7 @@ public class PlayerDeathHandler : MonoBehaviour
         Debug.Log($"Health changed: {currentHealth}");
 
         if (currentHealth < playerHealth.MaxHealth)
+            TriggerHurtEffect();
         {
             PlayerHurtEffect hurtEffect = GetComponent<PlayerHurtEffect>();
             if (hurtEffect != null)
@@ -85,6 +91,40 @@ public class PlayerDeathHandler : MonoBehaviour
             // Optional: Add a cooldown so you don't spam hurt animation
             StartCoroutine(HurtAnimationCooldown());
         }
+    }
+
+    private void TriggerHurtEffect()
+    {
+        if (screenHurtOverlay != null)
+        {
+            StartCoroutine(UIHurtFlash());
+        }
+    }
+
+    private IEnumerator UIHurtFlash()
+    {
+        // Fade in quickly
+        float elapsed = 0f;
+        while (elapsed < hurtFlashDuration / 2)
+        {
+            float alpha = Mathf.Lerp(0, hurtMaxAlpha, elapsed / (hurtFlashDuration / 2));
+            screenHurtOverlay.color = new Color(1, 0, 0, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Fade out slowly
+        elapsed = 0f;
+        while (elapsed < hurtFlashDuration / 2)
+        {
+            float alpha = Mathf.Lerp(hurtMaxAlpha, 0, elapsed / (hurtFlashDuration / 2));
+            screenHurtOverlay.color = new Color(1, 0, 0, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure completely invisible
+        screenHurtOverlay.color = new Color(1, 0, 0, 0);
     }
 
     private IEnumerator HurtAnimationCooldown()
