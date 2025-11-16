@@ -28677,6 +28677,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4791839343609390124, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: deathScreen
+      value: 
+      objectReference: {fileID: 1689356114}
+    - target: {fileID: 4791839343609390124, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: respawnPoints.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -74008,6 +74012,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7335051610645913851, guid: 6ed4aebaeedce0a42bd253cc5ab192fb, type: 3}
   m_PrefabInstance: {fileID: 1688738705}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1689356114 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4056626918982198341, guid: a54a16dd87678314781a692b0e7c1819, type: 3}
+  m_PrefabInstance: {fileID: 356061511}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &1697949177 stripped
 Transform:
