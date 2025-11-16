@@ -20,7 +20,7 @@ public class FoxNPC : MonoBehaviour
     [TextArea]
     public string[] afterCrystalDialogue = {
         "Thank you for retrieving the fire crystal!",
-        "I will now infuse your staff with the power of fire magic.",
+        "Tp show my gratitude I will infuse your staff with the power of fire magic.",
         "...",
         "I have heard about your journey to find Aetherius.",
         "Be warned, he is not the person he once was...",
@@ -42,6 +42,7 @@ public class FoxNPC : MonoBehaviour
     private bool hasSpokenInitial = false;
     private bool playerHasCrystal = false;
     private bool hasUnlockedFireAbility = false;
+    private bool hasCompletedCrystalDialogue = false; // NEW: Track if crystal dialogue was completed
 
     void Start()
     {
@@ -66,7 +67,7 @@ public class FoxNPC : MonoBehaviour
             {
                 StartInitialConversation();
             }
-            else if (playerHasCrystal && !hasUnlockedFireAbility)
+            else if (playerHasCrystal && !hasUnlockedFireAbility && !hasCompletedCrystalDialogue) // UPDATED: Added condition
             {
                 // Player has crystal - trigger ability unlock dialogue
                 StartCrystalConversation();
@@ -99,7 +100,7 @@ public class FoxNPC : MonoBehaviour
             {
                 StartInitialConversation();
             }
-            else if (playerHasCrystal && !hasUnlockedFireAbility)
+            else if (playerHasCrystal && !hasUnlockedFireAbility && !hasCompletedCrystalDialogue) // UPDATED: Added condition
             {
                 StartCrystalConversation();
             }
@@ -124,10 +125,11 @@ public class FoxNPC : MonoBehaviour
 
     private void StartCrystalConversation()
     {
-        if (dialogueSystem == null || hasUnlockedFireAbility) return;
+        if (dialogueSystem == null || hasUnlockedFireAbility || hasCompletedCrystalDialogue) return; // UPDATED: Added condition
         if (dialogueSystem.IsDialogueActive) return;
 
         dialogueSystem.StartDialogue(afterCrystalDialogue, "Ignis");
+        hasCompletedCrystalDialogue = true; // NEW: Mark as completed
 
         // Hide prompt
         if (interactPromptUI != null)
