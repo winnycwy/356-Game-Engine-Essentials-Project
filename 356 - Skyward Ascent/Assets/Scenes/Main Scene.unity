@@ -68098,7 +68098,7 @@ MonoBehaviour:
   dissolveProperty: _dissolve
   dissolveDuration: 2
   destroyAfterDissolve: 1
-  cageDissolveSound: {fileID: 8300000, guid: 0fb7d3e0817ba5a41a2806faef67b5e9, type: 3}
+  cageDissolveSound: {fileID: 8300000, guid: c0e320456eccf9243898653e2218ee14, type: 3}
   dissolveVolume: 1
 --- !u!1001 &1513187372
 PrefabInstance:
