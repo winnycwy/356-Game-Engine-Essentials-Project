@@ -82,7 +82,7 @@ public class FireRainAreaDamage : MonoBehaviour
 
     private bool IsEnemy(GameObject obj)
     {
-        return obj.CompareTag("Enemy") || obj.CompareTag("Bee");
+        return obj.CompareTag("enemy");
     }
 
     private void ProcessDamage(GameObject enemy)
