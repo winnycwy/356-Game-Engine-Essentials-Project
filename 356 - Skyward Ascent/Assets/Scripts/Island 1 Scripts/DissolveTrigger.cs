@@ -87,16 +87,5 @@ public class DissolveTrigger : MonoBehaviour
         {
             Debug.LogWarning("Dissolve sound or AudioSource not set up properly!", this);
         }
-
-        // Check camera position
-        //if (Camera.main != null)
-        //{
-        //    Vector3 cameraPos = Camera.main.transform.position;
-        //    float distance = Vector3.Distance(transform.position, cameraPos);
-        //    Debug.Log($"Camera at: {cameraPos}, Distance to sound: {distance}");
-        //}
-
-        //AudioSource.PlayClipAtPoint(cageDissolveSound, transform.position, 1f);
-        //Debug.Log("cage dissolve sound played at position: " + transform.position);
     }
 }
