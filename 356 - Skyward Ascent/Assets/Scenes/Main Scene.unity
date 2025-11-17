@@ -97187,7 +97187,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5283066075486861980, guid: fac65ea5813b2384cbae012bce6e2d91, type: 3}
       propertyPath: waypoints.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5283066075486861980, guid: fac65ea5813b2384cbae012bce6e2d91, type: 3}
       propertyPath: animationTransitionTime
