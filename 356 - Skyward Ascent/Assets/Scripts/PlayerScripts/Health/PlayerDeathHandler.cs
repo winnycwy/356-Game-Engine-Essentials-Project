@@ -26,6 +26,7 @@ public class PlayerDeathHandler : MonoBehaviour
     [Header("Respawn Settings")]
     public Transform[] respawnPoints; // Assign your island start points here
     public int currentRespawnPoint = 0;
+    public int deathIslandIndex = 0;
 
     private Health playerHealth;
     private Animator animator;
@@ -155,12 +156,22 @@ public class PlayerDeathHandler : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
+    // Keep this method for the respawn zones to call
+    public void SetCurrentIsland(int islandIndex)
+    {
+        if (!isDead && islandIndex >= 0 && islandIndex < respawnPoints.Length)
+        {
+            deathIslandIndex = islandIndex;
+            Debug.Log($"Player now on Island {deathIslandIndex + 1}");
+        }
+    }
+
     private void HandleDeath()
     {
         if (isDead) return;
 
         isDead = true;
-        Debug.Log("Player Died!");
+        Debug.Log($"Player died on Island {deathIslandIndex + 1}, will respawn there");
 
         StopAllCoroutines();
         if (screenHurtOverlay != null)
@@ -344,6 +355,7 @@ public class PlayerDeathHandler : MonoBehaviour
         }
 
         Debug.Log("=== STARTING RESPAWN PROCESS ===");
+        Debug.Log($"Respawning at Island {deathIslandIndex + 1}"); // Added island info
 
 
         // 1️⃣ Reset healing items FIRST
@@ -389,12 +401,19 @@ public class PlayerDeathHandler : MonoBehaviour
         }
 
         // 2️⃣ Move player to respawn position
-        if (respawnPoints != null && respawnPoints.Length > 0)
+        // 2️⃣ Move player to respawn position - USE deathIslandIndex
+        if (respawnPoints != null && respawnPoints.Length > deathIslandIndex)
         {
-            int pointIndex = Mathf.Clamp(currentRespawnPoint, 0, respawnPoints.Length - 1);
-            transform.position = respawnPoints[pointIndex].position;
-            transform.rotation = respawnPoints[pointIndex].rotation;
-            Debug.Log($"Player moved to respawn point {pointIndex}");
+            transform.position = respawnPoints[deathIslandIndex].position;
+            transform.rotation = respawnPoints[deathIslandIndex].rotation;
+            Debug.Log($"Player moved to Island {deathIslandIndex + 1} respawn point");
+        }
+        else if (respawnPoints != null && respawnPoints.Length > 0)
+        {
+            // Fallback to first respawn point
+            transform.position = respawnPoints[0].position;
+            transform.rotation = respawnPoints[0].rotation;
+            Debug.Log($"Player moved to fallback respawn point (Island 1)");
         }
         else
         {
