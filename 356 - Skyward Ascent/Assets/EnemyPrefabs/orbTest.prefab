@@ -123,10 +123,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65a453e911b6f244dac4f872972475bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  turnSpeed: 4
+  speed: 30
+  turnSpeed: 5
   health: {fileID: 3237396124495047188}
-  contactDamage: 10
+  contactDamage: 25
 --- !u!114 &3237396124495047188
 MonoBehaviour:
   m_ObjectHideFlags: 0

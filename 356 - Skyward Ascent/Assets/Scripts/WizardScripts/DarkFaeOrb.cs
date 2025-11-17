@@ -25,7 +25,7 @@ public class DarkFaeOrb : MonoBehaviour
             health.OnHealthEmpty += OnDeath;
 
         // Auto-destroy after 10s if not killed
-        Destroy(gameObject, 10f);
+        Destroy(gameObject, 5f);
 
         // Find player as target (optional)
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");

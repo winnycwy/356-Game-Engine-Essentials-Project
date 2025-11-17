@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   lifeTime: 5
-  contactDamage: 10
+  contactDamage: 25
 --- !u!1001 &6348229421359335107
 PrefabInstance:
   m_ObjectHideFlags: 0

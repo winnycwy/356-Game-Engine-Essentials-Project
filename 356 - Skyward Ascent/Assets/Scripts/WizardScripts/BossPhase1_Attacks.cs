@@ -36,7 +36,7 @@ public class BossPhase1_Attacks : MonoBehaviour
         anim.SetTrigger("Cast");
 
         // spawn 2 or 3 clones around boss (Remove that)
-        for (int i = 0; i < Random.Range(1, 1); i++)
+        for (int i = 0; i < Random.Range(1, 4); i++)
         {
             Vector3 pos = boss.position + Random.insideUnitSphere * 3f;
             pos.y = boss.position.y;
