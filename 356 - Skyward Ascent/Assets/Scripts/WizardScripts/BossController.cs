@@ -1,5 +1,6 @@
 using UnityEngine;
 using Ilumisoft.HealthSystem;
+using System.Collections;
 
 public class BossController : MonoBehaviour
 {
@@ -10,8 +11,11 @@ public class BossController : MonoBehaviour
     public BossPhase1_Attacks phase1Controller;
     public BossPhase2_Attacks phase2Controller;
 
+    [Header("Animation")]
+    public Animator animator;
+
     [Header("Activation")]
-    public bool startActivated = false; // optional, auto-start
+    public bool startActivated = false;
 
     [Header("Phase 3 Dialogue")]
     public DialogueSystem dialogueSystem;
@@ -32,9 +36,12 @@ public class BossController : MonoBehaviour
         if (bossHealth == null)
             bossHealth = GetComponent<Health>();
 
-        bossHealth.OnHealthChanged += OnBossHealthChanged;
+        if (animator == null)
+            animator = GetComponent<Animator>();
 
-        // Disable attacks until activation
+        bossHealth.OnHealthChanged += OnBossHealthChanged;
+        bossHealth.OnHealthEmpty += OnBossDeath;
+
         if (phase1Controller != null)
             phase1Controller.enabled = startActivated;
 
@@ -42,23 +49,31 @@ public class BossController : MonoBehaviour
             bossActivated = true;
     }
 
+    private void OnBossDeath()
+    {
+        if (!phase3Started)
+        {
+            StartPhase3();
+        }
+    }
+
     private void OnBossHealthChanged(float difference)
     {
-        if (!bossActivated) return; // Only track health changes after activation
+        if (!bossActivated) return;
 
         float current = bossHealth.CurrentHealth;
         float max = bossHealth.MaxHealth;
 
-        // PHASE 2 TRIGGER
+        // Play damage animation when taking damage
+        if (difference < 0 && animator != null && !animator.GetBool("isDead"))
+        {
+            animator.SetTrigger("Damage");
+        }
+
+        // PHASE 2 TRIGGER ONLY
         if (!phase2Started && current <= max * 0.60f)
         {
             StartPhase2();
-        }
-
-        // PHASE 3 TRIGGER
-        if (!phase3Started && current <= 0)
-        {
-            StartPhase3();
         }
     }
 
@@ -87,11 +102,30 @@ public class BossController : MonoBehaviour
         phase3Started = true;
         Debug.Log("BOSS: Switching to PHASE 3 (Dialogue)");
 
+        // Set death bool (not trigger)
+        if (animator != null)
+            animator.SetBool("isDead", true);
+
         // Disable any remaining attacks
         if (phase1Controller != null) phase1Controller.enabled = false;
         if (phase2Controller != null) phase2Controller.enabled = false;
 
-        // Start dialogue
+        // Unsubscribe from health events so boss stops reacting to damage
+        if (bossHealth != null)
+        {
+            bossHealth.OnHealthChanged -= OnBossHealthChanged;
+            bossHealth.OnHealthEmpty -= OnBossDeath;
+        }
+
+        // Start dialogue after a delay to let death animation play
+        StartCoroutine(StartDialogueAfterDeath());
+    }
+
+    private IEnumerator StartDialogueAfterDeath()
+    {
+        // Wait for death animation to start
+        yield return new WaitForSeconds(1f);
+
         if (dialogueSystem != null)
         {
             dialogueSystem.StartDialogue(phase3Lines, phase3Speaker);
