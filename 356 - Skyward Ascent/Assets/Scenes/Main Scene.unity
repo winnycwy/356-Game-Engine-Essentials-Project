@@ -12901,6 +12901,7 @@ MonoBehaviour:
   orbPrefab: {fileID: 3194683832253027780, guid: da1a4ffcce1d2fa478a3c7998bed1c70, type: 3}
   cloneCooldown: 6
   orbCooldown: 5
+  anim: {fileID: 1710578078}
 --- !u!4 &301991636
 Transform:
   m_ObjectHideFlags: 0
@@ -30643,13 +30644,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4713910160336699662, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4723563251553016914, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4300089
+      value: 1.4300075
       objectReference: {fileID: 0}
     - target: {fileID: 4723563251553016914, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.709999
+      value: -9.709998
       objectReference: {fileID: 0}
     - target: {fileID: 4791839343609390124, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: deathScreen
@@ -30687,13 +30692,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 6386577797974738836, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 7324688844878281797, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.4300089
+      value: 1.4300075
       objectReference: {fileID: 0}
     - target: {fileID: 7324688844878281797, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.709999
+      value: -9.709998
       objectReference: {fileID: 0}
     - target: {fileID: 7578404911336234860, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: buttonIcon
@@ -30722,6 +30731,18 @@ PrefabInstance:
     - target: {fileID: 7578404911336234860, guid: ebf6398122cde9443b303442c51569ac, type: 3}
       propertyPath: orbDamagePerSecond
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174835368910702038, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -187.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174835368910702038, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 337.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174835368910702038, guid: ebf6398122cde9443b303442c51569ac, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -232.05
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 37238700750936792, guid: ebf6398122cde9443b303442c51569ac, type: 3}
@@ -78701,6 +78722,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossHealth: {fileID: 1710578075}
+  anim: {fileID: 1710578078}
   phase1Controller: {fileID: 301991635}
   phase2Controller: {fileID: 1710578073}
   startActivated: 0
@@ -78747,6 +78769,11 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!95 &1710578078 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2640996444692788344, guid: 6a3c3c37133b6ae4d9590995c8166d88, type: 3}
+  m_PrefabInstance: {fileID: 1710578070}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1714421446
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,9 @@ public class BossController : MonoBehaviour
     [Header("Health")]
     public Health bossHealth;
 
+    [Header("Animator")]
+    public Animator anim;
+
     [Header("Phase Controllers")]
     public BossPhase1_Attacks phase1Controller;
     public BossPhase2_Attacks phase2Controller;
@@ -32,6 +35,9 @@ public class BossController : MonoBehaviour
         if (bossHealth == null)
             bossHealth = GetComponent<Health>();
 
+        if (anim == null)
+            anim = GetComponent<Animator>();
+
         bossHealth.OnHealthChanged += OnBossHealthChanged;
 
         // Disable attacks until activation
@@ -40,11 +46,17 @@ public class BossController : MonoBehaviour
 
         if (startActivated)
             bossActivated = true;
+            anim.SetTrigger("StartBattle");
     }
 
     private void OnBossHealthChanged(float difference)
     {
         if (!bossActivated) return; // Only track health changes after activation
+
+        // Damage reaction animation
+        if (difference < 0)
+            anim.SetTrigger("Hit");
+
 
         float current = bossHealth.CurrentHealth;
         float max = bossHealth.MaxHealth;
@@ -69,6 +81,8 @@ public class BossController : MonoBehaviour
         bossActivated = true;
         Debug.Log("Boss activated!");
 
+        anim.SetTrigger("StartBattle");
+
         if (phase1Controller != null)
             phase1Controller.enabled = true;
     }
@@ -86,6 +100,9 @@ public class BossController : MonoBehaviour
     {
         phase3Started = true;
         Debug.Log("BOSS: Switching to PHASE 3 (Dialogue)");
+
+        anim.SetTrigger("Kneel");
+
 
         // Disable any remaining attacks
         if (phase1Controller != null) phase1Controller.enabled = false;

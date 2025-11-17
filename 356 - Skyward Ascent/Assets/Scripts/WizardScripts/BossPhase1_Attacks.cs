@@ -12,6 +12,8 @@ public class BossPhase1_Attacks : MonoBehaviour
     public float cloneCooldown = 6f;
     public float orbCooldown = 5f;
 
+    public Animator anim;
+
     private bool canUseClone = true;
     private bool canUseOrb = true;
 
@@ -31,6 +33,7 @@ public class BossPhase1_Attacks : MonoBehaviour
     IEnumerator SpawnClones()
     {
         canUseClone = false;
+        anim.SetTrigger("Cast");
 
         // spawn 2 or 3 clones around boss (Remove that)
         for (int i = 0; i < Random.Range(1, 1); i++)
@@ -50,6 +53,7 @@ public class BossPhase1_Attacks : MonoBehaviour
     IEnumerator ShootOrbs()
     {
         canUseOrb = false;
+        anim.SetTrigger("Cast");
 
         // spawn 2 orbs
         for (int i = 0; i < 2; i++)
