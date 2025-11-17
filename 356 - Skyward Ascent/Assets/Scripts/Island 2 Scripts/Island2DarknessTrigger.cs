@@ -274,6 +274,9 @@ public class Island2DarknessTrigger : MonoBehaviour
         "Trust in the flames you carry, both old and new."
     };
 
+    [Header("Disappear Effect")]
+    public GameObject shockwaveEffect;
+
     private Vignette vignette;
     private ColorGrading colorGrading;
     private float originalLightIntensity;
@@ -514,9 +517,26 @@ public class Island2DarknessTrigger : MonoBehaviour
                 wizardAnimator.SetTrigger("Disappear");
 
             yield return new WaitForSeconds(1f);
+            SpawnDisappearEffect();
 
             if (wizardSpirit != null)
                 wizardSpirit.SetActive(false);
+        }
+    }
+
+    private void SpawnDisappearEffect()
+    {
+        if (shockwaveEffect != null)
+        {
+
+            shockwaveEffect.SetActive(true);
+
+            // Get particle system and play it
+            ParticleSystem particles = shockwaveEffect.GetComponent<ParticleSystem>();
+            if (particles != null)
+            {
+                particles.Play();
+            }
         }
     }
 
