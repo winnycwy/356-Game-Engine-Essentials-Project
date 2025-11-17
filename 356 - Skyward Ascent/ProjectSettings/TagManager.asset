@@ -9,6 +9,9 @@ TagManager:
   - FaeLight
   - WandProjectile
   - Fae Light
+  - Island1
+  - Island2
+  - Island3
   layers:
   - Default
   - TransparentFX
