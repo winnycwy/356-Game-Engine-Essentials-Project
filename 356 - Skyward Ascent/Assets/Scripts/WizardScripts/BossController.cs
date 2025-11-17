@@ -3,6 +3,7 @@ using Ilumisoft.HealthSystem;
 
 public class BossController : MonoBehaviour
 {
+
     [Header("Health")]
     public Health bossHealth;
 
@@ -24,6 +25,12 @@ public class BossController : MonoBehaviour
         "This tower... these memories... they were never my prison. I was.",
         "Thank you... for helping me remember what I truly am."
     };
+
+    [Header("Ending")]
+    public EndingManager endingManager;
+    public float endingSequenceDelay = 3f;
+
+
     public string phase3Speaker = "Boss";
 
     private bool bossActivated = false;
@@ -39,14 +46,26 @@ public class BossController : MonoBehaviour
             anim = GetComponent<Animator>();
 
         bossHealth.OnHealthChanged += OnBossHealthChanged;
+        bossHealth.OnHealthEmpty += OnBossDeath; // ADDED THIS LINE
 
         // Disable attacks until activation
         if (phase1Controller != null)
             phase1Controller.enabled = startActivated;
 
         if (startActivated)
+        {
             bossActivated = true;
             anim.SetTrigger("StartBattle");
+        }
+
+    }
+
+    private void OnBossDeath()
+    {
+        if (!phase3Started)
+        {
+            StartPhase3();
+        }
     }
 
     private void OnBossHealthChanged(float difference)
@@ -108,10 +127,39 @@ public class BossController : MonoBehaviour
         if (phase1Controller != null) phase1Controller.enabled = false;
         if (phase2Controller != null) phase2Controller.enabled = false;
 
-        // Start dialogue
+        if (bossHealth != null)
+        {
+            bossHealth.OnHealthChanged -= OnBossHealthChanged;
+            bossHealth.OnHealthEmpty -= OnBossDeath;
+        }
+
+        // Start dialogue and ending sequence
+        StartCoroutine(StartDialogueAndEnding());
+    }
+
+    private System.Collections.IEnumerator StartDialogueAndEnding()
+    {
+        // Wait for death animation to start
+        yield return new WaitForSeconds(1f);
+
+        // Play dialogue
         if (dialogueSystem != null)
         {
             dialogueSystem.StartDialogue(phase3Lines, phase3Speaker);
+
+            // Wait for dialogue to complete
+            yield return new WaitUntil(() => !dialogueSystem.IsDialogueActive);
         }
+
+        // Wait a moment before ending screen
+        yield return new WaitForSeconds(endingSequenceDelay);
+
+        // Start ending sequence (this will play the redemption music)
+        if (endingManager != null)
+        {
+            endingManager.StartEndingSequence();
+        }
+        
+
     }
 }

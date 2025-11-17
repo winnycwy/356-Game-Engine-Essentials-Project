@@ -8,14 +8,16 @@ public class EndingManager : MonoBehaviour
 {
     [Header("UI References")]
     public GameObject endingCanvas;
-    public TextMeshProUGUI titleText;
     public TextMeshProUGUI subtitleText;
     public TextMeshProUGUI narrationText;
     public Image fadePanel;
-    public Button continueButton;
+    public Button quitButton;
+
+    [Header("Background Image")]
+    public Image backgroundImage; // Drag your background image here
+    public Sprite endingBackground; // Assign your picture/sprite
 
     [Header("Ending Sequence")]
-    public string actTitle = "Act III: The Redemption";
     public string[] narrationLines = new string[]
     {
         "The Defeat: You don't kill him. You break his corrupted shell.",
@@ -27,7 +29,8 @@ public class EndingManager : MonoBehaviour
     };
 
     [Header("Timing")]
-    public float fadeInDuration = 2f;
+    public float fadeToBlackDuration = 1.5f; // Fade TO black
+    public float fadeFromBlackDuration = 2f;  // Fade FROM black to background
     public float lineDisplayDuration = 4f;
     public float betweenLineDelay = 0.5f;
 
@@ -41,9 +44,13 @@ public class EndingManager : MonoBehaviour
     public float cameraMoveDuration = 5f;
     public float cameraFovChange = 10f;
 
+    [Header("Player Control")]
+    public MonoBehaviour playerMovementScript; // Assign your player movement script here
+
     private Vector3 cameraStartPosition;
     private float cameraStartFov;
     private bool cameraEffectPlaying = false;
+    private bool endingSequenceActive = false;
 
     private void Start()
     {
@@ -51,9 +58,9 @@ public class EndingManager : MonoBehaviour
         if (endingCanvas != null)
             endingCanvas.SetActive(false);
 
-        // Setup continue button
-        if (continueButton != null)
-            continueButton.onClick.AddListener(ReturnToMainMenu);
+        // Setup quit button
+        if (quitButton != null)
+            quitButton.onClick.AddListener(OnQuitButtonClick);
 
         // Get camera references
         if (mainCamera == null)
@@ -72,15 +79,31 @@ public class EndingManager : MonoBehaviour
 
     public void StartEndingSequence()
     {
+        // ENABLE THIS GAMEOBJECT FIRST
+        gameObject.SetActive(true);
+        endingSequenceActive = true;
+
         StartCoroutine(EndingSequence());
     }
 
     private IEnumerator EndingSequence()
     {
-        // Start camera effects
-        if (mainCamera != null && cameraFinalPosition != null)
+        // DISABLE PLAYER MOVEMENT
+        DisablePlayerMovement();
+
+        // LOCK AND HIDE CURSOR during the story part
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // ENABLE THE CANVAS FIRST (but keep it black for now)
+        if (endingCanvas != null)
+            endingCanvas.SetActive(true);
+
+        // Set up fade panel to be fully black and visible
+        if (fadePanel != null)
         {
-            StartCoroutine(CameraEndingEffect());
+            fadePanel.color = Color.black;
+            fadePanel.gameObject.SetActive(true);
         }
 
         // Start redemption music
@@ -91,26 +114,34 @@ public class EndingManager : MonoBehaviour
             audioSource.Play();
         }
 
-        // Show ending canvas
-        if (endingCanvas != null)
-            endingCanvas.SetActive(true);
+        // Set background image (but keep it hidden behind black for now)
+        if (backgroundImage != null && endingBackground != null)
+        {
+            backgroundImage.sprite = endingBackground;
+            backgroundImage.gameObject.SetActive(true);
+            backgroundImage.color = new Color(1, 1, 1, 0); // Make background invisible initially
+        }
 
-        // Initial fade in
+        // Start camera effects
+        if (mainCamera != null && cameraFinalPosition != null)
+        {
+            StartCoroutine(CameraEndingEffect());
+        }
+
+        // STEP 1: We're already at black screen (from fadePanel)
+        // Just wait a moment at black for dramatic effect
+        yield return new WaitForSeconds(0.5f);
+
+        // STEP 2: Fade FROM black to reveal background image
         if (fadePanel != null)
         {
-            fadePanel.color = Color.black;
-            yield return StartCoroutine(FadePanel(0f, fadeInDuration));
+            yield return StartCoroutine(FadePanel(0f, fadeFromBlackDuration)); // Fade black overlay to transparent
         }
 
-        // Display act title
-        if (titleText != null)
-        {
-            titleText.text = actTitle;
-            titleText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(3f);
-        }
+        // STEP 3: Background is now fully visible, wait a moment
+        yield return new WaitForSeconds(1f);
 
-        // Display each narration line
+        // Display each narration line (START DIRECTLY WITH STORY)
         if (narrationText != null)
         {
             foreach (string line in narrationLines)
@@ -132,20 +163,84 @@ public class EndingManager : MonoBehaviour
             }
         }
 
-        // Show final message and continue button
-        if (subtitleText != null)
+        // STEP 4: Fade to black for the final "End" screen
+        yield return StartCoroutine(FadeToFinalScreen());
+    }
+
+    private IEnumerator FadeToFinalScreen()
+    {
+        // Fade out the background image to black
+        if (fadePanel != null)
         {
-            subtitleText.text = "Thank you for playing";
-            subtitleText.gameObject.SetActive(true);
+            yield return StartCoroutine(FadePanel(1f, 2f)); // Fade to black
         }
 
-        if (continueButton != null)
+        // Hide the background image
+        if (backgroundImage != null)
         {
-            continueButton.gameObject.SetActive(true);
+            backgroundImage.gameObject.SetActive(false);
+        }
+
+        // Show final message on black background
+        if (subtitleText != null)
+        {
+            subtitleText.text = "End";
+            subtitleText.gameObject.SetActive(true);
+
+            // Fade in the "End" text
+            Color originalColor = subtitleText.color;
+            subtitleText.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0f);
+            yield return StartCoroutine(FadeTMPText(subtitleText, 1f, 1.5f));
+        }
+
+        // UNLOCK AND SHOW CURSOR so player can click the button
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // Show quit button after a delay
+        yield return new WaitForSeconds(1f);
+
+        if (quitButton != null)
+        {
+            quitButton.gameObject.SetActive(true);
+
+            // Make sure the button is interactable
+            quitButton.interactable = true;
+
+            // Select the button so it can be clicked with keyboard/controller
+            quitButton.Select();
         }
 
         // Wait for camera effect to complete
         yield return new WaitUntil(() => !cameraEffectPlaying);
+    }
+
+    private void DisablePlayerMovement()
+    {
+        if (playerMovementScript != null)
+        {
+            playerMovementScript.enabled = false;
+        }
+        else
+        {
+            // Try to find the player movement script automatically
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                // Try common movement script names
+                MonoBehaviour[] scripts = player.GetComponents<MonoBehaviour>();
+                foreach (MonoBehaviour script in scripts)
+                {
+                    if (script.GetType().Name.Contains("Movement") ||
+                        script.GetType().Name.Contains("Controller") ||
+                        script.GetType().Name.Contains("Player"))
+                    {
+                        script.enabled = false;
+                        Debug.Log("Disabled player movement: " + script.GetType().Name);
+                    }
+                }
+            }
+        }
     }
 
     private IEnumerator CameraEndingEffect()
@@ -208,17 +303,46 @@ public class EndingManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
+    // Quit button click handler
+    public void OnQuitButtonClick()
     {
-        // Fade out audio
-        if (audioSource != null)
-            StartCoroutine(FadeAudioOut(1f));
+        Debug.Log("Quit button clicked - Quitting game");
 
-        // Load main menu after fade
-        StartCoroutine(LoadMainMenuAfterDelay(1f));
+        // Change button text to show it's working
+        if (quitButton != null)
+        {
+            TextMeshProUGUI buttonText = quitButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonText != null)
+            {
+                buttonText.text = "QUITTING...";
+            }
+
+            // Disable button to prevent multiple clicks
+            quitButton.interactable = false;
+        }
+
+        // Quit the game after a short delay
+        StartCoroutine(QuitAfterDelay(1f));
     }
 
-    private IEnumerator FadeAudioOut(float duration)
+    private IEnumerator QuitAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        QuitGame();
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting game...");
+
+        // Fade out audio
+        if (audioSource != null)
+            StartCoroutine(QuitAfterAudioFade(1f));
+        else
+            QuitImmediately();
+    }
+
+    private IEnumerator QuitAfterAudioFade(float duration)
     {
         float startVolume = audioSource.volume;
         float currentTime = 0f;
@@ -230,13 +354,26 @@ public class EndingManager : MonoBehaviour
             yield return null;
         }
 
-        audioSource.Stop();
-        audioSource.volume = startVolume;
+        QuitImmediately();
     }
 
-    private IEnumerator LoadMainMenuAfterDelay(float delay)
+    private void QuitImmediately()
     {
-        yield return new WaitForSeconds(delay);
-        SceneManager.LoadScene("MainMenu");
+#if UNITY_EDITOR
+        // If running in Unity Editor
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        // If running in built application
+        Application.Quit();
+#endif
+    }
+
+    // Optional: Handle escape key to quit as well
+    private void Update()
+    {
+        if (endingSequenceActive && Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnQuitButtonClick();
+        }
     }
 }
