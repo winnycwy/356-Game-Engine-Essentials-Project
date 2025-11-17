@@ -131,7 +131,7 @@ public class BatScript : MonoBehaviour
         UpdateMovementSpeed();
         UpdateAnimations();
         UpdateFlappingSound();
-        MaintainFlightHeight(); // This now actually uses your flightHeight setting
+        MaintainFlightHeight();
 
         if (player == null) return;
 

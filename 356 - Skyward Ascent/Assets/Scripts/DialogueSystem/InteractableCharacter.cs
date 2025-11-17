@@ -1328,7 +1328,7 @@ public class InteractableCharacter : MonoBehaviour
             // Grant Fae Light ability
             if (!hasGrantedAbility && playerFaeLightAbility != null)
             {
-                GrantFaeLightAbility();
+                GrantFaeLightAbility(); // Ability unlock
             }
 
             // Activate portal
