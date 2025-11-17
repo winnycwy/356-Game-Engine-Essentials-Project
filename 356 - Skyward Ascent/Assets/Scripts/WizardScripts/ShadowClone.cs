@@ -5,24 +5,24 @@ public class ShadowClone : MonoBehaviour
 {
     public float speed = 10f;
     public float lifeTime = 3f;
-    public float contactDamage = 10f;   // how much damage clone deals to player
+    public float contactDamage = 10f;
 
     private Transform player;
-    private Health health;              // Ilumisoft health reference
+    private Health health;
+    private Animator animator;
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-
+        animator = GetComponent<Animator>();
         health = GetComponent<Health>();
-        if (health == null)
+
+        if (health != null)
         {
-            Debug.LogError("ShadowClone requires a Health component!");
+            health.OnHealthEmpty += OnDeath;
         }
 
-        // If killed by weapon:
-        health.OnHealthEmpty += OnDeath;
-
+        // Auto-destroy after lifetime
         Destroy(gameObject, lifeTime);
     }
 
@@ -39,21 +39,21 @@ public class ShadowClone : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // If it hits player, deal damage + die
+        // If it hits player, deal damage + disappear
         if (other.CompareTag("Player"))
         {
             Health playerHealth = other.GetComponent<Health>();
-
             if (playerHealth != null)
                 playerHealth.ApplyDamage(contactDamage);
 
+            // Just destroy, no animation needed for clones
             Destroy(gameObject);
         }
     }
 
     private void OnDeath()
     {
-        // Clone is killed by weapon or other damage
+        // Clone dies to player attacks - just destroy
         Destroy(gameObject);
     }
 }
