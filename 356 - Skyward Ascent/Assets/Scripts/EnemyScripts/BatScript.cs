@@ -13,8 +13,7 @@ public class BatScript : MonoBehaviour
     public Transform[] waypoints;
 
     [Header("Flight Settings")]
-    public float flightHeight = 2f; // This actually controls bat height now!
-    public float groundClearance = 0.5f;
+    public float heightAbovePlayer = 0.5f; // Directly above player's head
 
     [Header("Movement Settings")]
     public float patrolSpeed = 4f;
@@ -71,7 +70,7 @@ public class BatScript : MonoBehaviour
         batRenderer = GetComponentInChildren<Renderer>();
         animator = GetComponentInChildren<Animator>();
 
-        // Configure NavMeshAgent with higher speeds
+        // Configure NavMeshAgent
         agent.speed = patrolSpeed;
         agent.acceleration = acceleration;
 
@@ -101,9 +100,6 @@ public class BatScript : MonoBehaviour
             health.OnHealthEmpty += OnDeath;
         }
 
-        // Set initial flight height
-        SetFlightHeight(flightHeight);
-
         GoToNextWaypoint();
     }
 
@@ -131,7 +127,7 @@ public class BatScript : MonoBehaviour
         UpdateMovementSpeed();
         UpdateAnimations();
         UpdateFlappingSound();
-        MaintainFlightHeight(); // This now actually uses your flightHeight setting
+        MaintainFlightHeight(); // This now directly matches player height
 
         if (player == null) return;
 
@@ -159,55 +155,27 @@ public class BatScript : MonoBehaviour
         }
     }
 
+    private void MaintainFlightHeight()
+    {
+        if (isDead || player == null || agent == null) return;
+
+        // Let NavMeshAgent handle movement, only adjust destination height
+        Vector3 currentDestination = agent.destination;
+        float targetHeight = player.position.y + heightAbovePlayer;
+
+        // Only update if height difference is significant
+        if (Mathf.Abs(currentDestination.y - targetHeight) > 0.1f)
+        {
+            agent.destination = new Vector3(currentDestination.x, targetHeight, currentDestination.z);
+        }
+    }
+
     private void UpdateMovementSpeed()
     {
         if (isDead) return;
 
         float targetSpeed = currentState == State.Chase ? chaseSpeed : patrolSpeed;
         agent.speed = Mathf.Lerp(agent.speed, targetSpeed, Time.deltaTime * 2f);
-    }
-
-    private void MaintainFlightHeight()
-    {
-        if (isDead) return;
-
-        Vector3 currentPosition = transform.position;
-
-        // Simply use the flightHeight you set - no complex calculations!
-        float targetHeight = flightHeight;
-
-        // Only check ground clearance if we're too low
-        float groundHeight = GetGroundHeight(currentPosition);
-        float minSafeHeight = groundHeight + groundClearance;
-
-        // Make sure we're not flying through the ground
-        if (targetHeight < minSafeHeight)
-        {
-            targetHeight = minSafeHeight;
-        }
-
-        // Apply the height
-        if (Mathf.Abs(currentPosition.y - targetHeight) > 0.1f)
-        {
-            float newY = Mathf.Lerp(currentPosition.y, targetHeight, Time.deltaTime * 3f);
-            transform.position = new Vector3(currentPosition.x, newY, currentPosition.z);
-        }
-    }
-
-    private void SetFlightHeight(float height)
-    {
-        Vector3 currentPosition = transform.position;
-        transform.position = new Vector3(currentPosition.x, height, currentPosition.z);
-    }
-
-    private float GetGroundHeight(Vector3 position)
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity))
-        {
-            return hit.point.y;
-        }
-        return 0f;
     }
 
     private void UpdateFlappingSound()
@@ -400,8 +368,9 @@ public class BatScript : MonoBehaviour
 
         Vector3 waypointPos = waypoints[waypointIndex].position;
 
-        // Use your flightHeight setting for waypoints
-        Vector3 adjustedWaypoint = new Vector3(waypointPos.x, flightHeight, waypointPos.z);
+        // Use player's current height for waypoints too
+        float waypointHeight = player != null ? player.position.y + heightAbovePlayer : waypointPos.y;
+        Vector3 adjustedWaypoint = new Vector3(waypointPos.x, waypointHeight, waypointPos.z);
 
         agent.destination = adjustedWaypoint;
         waypointIndex = (waypointIndex + 1) % waypoints.Length;
@@ -413,8 +382,8 @@ public class BatScript : MonoBehaviour
 
         Vector3 playerPosition = player.position;
 
-        // Use your flightHeight setting for chasing (NOT player's height!)
-        Vector3 chasePosition = new Vector3(playerPosition.x, flightHeight, playerPosition.z);
+        // Chase at player's current height
+        Vector3 chasePosition = new Vector3(playerPosition.x, playerPosition.y + heightAbovePlayer, playerPosition.z);
 
         agent.destination = chasePosition;
     }
@@ -430,11 +399,19 @@ public class BatScript : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // Draw flight height indicator
-        Gizmos.color = Color.green;
-        Vector3 heightPos = new Vector3(transform.position.x, flightHeight, transform.position.z);
-        Gizmos.DrawWireSphere(heightPos, 0.5f);
-        Gizmos.DrawLine(transform.position, heightPos);
+        // Draw height relationship
+        if (player != null)
+        {
+            Gizmos.color = Color.green;
+            Vector3 batHeightPos = new Vector3(transform.position.x, player.position.y + heightAbovePlayer, transform.position.z);
+            Gizmos.DrawWireSphere(batHeightPos, 0.3f);
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(player.position, 0.3f);
+
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(player.position, batHeightPos);
+        }
 
         if (flappingAudioSource != null)
         {
