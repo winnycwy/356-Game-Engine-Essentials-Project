@@ -14,15 +14,18 @@ public class ShadowClone : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        animator = GetComponent<Animator>();
+
         health = GetComponent<Health>();
+        animator = GetComponent<Animator>();
 
-        if (health != null)
-        {
-            health.OnHealthEmpty += OnDeath;
-        }
+        if (health == null)
+            Debug.LogError("ShadowClone requires a Health component!");
 
-        // Auto-destroy after lifetime
+        if (animator != null)
+            animator.SetTrigger("Run");
+
+        health.OnHealthEmpty += OnDeath;
+
         Destroy(gameObject, lifeTime);
     }
 
@@ -30,30 +33,39 @@ public class ShadowClone : MonoBehaviour
     {
         if (player == null) return;
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            player.position,
-            speed * Time.deltaTime
-        );
+        // --- ROTATE TOWARD PLAYER ---
+        Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                10f * Time.deltaTime
+            );
+        }
+
+        // --- MOVE FORWARD IN LOOK DIRECTION ---
+        transform.position += transform.forward * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // If it hits player, deal damage + disappear
         if (other.CompareTag("Player"))
         {
             Health playerHealth = other.GetComponent<Health>();
+
             if (playerHealth != null)
                 playerHealth.ApplyDamage(contactDamage);
 
-            // Just destroy, no animation needed for clones
             Destroy(gameObject);
         }
     }
 
     private void OnDeath()
     {
-        // Clone dies to player attacks - just destroy
         Destroy(gameObject);
     }
 }
