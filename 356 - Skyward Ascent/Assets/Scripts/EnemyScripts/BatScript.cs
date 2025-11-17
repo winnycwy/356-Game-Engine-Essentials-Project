@@ -13,14 +13,12 @@ public class BatScript : MonoBehaviour
     public Transform[] waypoints;
 
     [Header("Flight Settings")]
-    public float flightHeight = 3f;
+    public float flightHeight = 2f; // This actually controls bat height now!
     public float groundClearance = 0.5f;
-    public float obstacleClearance = 1f;
-    public float obstacleCheckDistance = 2f;
 
     [Header("Movement Settings")]
-    public float patrolSpeed = 4f; // Increased from default
-    public float chaseSpeed = 6f;  // Increased from default
+    public float patrolSpeed = 4f;
+    public float chaseSpeed = 6f;
     public float acceleration = 12f;
 
     [Header("Combat Settings")]
@@ -103,8 +101,8 @@ public class BatScript : MonoBehaviour
             health.OnHealthEmpty += OnDeath;
         }
 
-        // Ensure the bat starts at a safe height
-        EnsureSafeHeight();
+        // Set initial flight height
+        SetFlightHeight(flightHeight);
 
         GoToNextWaypoint();
     }
@@ -130,10 +128,10 @@ public class BatScript : MonoBehaviour
     {
         if (isDead) return;
 
-        UpdateMovementSpeed(); // Update speed based on state
+        UpdateMovementSpeed();
         UpdateAnimations();
         UpdateFlappingSound();
-        MaintainFlightHeight();
+        MaintainFlightHeight(); // This now actually uses your flightHeight setting
 
         if (player == null) return;
 
@@ -165,10 +163,7 @@ public class BatScript : MonoBehaviour
     {
         if (isDead) return;
 
-        // Change speed based on state
         float targetSpeed = currentState == State.Chase ? chaseSpeed : patrolSpeed;
-
-        // Smoothly change speed
         agent.speed = Mathf.Lerp(agent.speed, targetSpeed, Time.deltaTime * 2f);
     }
 
@@ -176,25 +171,22 @@ public class BatScript : MonoBehaviour
     {
         if (isDead) return;
 
-        // Get current position
         Vector3 currentPosition = transform.position;
 
-        // Calculate ground height
+        // Simply use the flightHeight you set - no complex calculations!
+        float targetHeight = flightHeight;
+
+        // Only check ground clearance if we're too low
         float groundHeight = GetGroundHeight(currentPosition);
+        float minSafeHeight = groundHeight + groundClearance;
 
-        // Calculate obstacle height (jumping stones, etc.)
-        float obstacleHeight = GetObstacleHeight(currentPosition);
+        // Make sure we're not flying through the ground
+        if (targetHeight < minSafeHeight)
+        {
+            targetHeight = minSafeHeight;
+        }
 
-        // Calculate minimum safe height (highest of ground + clearance or obstacle + clearance)
-        float minSafeHeight = Mathf.Max(
-            groundHeight + groundClearance,
-            obstacleHeight + obstacleClearance
-        );
-
-        // Ensure we're flying at least at flightHeight OR above obstacles
-        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
-
-        // Smoothly adjust height if needed
+        // Apply the height
         if (Mathf.Abs(currentPosition.y - targetHeight) > 0.1f)
         {
             float newY = Mathf.Lerp(currentPosition.y, targetHeight, Time.deltaTime * 3f);
@@ -202,67 +194,20 @@ public class BatScript : MonoBehaviour
         }
     }
 
+    private void SetFlightHeight(float height)
+    {
+        Vector3 currentPosition = transform.position;
+        transform.position = new Vector3(currentPosition.x, height, currentPosition.z);
+    }
+
     private float GetGroundHeight(Vector3 position)
     {
         RaycastHit hit;
-        // Shoot a ray straight down to find the ground
         if (Physics.Raycast(position, Vector3.down, out hit, Mathf.Infinity))
         {
             return hit.point.y;
         }
-
-        // If no ground detected, assume flat ground at y=0
         return 0f;
-    }
-
-    private float GetObstacleHeight(Vector3 position)
-    {
-        float highestObstacle = 0f;
-
-        // Check for obstacles in multiple directions
-        Vector3[] checkDirections = {
-            Vector3.forward,
-            Vector3.back,
-            Vector3.left,
-            Vector3.right,
-            Vector3.forward + Vector3.right,
-            Vector3.forward + Vector3.left,
-            Vector3.back + Vector3.right,
-            Vector3.back + Vector3.left
-        };
-
-        foreach (Vector3 direction in checkDirections)
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(position, direction, out hit, obstacleCheckDistance))
-            {
-                // Only consider obstacles that are higher than current position
-                if (hit.collider.gameObject != gameObject && hit.point.y > highestObstacle)
-                {
-                    highestObstacle = hit.point.y;
-                }
-            }
-        }
-
-        return highestObstacle;
-    }
-
-    private void EnsureSafeHeight()
-    {
-        Vector3 currentPosition = transform.position;
-        float groundHeight = GetGroundHeight(currentPosition);
-        float obstacleHeight = GetObstacleHeight(currentPosition);
-        float minSafeHeight = Mathf.Max(
-            groundHeight + groundClearance,
-            obstacleHeight + obstacleClearance
-        );
-
-        // If current position is below safe height, move up
-        if (currentPosition.y < minSafeHeight)
-        {
-            float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
-            transform.position = new Vector3(currentPosition.x, targetHeight, currentPosition.z);
-        }
     }
 
     private void UpdateFlappingSound()
@@ -270,7 +215,7 @@ public class BatScript : MonoBehaviour
         if (flappingAudioSource == null || isDead) return;
 
         float speed = agent.velocity.magnitude / agent.speed;
-        flappingAudioSource.pitch = Mathf.Lerp(0.7f, 1.5f, speed); // Increased pitch range for faster movement
+        flappingAudioSource.pitch = Mathf.Lerp(0.7f, 1.5f, speed);
 
         float targetVolume = currentState == State.Chase ? flappingVolume * 1.5f : flappingVolume;
         flappingAudioSource.volume = Mathf.Lerp(flappingAudioSource.volume, targetVolume, Time.deltaTime * 2f);
@@ -455,16 +400,8 @@ public class BatScript : MonoBehaviour
 
         Vector3 waypointPos = waypoints[waypointIndex].position;
 
-        // Ensure waypoint is at safe height
-        float groundHeight = GetGroundHeight(waypointPos);
-        float obstacleHeight = GetObstacleHeight(waypointPos);
-        float minSafeHeight = Mathf.Max(
-            groundHeight + groundClearance,
-            obstacleHeight + obstacleClearance
-        );
-        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
-
-        Vector3 adjustedWaypoint = new Vector3(waypointPos.x, targetHeight, waypointPos.z);
+        // Use your flightHeight setting for waypoints
+        Vector3 adjustedWaypoint = new Vector3(waypointPos.x, flightHeight, waypointPos.z);
 
         agent.destination = adjustedWaypoint;
         waypointIndex = (waypointIndex + 1) % waypoints.Length;
@@ -476,16 +413,8 @@ public class BatScript : MonoBehaviour
 
         Vector3 playerPosition = player.position;
 
-        // Ensure chase position is at safe height
-        float groundHeight = GetGroundHeight(playerPosition);
-        float obstacleHeight = GetObstacleHeight(playerPosition);
-        float minSafeHeight = Mathf.Max(
-            groundHeight + groundClearance,
-            obstacleHeight + obstacleClearance
-        );
-        float targetHeight = Mathf.Max(flightHeight, minSafeHeight);
-
-        Vector3 chasePosition = new Vector3(playerPosition.x, targetHeight, playerPosition.z);
+        // Use your flightHeight setting for chasing (NOT player's height!)
+        Vector3 chasePosition = new Vector3(playerPosition.x, flightHeight, playerPosition.z);
 
         agent.destination = chasePosition;
     }
@@ -501,25 +430,11 @@ public class BatScript : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, attackRange);
 
-        // Draw ground detection ray
-        Vector3 currentPos = transform.position;
-        float groundHeight = GetGroundHeight(currentPos);
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(currentPos, new Vector3(currentPos.x, groundHeight, currentPos.z));
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(new Vector3(currentPos.x, groundHeight, currentPos.z), 0.2f);
-
-        // Draw obstacle detection rays
-        Gizmos.color = Color.blue;
-        Vector3[] checkDirections = {
-            Vector3.forward, Vector3.back, Vector3.left, Vector3.right,
-            Vector3.forward + Vector3.right, Vector3.forward + Vector3.left,
-            Vector3.back + Vector3.right, Vector3.back + Vector3.left
-        };
-        foreach (Vector3 direction in checkDirections)
-        {
-            Gizmos.DrawRay(currentPos, direction * obstacleCheckDistance);
-        }
+        // Draw flight height indicator
+        Gizmos.color = Color.green;
+        Vector3 heightPos = new Vector3(transform.position.x, flightHeight, transform.position.z);
+        Gizmos.DrawWireSphere(heightPos, 0.5f);
+        Gizmos.DrawLine(transform.position, heightPos);
 
         if (flappingAudioSource != null)
         {
